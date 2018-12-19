@@ -17,17 +17,17 @@ class TargetLocations {
     // USe NSPRedicat  on CloudKit QUerires 
     var timeStamp: Date
     var ckRecordID: CKRecord.ID
-    var usersLocationRefrence: CKRecord.Reference?
+    var userReference: CKRecord.Reference
     // double Long and Lat
     
-    init(geoCodeAddressString: String, addressTitle: String, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), usersLocationRefrence: CKRecord.Reference) {
+    init(geoCodeAddressString: String, addressTitle: String, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), userReference: CKRecord.Reference) {
         self.geoCodeAddressString = geoCodeAddressString
         self.addressTitle = addressTitle
         self.timeStamp = Date()
         self.ckRecordID = ckRecordID
         
         //ASK: DO i need to create a log in?
-        self.usersLocationRefrence = usersLocationRefrence
+        self.userReference = userReference
     }
     
     var timeStampAsString: String {
@@ -39,11 +39,11 @@ class TargetLocations {
         //Step 1. Unpack the values that i want from the CKREcord
         guard let geoCodeAddressString = ckRecord[LocationConstants.geoCodeAddressStringKey] as? String,
             let addressTitle = ckRecord[LocationConstants.addressTitleKey] as? String,
-        let usersLocationRefrence = ckRecord[LocationConstants.usersLocationRefKey] as? CKRecord.Reference
+        let userReference = ckRecord[LocationConstants.usersLocationRefKey] as? CKRecord.Reference
         else {return nil}
 
         // Step 2. Set tthose values as my initial values for my new instance
-      self.init(geoCodeAddressString: geoCodeAddressString, addressTitle: addressTitle, ckRecordID: ckRecord.recordID, usersLocationRefrence: usersLocationRefrence)
+      self.init(geoCodeAddressString: geoCodeAddressString, addressTitle: addressTitle, ckRecordID: ckRecord.recordID, userReference: userReference)
 //        self.usersLocationRefrence = usersLocationRefrence
 
     }

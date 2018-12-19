@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import UserNotifications
 
-class OnboardingViewController: UIViewController,  CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
+class LocationOnboardingVC: UIViewController,  CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
 
     private let locationManger = CLLocationManager()
     private let center = UNUserNotificationCenter.current()
@@ -140,7 +140,7 @@ class OnboardingViewController: UIViewController,  CLLocationManagerDelegate, UN
     }
     
 }
-extension OnboardingViewController {
+extension LocationOnboardingVC {
     
     // MARK: - Location Delegate Functions
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
@@ -165,7 +165,7 @@ extension OnboardingViewController {
     }
 }
 
-extension OnboardingViewController {
+extension LocationOnboardingVC {
     
     // MARK: - Notification Delegate Functions for testing
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
@@ -190,7 +190,7 @@ extension OnboardingViewController {
     }
 }
 
-extension OnboardingViewController {
+extension LocationOnboardingVC {
     
     // MARK: - Location Notification function that gets called when the user enteres the target region
     

@@ -1,19 +1,32 @@
 //
-//  LocationViewController.swift
+//  WalkThroughVC.swift
 //  Triggers
 //
-//  Created by Ivan Ramirez on 12/17/18.
+//  Created by Ivan Ramirez on 12/18/18.
 //  Copyright © 2018 ramcomw. All rights reserved.
 //
 
 import UIKit
 
-class LocationViewController: UIViewController {
-
+class WalkThroughVC: UIViewController {
+    
+    // MARK: - Oulets
+    
+    @IBOutlet var pageControl: UIPageControl!
+    
+    @IBOutlet var nextButton: UIButton! {
+        didSet {
+            nextButton.layer.cornerRadius = 25.0
+            nextButton.layer.masksToBounds = true
+        }
+    }
+    
+    @IBOutlet var skipButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-         view.backgroundColor = UIColor.green
+        // Do any additional setup after loading the view.
     }
     
 

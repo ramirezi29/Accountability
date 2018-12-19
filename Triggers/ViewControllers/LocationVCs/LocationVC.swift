@@ -1,5 +1,5 @@
 //
-//  NotesViewController.swift
+//  LocationViewController.swift
 //  Triggers
 //
 //  Created by Ivan Ramirez on 12/17/18.
@@ -8,12 +8,13 @@
 
 import UIKit
 
-class NotesViewController: UIViewController {
+class LocationVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.red
+        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0) ,
+                                      bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
     }
     
 

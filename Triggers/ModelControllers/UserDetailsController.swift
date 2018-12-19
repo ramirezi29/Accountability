@@ -33,6 +33,11 @@ class UserDetailsController {
         let userDetailsReference = CKRecord.Reference(recordID: userDetailsParentID, action: .deleteSelf)
         let predicate = NSPredicate(format: "\(LocationConstants.usersLocationRefKey) == %@", userDetailsReference)
         
+        /*
+         add this to the location controller
+          let predicate = NSPredicate(format: "\(LocationConstants.usersLocationRefKey) == %@", userDetailsReference)
+         */
+        
         // Create the query object, and set the sort order.
         let query = CKQuery(recordType: UserDetailConstants.UserDetailsKey, predicate: predicate)
         query.sortDescriptors = [NSSortDescriptor(key: LocationConstants.timeStampKey, ascending: true)]
@@ -75,10 +80,44 @@ class UserDetailsController {
         }
     }
     
+    // MARK: - Create
     func createNewUserDetailsWith(sponseeName: String, sponsorName: String, sponserTelephoneNumber: String, aaStep: Int, completion: @escaping (Bool) -> Void) {
         
+        let userDetails = UserDetails(sponseeName: sponseeName, sponsorName: sponsorName, sponsorTelephoneNumber: sponserTelephoneNumber, aaStep: aaStep)
+        saveToCloudKit(userDetails: userDetails) { (success) in
+            if success {
+                print("\nSuccessfully created record\n")
+                completion(true)
+            } else {
+                completion(false)
+                print("\nError Creating Record\n")
+                //for test purposes fatal error
+                fatalError("\nFatal Error , error creating record\n")
+            }
+        }
         
     }
+    
+    // MARK: - Update
+    func updateUserDetails(userDetails: UserDetails, sponseeName: String, sponsorName: String, sponserTelephoneNumber: String, aaStep: Int, completion: @escaping (Bool) -> Void) {
+        userDetails.sponseeName = sponseeName
+        userDetails.sponsorName = sponsorName
+        userDetails.sponsorTelephoneNumber = sponsorName
+        
+        let record = CKRecord(userDetails: userDetails)
+        
+        //Note sure why Nil ??
+        let operration = CKModifyRecordsOperation(recordsToSave: [record], recordIDsToDelete: nil)
+        operration.savePolicy = .changedKeys
+        operration.queuePriority = .high
+        operration.qualityOfService = .userInteractive
+        operration.completionBlock = {
+            completion(true)
+        }
+        privateDB.add(operration)
+    }
+    
+    
 }
 
 

@@ -1,19 +1,24 @@
 //
-//  HomeViewController.swift
+//  CalendarVC.swift
 //  Triggers
 //
-//  Created by Ivan Ramirez on 12/17/18.
+//  Created by Ivan Ramirez on 12/18/18.
 //  Copyright © 2018 ramcomw. All rights reserved.
 //
 
 import UIKit
 
-class DashboardViewController: UIViewController {
+class CalendarVC: UIViewController {
 
+    @IBAction func ckShareButton(_ sender: Any) {
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-         view.backgroundColor = UIColor.purple
+       
+        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0) ,
+                                      bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
     }
     
 
@@ -26,5 +31,9 @@ class DashboardViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    
+    
+    @IBAction func shareButtonTapped(_ sender: Any) {
+    }
+    
 }
