@@ -6,12 +6,20 @@
 //  Copyright © 2018 ramcomw. All rights reserved.
 //
 
+
+
 import UIKit
 
-class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource {
+protocol WalkthroughPageViewControllerDelegate: class {
+    func didUpdatePageIndex(currentIndex: Int)
+}
+
+class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    
+     weak var walkthroughDelegate: WalkthroughPageViewControllerDelegate?
     
     var pageHeadings = ["Welcome", "Statistics", "What is Geo-Fence", "How do we track your device", "Why We track your device", "On Boarding User Details"]
-    let pageImages = ["cloudImage"] // can add more
+    let pageImages = ["cloudImage", "cloudImage", "cloudImage", "cloudImage", "cloudImage", "cloudImage", "cloudImage"] // can add more
     let pageSubHeadings = ["Welcome", "Statistics", "What is Geo-Fence", "How do we track your device", "Why We track your device", "On Boarding User Details"]
     
     var currentIndex = 0
@@ -21,6 +29,7 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource {
         super.viewDidLoad()
         // Set the data source to itself
         dataSource = self
+        delegate = self
         
         // create first walk through screen
         if let startingViewController = walkThroughContentController(at: 0) {
@@ -39,7 +48,7 @@ extension WalkThroughPVC {
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        var index = (viewController as? WalkThroughContentVC)?.index ?? 1
+        var index = (viewController as! WalkThroughContentVC).index
         index += 1
         return walkThroughContentController(at: index)
     }
@@ -55,7 +64,7 @@ extension WalkThroughPVC {
             return nil
         }
         //Storyboard ID for the walk through screen. ID used as a ref to create the storyboard instance
-        let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
+        let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
         //
         if let walkthroughVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughContentVC") as? WalkThroughContentVC {
             walkthroughVC.imageFile = pageImages[index]
@@ -66,6 +75,25 @@ extension WalkThroughPVC {
             return walkthroughVC
         }
         return nil
+    }
+    
+    func forwardPage() {
+        currentIndex += 1
+        if let nextViewController = walkThroughContentController(at: currentIndex) {
+            setViewControllers([nextViewController], direction: .forward, animated: true, completion: nil)
+        }
+    }
+    
+    // MARK: - Page View Controller delegate
+    
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        if completed {
+            if let contentViewController = pageViewController.viewControllers?.first as? WalkThroughContentVC {
+                currentIndex = contentViewController.index
+                
+                walkthroughDelegate?.didUpdatePageIndex(currentIndex: currentIndex)
+            }
+        }
     }
 }
 

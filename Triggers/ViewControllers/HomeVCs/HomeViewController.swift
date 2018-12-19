@@ -44,8 +44,15 @@ class HomeViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
+//        super.viewWillAppear(true)
+        
+        // NOTE: - In order to prevent the onboarding walk through from coming up again 
+        if UserDefaults.standard.bool(forKey: "hasViewedWalkthrough") {
+            return
+        }
+        
+        let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
+        
         if let walkThroughVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughVC") as? WalkThroughVC {
             present(walkThroughVC, animated: true, completion: nil)
         }

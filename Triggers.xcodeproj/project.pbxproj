@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		474651F721CA0EC700E23BA0 /* Notes.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 474651F621CA0EC700E23BA0 /* Notes.storyboard */; };
+		474651F921CA0FFB00E23BA0 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 474651F821CA0FFB00E23BA0 /* Home.storyboard */; };
 		477145E721C953960016FFAB /* ColorGradientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145E621C953960016FFAB /* ColorGradientExtension.swift */; };
 		477145EA21C956CB0016FFAB /* ColorCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145E921C956CB0016FFAB /* ColorCollection.swift */; };
 		477145EE21C961700016FFAB /* WalkThroughOnBoarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 477145EC21C961700016FFAB /* WalkThroughOnBoarding.storyboard */; };
@@ -38,6 +40,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		474651F621CA0EC700E23BA0 /* Notes.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Notes.storyboard; sourceTree = "<group>"; };
+		474651F821CA0FFB00E23BA0 /* Home.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		477145E621C953960016FFAB /* ColorGradientExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGradientExtension.swift; sourceTree = "<group>"; };
 		477145E921C956CB0016FFAB /* ColorCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollection.swift; sourceTree = "<group>"; };
 		477145ED21C961700016FFAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Triggers/UI/StoryBoards/Base.lproj/WalkThroughOnBoarding.storyboard; sourceTree = "<group>"; };
@@ -242,8 +246,10 @@
 		47E29E3321C8296D00FA44EE /* StoryBoards */ = {
 			isa = PBXGroup;
 			children = (
+				474651F621CA0EC700E23BA0 /* Notes.storyboard */,
 				4771460621C9AE160016FFAB /* Calendar.storyboard */,
 				477145EC21C961700016FFAB /* WalkThroughOnBoarding.storyboard */,
+				474651F821CA0FFB00E23BA0 /* Home.storyboard */,
 				47E29E2321C80B0400FA44EE /* LaunchScreen.storyboard */,
 				47E29E1E21C80B0200FA44EE /* Main.storyboard */,
 			);
@@ -350,11 +356,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				477145EE21C961700016FFAB /* WalkThroughOnBoarding.storyboard in Resources */,
+				474651F721CA0EC700E23BA0 /* Notes.storyboard in Resources */,
 				47E29E4821C8524A00FA44EE /* Localizable.strings in Resources */,
 				47E29E2521C80B0400FA44EE /* LaunchScreen.storyboard in Resources */,
 				47E29E2221C80B0400FA44EE /* Assets.xcassets in Resources */,
 				47E29E2021C80B0200FA44EE /* Main.storyboard in Resources */,
 				4771460721C9AE160016FFAB /* Calendar.storyboard in Resources */,
+				474651F921CA0FFB00E23BA0 /* Home.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

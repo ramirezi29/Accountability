@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WalkThroughVC: UIViewController {
+class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     
     // MARK: - Oulets
     
@@ -23,21 +23,68 @@ class WalkThroughVC: UIViewController {
     
     @IBOutlet var skipButton: UIButton!
     
+    var walkThroughPVC: WalkThroughPVC?
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        pageControl.currentPageIndicatorTintColor = UIColor.black
+        pageControl.pageIndicatorTintColor = UIColor.gray
+        pageControl.backgroundColor = UIColor.clear
+        pageControl.numberOfPages = 7
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func updateUI() {
+        if let index = walkThroughPVC?.currentIndex {
+            switch index {
+            case 0...5:
+                nextButton.setTitle("NEXT", for: .normal)
+                skipButton.isHidden = false
+                
+            case 6:
+                nextButton.setTitle("GET STARTED", for: .normal)
+                skipButton.isHidden = true
+                
+            default: break
+            }
+            
+            pageControl.currentPage = index
+        }
     }
-    */
-
+    
+    
+    func didUpdatePageIndex(currentIndex: Int) {
+        updateUI()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destination = segue.destination
+        if let pageViewController = destination as? WalkThroughPVC {
+            walkThroughPVC = pageViewController
+            walkThroughPVC?.walkthroughDelegate = self
+        }
+    }
+    
+    @IBAction func nextButtonTapped(_ sender: Any) {
+        if let index = walkThroughPVC?.currentIndex {
+            switch index {
+            case 0...5:
+                walkThroughPVC?.forwardPage()
+                
+            case 6:
+                UserDefaults.standard.set(true, forKey: "hasViewedWalkthrough")
+                dismiss(animated: true, completion: nil)
+                
+            default: break
+            }
+        }
+        
+       updateUI()
+    }
+    
+    
+    @IBAction func skipButtonTapped(_ sender: Any) {
+    }
+    
 }

@@ -20,6 +20,10 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Always Usage Descrption : Needed in order to  provide you with location notiffciations </string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>When in Usage Desacritpion: With this option, some features, like notification might not be avaliable </string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,9 +45,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Always Usage Descrption : Needed in order to  provide you with location notiffciations </string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>When in Usage Desacritpion: With this option, some features, like notification might not be avaliable </string>
 </dict>
 </plist>
