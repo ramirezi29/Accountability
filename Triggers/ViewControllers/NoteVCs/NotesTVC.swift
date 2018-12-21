@@ -17,8 +17,8 @@ class NotesTVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0) ,
-                                      bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        //background Color
+        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255,green: 213/255, blue: 214/255, alpha: 1.0))
     }
 
     // MARK: - Table view data source
@@ -87,6 +87,10 @@ class NotesTVC: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    @IBAction func editButtonTapped(_ sender: Any) {
+    }
+    
 
 }
 

@@ -37,8 +37,8 @@ class OnBoardingDetailsVC: UIViewController {
         
         guard let destinationVC = segue.destination as? HomeViewController else {return}
         
-        destinationVC.sponseeName = sponseeName
-        destinationVC.sponsorName = sponsorName
+//        destinationVC.sponseeName = sponseeName
+//        destinationVC.sponsorName = sponsorName
 //        destinationVC.aaStep = aaStep
         
     }

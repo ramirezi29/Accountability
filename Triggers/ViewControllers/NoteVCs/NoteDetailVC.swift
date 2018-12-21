@@ -10,10 +10,12 @@ import UIKit
 
 class NoteDetailVC: UIViewController {
 
-    @IBOutlet weak var editLabel: UILabel!
-    @IBOutlet weak var editSwitch: UISwitch!
-    @IBOutlet weak var cancelButton: UIBarButtonItem!
+    
+    
+    @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var savebutton: UIBarButtonItem!
+    @IBOutlet weak var textBodyView: UITextView!
+    @IBOutlet weak var titelTextField: UITextField!
     
     
     override func viewDidLoad() {
@@ -31,8 +33,7 @@ class NoteDetailVC: UIViewController {
          dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func editSwitchToggled(_ sender: UISwitch) {
-    }
+  
     
     /*
     // MARK: - Navigation

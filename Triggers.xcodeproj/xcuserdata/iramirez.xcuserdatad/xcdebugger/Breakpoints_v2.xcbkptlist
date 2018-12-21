@@ -4,13 +4,195 @@
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            scope = "0"
-            stopOnStyle = "0">
+            filePath = "Triggers/ModelControllers/UserDetailsController.swift"
+            timestampString = "567062533.449545"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "createNewUserDetailsWith(sponseeName:sponsorName:sponserTelephoneNumber:sponsorEmail:aaStep:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/ViewControllers/HomeVCs/HomeViewController.swift"
+            timestampString = "567062533.449947"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "303"
+            endingLineNumber = "303"
+            landmarkName = "textFieldShouldReturn(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/ViewControllers/HomeVCs/HomeViewController.swift"
+            timestampString = "567062533.4502831"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "302"
+            endingLineNumber = "302"
+            landmarkName = "textFieldShouldReturn(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/Models/UserDetails.swift"
+            timestampString = "567062533.4503469"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "init(ckRecord:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Triggers.UserDetails.__allocating_init(ckRecord: __C.CKRecord) -&gt; Swift.Optional&lt;Triggers.UserDetails&gt;"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/Models/UserDetails.swift"
+                  timestampString = "567062533.8641599"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Triggers.UserDetails.init(ckRecord: __C.CKRecord) -&gt; Swift.Optional&lt;Triggers.UserDetails&gt;"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/Models/UserDetails.swift"
+                  timestampString = "567062533.866984"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "39"
+                  endingLineNumber = "39"
+                  offsetFromSymbolStart = "40">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/Models/UserDetails.swift"
+            timestampString = "567062533.451076"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "CKRecord"
+            landmarkType = "21">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(extension in Triggers):__C.CKRecord.init(userDetails: Triggers.UserDetails) -&gt; __C.CKRecord"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/Models/UserDetails.swift"
+                  timestampString = "567062533.873297"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(extension in Triggers):__C.CKRecord.init(userDetails: Triggers.UserDetails) -&gt; __C.CKRecord"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/Models/UserDetails.swift"
+                  timestampString = "567062533.875598"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "36">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/ViewControllers/HomeVCs/HomeViewController.swift"
+            timestampString = "567062533.4513921"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Triggers.HomeViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/ViewControllers/HomeVCs/HomeViewController.swift"
+                  timestampString = "567062533.881586"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "82"
+                  endingLineNumber = "82"
+                  offsetFromSymbolStart = "1532">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Array&lt;Triggers.UserDetails&gt;&gt;, Swift.Optional&lt;Triggers.NetworkingError&gt;) -&gt; () in Triggers.HomeViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/ViewControllers/HomeVCs/HomeViewController.swift"
+                  timestampString = "567062533.883674"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "83"
+                  endingLineNumber = "83"
+                  offsetFromSymbolStart = "88">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

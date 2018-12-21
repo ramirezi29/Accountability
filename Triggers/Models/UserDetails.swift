@@ -14,20 +14,23 @@ import CloudKit
 class UserDetails {
     var sponseeName: String
     var sponsorName: String?
-    var sponsorTelephoneNumber: String
-    
+    var sponsorTelephoneNumber: String?
+    var sponsorEmail: String?
     var aaStep: Int?
     var ckRecordID: CKRecord.ID?
     //Dont need a refence 
     
-    var targetLocations: [TargetLocations] = []
+    var targetLocations: [TargetLocation] = []
     
-    init(sponseeName: String, sponsorName: String, sponsorTelephoneNumber: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString)) {
+    var notes: [Note] = []
+    
+    init(sponseeName: String, sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString)) {
         self.sponseeName = sponseeName
         self.sponsorName = sponsorName
         self.sponsorTelephoneNumber = sponsorTelephoneNumber
         self.aaStep = aaStep
         self.ckRecordID = ckRecordID
+        self.sponsorEmail = sponsorEmail
         
     }
     
@@ -36,11 +39,16 @@ class UserDetails {
         guard let sponseeName = ckRecord[UserDetailConstants.sponseeNameKey] as? String,
             let sponsorName = ckRecord[UserDetailConstants.sponsorNameKey] as? String,
             let sponsorTelephoneNumber = ckRecord[UserDetailConstants.sponsorTelephoneNumberKey] as? String,
+            
+            let sponsorEmail = ckRecord[UserDetailConstants.sponsorEmailKey] as? String,
+            
             let aaStep = ckRecord[UserDetailConstants.aaStepKey] as? Int
+            
         
             else {return nil}
         
-        self.init(sponseeName: sponseeName, sponsorName: sponsorName, sponsorTelephoneNumber: sponsorTelephoneNumber, aaStep: aaStep, ckRecordID: ckRecord.recordID)
+        
+        self.init(sponseeName: sponseeName, sponsorName: sponsorName, sponsorTelephoneNumber: sponsorTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep, ckRecordID: ckRecord.recordID)
     }
 }
 
@@ -51,10 +59,11 @@ extension CKRecord {
         self.init(recordType: UserDetailConstants.UserDetailsKey, recordID: recordID)
         self.setValue(userDetails.sponseeName, forKey: UserDetailConstants.sponseeNameKey)
         self.setValue(userDetails.sponsorTelephoneNumber, forKey: UserDetailConstants.sponsorTelephoneNumberKey)
+        self.setValue(userDetails.sponsorEmail, forKey: UserDetailConstants.sponsorEmailKey)
         self.setValue(userDetails.aaStep, forKey: UserDetailConstants.aaStepKey)
         
         
-       // NOTE: - In order to not save a branch new record
+       // NOTE: - In order to not save a brand new record
         userDetails.ckRecordID = recordID
     }
 }

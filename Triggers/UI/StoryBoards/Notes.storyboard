@@ -29,6 +29,9 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" title="Edit"/>
                                         </button>
+                                        <connections>
+                                            <action selector="editButtonTapped:" destination="8Z9-zc-agE" id="DUa-QJ-AF7"/>
+                                        </connections>
                                     </barButtonItem>
                                     <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="Fcl-TG-3pb">
                                         <connections>
@@ -95,26 +98,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tUL-5Z-APZ">
-                                <rect key="frame" x="149" y="107" width="85" height="31"/>
-                                <connections>
-                                    <action selector="editSwitchToggled:" destination="SeD-TK-5FM" eventType="valueChanged" id="gMY-vX-wcE"/>
-                                </connections>
-                            </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Edit)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FlV-Sa-UnK">
-                                <rect key="frame" x="145" y="78" width="81" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="amA-wM-y31">
-                                <rect key="frame" x="37.5" y="65.5" width="300" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="UX2-LW-5E0">
-                                <rect key="frame" x="34" y="151.5" width="307" height="548"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="UX2-LW-5E0">
+                                <rect key="frame" x="34" y="152" width="307" height="505"/>
                                 <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -127,7 +112,7 @@
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="GjZ-mL-nNK">
                                                 <rect key="frame" x="16" y="7" width="92" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="(Cancel)"/>
+                                                <state key="normal" title="(BACK)"/>
                                                 <connections>
                                                     <action selector="cancelButtonTapped:" destination="SeD-TK-5FM" eventType="touchUpInside" id="ZjV-Ez-bbE"/>
                                                 </connections>
@@ -149,35 +134,38 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="amA-wM-y31">
+                                <rect key="frame" x="40" y="92" width="300" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="UX2-LW-5E0" firstAttribute="centerY" secondItem="UeK-2e-DWc" secondAttribute="centerY" constant="92" id="29q-Rh-8kM"/>
+                            <constraint firstItem="UX2-LW-5E0" firstAttribute="centerY" secondItem="UeK-2e-DWc" secondAttribute="centerY" constant="71" id="29q-Rh-8kM"/>
                             <constraint firstItem="UX2-LW-5E0" firstAttribute="leading" secondItem="1cV-pg-rHc" secondAttribute="leading" constant="34" id="44Z-uV-Lxg"/>
-                            <constraint firstItem="PiD-p1-JbH" firstAttribute="leading" secondItem="FlV-Sa-UnK" secondAttribute="trailing" constant="-225" id="8lI-Ja-3t8"/>
-                            <constraint firstItem="UX2-LW-5E0" firstAttribute="centerX" secondItem="FlV-Sa-UnK" secondAttribute="centerX" constant="2" id="Kg9-iT-H9I"/>
-                            <constraint firstItem="tUL-5Z-APZ" firstAttribute="top" secondItem="FlV-Sa-UnK" secondAttribute="bottom" constant="8" id="Lmp-nr-OIf"/>
-                            <constraint firstItem="amA-wM-y31" firstAttribute="centerY" secondItem="UeK-2e-DWc" secondAttribute="centerY" constant="-253" id="Uto-aj-7tg"/>
-                            <constraint firstItem="UX2-LW-5E0" firstAttribute="top" secondItem="amA-wM-y31" secondAttribute="bottom" constant="56" id="awS-ix-juP"/>
+                            <constraint firstItem="amA-wM-y31" firstAttribute="centerY" secondItem="UeK-2e-DWc" secondAttribute="centerY" constant="-226.5" id="Uto-aj-7tg"/>
+                            <constraint firstItem="UX2-LW-5E0" firstAttribute="top" secondItem="amA-wM-y31" secondAttribute="bottom" constant="29.5" id="awS-ix-juP"/>
                             <constraint firstItem="amA-wM-y31" firstAttribute="width" secondItem="UeK-2e-DWc" secondAttribute="width" multiplier="0.8" id="b7w-w3-sEm"/>
-                            <constraint firstItem="FlV-Sa-UnK" firstAttribute="top" secondItem="PiD-p1-JbH" secondAttribute="bottom" constant="14" id="dui-Zt-EJf"/>
                             <constraint firstItem="PiD-p1-JbH" firstAttribute="leading" secondItem="1cV-pg-rHc" secondAttribute="leading" constant="1" id="f7H-Z0-vaY"/>
-                            <constraint firstItem="amA-wM-y31" firstAttribute="centerX" secondItem="UeK-2e-DWc" secondAttribute="centerX" id="mPw-0X-YIT"/>
+                            <constraint firstItem="amA-wM-y31" firstAttribute="centerX" secondItem="UeK-2e-DWc" secondAttribute="centerX" constant="2.5" id="mPw-0X-YIT"/>
                             <constraint firstItem="UX2-LW-5E0" firstAttribute="centerX" secondItem="UeK-2e-DWc" secondAttribute="centerX" id="oaQ-J8-im6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="PiD-p1-JbH" secondAttribute="trailing" constant="-21" id="pfl-oe-B0I"/>
-                            <constraint firstItem="tUL-5Z-APZ" firstAttribute="leading" secondItem="amA-wM-y31" secondAttribute="trailing" constant="-188.66666666666663" id="smh-NX-kBO"/>
-                            <constraint firstItem="PiD-p1-JbH" firstAttribute="centerX" secondItem="tUL-5Z-APZ" secondAttribute="centerX" id="uRt-Ws-kKS"/>
                             <constraint firstItem="PiD-p1-JbH" firstAttribute="top" secondItem="1cV-pg-rHc" secondAttribute="top" id="yXc-Iz-5zB"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="1cV-pg-rHc"/>
                     </view>
                     <connections>
-                        <outlet property="editLabel" destination="FlV-Sa-UnK" id="mpo-0d-ek5"/>
+                        <outlet property="backButton" destination="gq1-Gn-LYT" id="uf6-rl-3VV"/>
+                        <outlet property="savebutton" destination="zzS-HT-1gq" id="H7V-R8-xsJ"/>
+                        <outlet property="textBodyView" destination="UX2-LW-5E0" id="0Jz-i7-lP4"/>
+                        <outlet property="titelTextField" destination="amA-wM-y31" id="9nL-Uh-GEl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AOl-qJ-IPr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2416" y="-118"/>
+            <point key="canvasLocation" x="-2416.8000000000002" y="-118.29085457271366"/>
         </scene>
     </scenes>
 </document>
