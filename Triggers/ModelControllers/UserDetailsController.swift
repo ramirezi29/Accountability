@@ -25,12 +25,16 @@ class UserDetailsController {
     
     typealias fetchCompletion = ([UserDetails]?, NetworkingError?) -> Void
     
+    typealias boolVoidCompletion = (Bool) -> Void
+    
     // MARK: - Fetch
     func fetchItems(userDetails: UserDetails, completion: @escaping fetchCompletion) {
         
         // Match item records whose owningList(newsletter) field points to the specified list record (instance of Newsletter)
         guard let userDetailsParentID = userDetails.ckRecordID else {return}
         let userDetailsReference = CKRecord.Reference(recordID: userDetailsParentID, action: .deleteSelf)
+        
+        // MARK: - Test this to see if the predicate should be Value(true)
         let predicate = NSPredicate(format: "\(LocationConstants.usersLocationRefKey) == %@", userDetailsReference)
         
         /*
@@ -61,7 +65,7 @@ class UserDetailsController {
     }
     
     // MARK: - Save
-    func saveToCloudKit(userDetails: UserDetails, completion: @escaping (Bool) -> Void) {
+    func saveToCloudKit(userDetails: UserDetails, completion: @escaping boolVoidCompletion) {
         let userDetailRecord = CKRecord(userDetails: userDetails)
         
         privateDB.save(userDetailRecord) { (record, error) in
@@ -81,28 +85,30 @@ class UserDetailsController {
     }
     
     // MARK: - Create
-    func createNewUserDetailsWith(sponseeName: String, sponsorName: String, sponserTelephoneNumber: String, aaStep: Int, completion: @escaping (Bool) -> Void) {
+    func createNewUserDetailsWith(sponseeName: String, sponsorName: String, sponserTelephoneNumber: String, sponsorEmail: String, aaStep: Int, completion: @escaping boolVoidCompletion) {
         
-        let userDetails = UserDetails(sponseeName: sponseeName, sponsorName: sponsorName, sponsorTelephoneNumber: sponserTelephoneNumber, aaStep: aaStep)
+        let userDetails = UserDetails(sponseeName: sponseeName, sponsorName: sponsorName, sponsorTelephoneNumber: sponserTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep)
+
         saveToCloudKit(userDetails: userDetails) { (success) in
             if success {
-                print("\nSuccessfully created record\n")
+                print("\n🙏🏽Successfully created record\n")
                 completion(true)
             } else {
                 completion(false)
-                print("\nError Creating Record\n")
+                print("\n💀Error Creating Record💀\n")
                 //for test purposes fatal error
-                fatalError("\nFatal Error , error creating record\n")
+//                fatalError("\nFatal Error , error creating record\n")
             }
         }
         
     }
     
     // MARK: - Update
-    func updateUserDetails(userDetails: UserDetails, sponseeName: String, sponsorName: String, sponserTelephoneNumber: String, aaStep: Int, completion: @escaping (Bool) -> Void) {
+    func updateUserDetails(userDetails: UserDetails, sponseeName: String, sponsorName: String, sponserTelephoneNumber: String, sponsorEmail: String, aaStep: Int, completion: @escaping boolVoidCompletion) {
         userDetails.sponseeName = sponseeName
         userDetails.sponsorName = sponsorName
         userDetails.sponsorTelephoneNumber = sponsorName
+        userDetails.sponsorEmail = sponsorEmail
         
         let record = CKRecord(userDetails: userDetails)
         

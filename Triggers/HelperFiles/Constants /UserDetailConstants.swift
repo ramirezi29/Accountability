@@ -15,5 +15,6 @@ struct UserDetailConstants {
     static let sponsorNameKey = "sponsorName"
     static let sponsorTelephoneNumberKey = "sponsorTelephoneNumber"
     static let aaStepKey = "aaStep"
+    static let sponsorEmailKey = "sponsorEmail"
     
 }

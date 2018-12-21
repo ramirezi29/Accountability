@@ -15,4 +15,7 @@ struct LocationConstants  {
     static let addressTitleKey = "addressTitle"
     static let timeStampKey = "timeStamp"
     static let usersLocationRefKey = "usersLocationRefKey"
+    static let longitudeKey = "longitude"
+    static let latitudeKey = "latitude"
+    
 }

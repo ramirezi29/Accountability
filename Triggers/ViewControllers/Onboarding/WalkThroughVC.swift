@@ -12,6 +12,8 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     
     // MARK: - Oulets
     
+    @IBOutlet var bossViewOutlet: UIView!
+    @IBOutlet weak var buttomViewOutlet: UIView!
     @IBOutlet var pageControl: UIPageControl!
     
     @IBOutlet var nextButton: UIButton! {
@@ -24,37 +26,82 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     @IBOutlet var skipButton: UIButton!
     
     var walkThroughPVC: WalkThroughPVC?
-    
+    var disableOnBardingBool = false
+    var disableOnboardingKey = "disableOnboardingKey"
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // user defualts
+        loadUserDefaults()
+        
+        if disableOnBardingBool == true  {
+         presentMainView()
+        }
+        //View
+        buttomViewOutlet.backgroundColor = .black
+        bossViewOutlet.backgroundColor = .red
 
-        pageControl.currentPageIndicatorTintColor = UIColor.black
+        // index
+        let index = walkThroughPVC?.currentIndex
+        print("\nThe View just loaded and you are on index: \(String(describing: index))\n")
+        
+        // Next button
+        nextButton.isHidden = true
+        
+        // Page Control
+        pageControl.currentPageIndicatorTintColor = UIColor.white
         pageControl.pageIndicatorTintColor = UIColor.gray
         pageControl.backgroundColor = UIColor.clear
         pageControl.numberOfPages = 7
+        
+        
+  
+    }
+    
+    func loadUserDefaults(){
+        disableOnBardingBool = UserDefaults.standard.bool(forKey: disableOnboardingKey)
     }
     
     func updateUI() {
         if let index = walkThroughPVC?.currentIndex {
+            print("\ncurrent index: \(index)")
             switch index {
             case 0...5:
-                nextButton.setTitle("NEXT", for: .normal)
-                skipButton.isHidden = false
+                self.nextButton.isEnabled = false
+                UIView.animate(withDuration: 0.8, delay: 0, options: [], animations: {
+                    self.nextButton.alpha = 0.0
+                }, completion: nil)
                 
+//                nextButton.isHidden = true
+                //Uncomment for later version if you want to show the nextButton on the walk through VC starting from index [0]
+//                nextButton.setTitle("NEXT", for: .normal)
+
             case 6:
-                nextButton.setTitle("GET STARTED", for: .normal)
-                skipButton.isHidden = true
-                
+            print("foo")
+//                nextButton.isEnabled = true
+//                  nextButton.isHidden = false
+//
+//                  UIView.animate(withDuration: 0.8, delay: 0.1, options: [], animations: {
+//                    self.nextButton.alpha = 1.0
+//                  }, completion: nil)
+//
+//                nextButton.setTitle("GET STARTED", for: .normal)
             default: break
+                
             }
-            
             pageControl.currentPage = index
         }
     }
     
+    func presentMainView() {
+        let homeTVC = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!
+        present(homeTVC, animated: true, completion: nil)
+    }
     
     func didUpdatePageIndex(currentIndex: Int) {
+        let contentVC = walkThroughPVC!.currentVC!
+        contentVC.delegate = self
+        
         updateUI()
     }
     
@@ -67,24 +114,64 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     }
     
     @IBAction func nextButtonTapped(_ sender: Any) {
+        
         if let index = walkThroughPVC?.currentIndex {
+            
             switch index {
             case 0...5:
                 walkThroughPVC?.forwardPage()
                 
             case 6:
+                
+                // check if already been viewed
+                if disableOnBardingBool == false {
+                    disableOnBardingBool = true
+                     UserDefaults.standard.set(true, forKey: "hasViewedWalkthrough")
+                    dismiss(animated: true, completion: nil)
+                    presentMainView()
+                }
+                print("🔶")
+                print("🕊User Defaults got hit and you are now be segued to Home VC")
+                
                 UserDefaults.standard.set(true, forKey: "hasViewedWalkthrough")
+                
+                // Needed only if they get to the Home VC wihtout first going thorugh the onboarding
                 dismiss(animated: true, completion: nil)
                 
+                
+                // Segue programatically to home view controller
+               
+                presentMainView()
             default: break
             }
+            print("\n♦️ you are on case number: \(index)")
+            print("🔷When you clicked Next you were on index: \(index) now your on index: \(index.advanced(by: 1))")
         }
-        
        updateUI()
     }
-    
-    
-    @IBAction func skipButtonTapped(_ sender: Any) {
+}
+
+extension WalkThroughVC : WalkThroughContentVCDelegate {
+    func validUserNameEntered(username: String, isHidden: Bool) {
+        
+        switch isHidden {
+        case true:
+            nextButton.isEnabled = true
+            nextButton.isHidden = isHidden
+            
+            UIView.animate(withDuration: 0.8, delay: 0.1, options: [], animations: {
+                self.nextButton.alpha = 0.0
+            }, completion: nil)
+            
+        case false:
+            nextButton.isHidden = isHidden
+            
+            UIView.animate(withDuration: 0.8, delay: 0.1, options: [], animations: {
+                self.nextButton.alpha = 1.0
+            }, completion: nil)
+            
+            nextButton.setTitle("GET STARTED", for: .normal)
+        }
+        
     }
-    
 }

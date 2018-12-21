@@ -21,9 +21,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Always Usage Descrption : Needed in order to  provide you with location notiffciations </string>
+	<string>Needed in order to  provide you with location notiffciations </string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Needed in order to  provide you with location notiffciations </string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>When in Usage Desacritpion: With this option, some features, like notification might not be avaliable </string>
+	<string>With this option, some features, like notification might not be avaliable </string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

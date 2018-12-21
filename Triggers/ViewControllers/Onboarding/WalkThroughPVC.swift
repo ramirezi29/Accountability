@@ -17,10 +17,11 @@ protocol WalkthroughPageViewControllerDelegate: class {
 class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
      weak var walkthroughDelegate: WalkthroughPageViewControllerDelegate?
+    var currentVC: WalkThroughContentVC?
     
-    var pageHeadings = ["Welcome", "Statistics", "What is Geo-Fence", "How do we track your device", "Why We track your device", "On Boarding User Details"]
-    let pageImages = ["cloudImage", "cloudImage", "cloudImage", "cloudImage", "cloudImage", "cloudImage", "cloudImage"] // can add more
-    let pageSubHeadings = ["Welcome", "Statistics", "What is Geo-Fence", "How do we track your device", "Why We track your device", "On Boarding User Details"]
+    var pageHeadings = ["0 Welcome","1 Statistics", "2 What is Geo-Fence", "3 How do we track your device", "4 Why We track your device", "5 On Boarding User Details", " 6Words of Encouragment"]
+    var pageImages = ["aloneChair", "manCrouched", "manCrouched", "cityTraffic", "cityTraffic", "cityTraffic", "manCrouched"] // can add more
+    var pageSubHeadings = ["0 Welcome", "1 Statistics", "2 What is Geo-Fence", "3 How do we track your device", "4 Why We track your device", "5 On Boarding User Details", "6 Words of Encouragment"]
     
     var currentIndex = 0
     
@@ -42,7 +43,7 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
 extension WalkThroughPVC {
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        var index = (viewController as? WalkThroughContentVC)?.index ?? 1
+        var index = (viewController as! WalkThroughContentVC).index
         index -= 1
         return walkThroughContentController(at: index)
     }
@@ -59,20 +60,19 @@ extension WalkThroughPVC {
     // page index is in the paramaters, if zero it will create the first onboarding screen
     func walkThroughContentController(at index: Int) -> WalkThroughContentVC? {
         // validation to check
-        if index < 0 || index >= pageHeadings.count
-        {
+        if index < 0 || index >= pageHeadings.count {
             return nil
         }
         //Storyboard ID for the walk through screen. ID used as a ref to create the storyboard instance
         let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
         //
-        if let walkthroughVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughContentVC") as? WalkThroughContentVC {
-            walkthroughVC.imageFile = pageImages[index]
-            walkthroughVC.headLine = pageHeadings[index]
-            walkthroughVC.subHeadLine = pageSubHeadings[index]
-            walkthroughVC.index = index
-            
-            return walkthroughVC
+        if let pageContentVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughContentVC") as? WalkThroughContentVC {
+            pageContentVC.imageFile = pageImages[index]
+            pageContentVC.headLine = pageHeadings[index]
+            pageContentVC.subHeadLine = pageSubHeadings[index]
+            pageContentVC.index = index
+            self.currentVC = pageContentVC
+            return pageContentVC
         }
         return nil
     }
