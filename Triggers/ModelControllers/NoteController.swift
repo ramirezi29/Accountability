@@ -37,7 +37,7 @@ class NoteController {
          */
         
         // Create the query object, and set the sort order.
-        let query = CKQuery(recordType: NoteConstants.NoteKey, predicate: predicate)
+        let query = CKQuery(recordType: NoteConstants.NoteTypeKey, predicate: predicate)
         query.sortDescriptors = [NSSortDescriptor(key: NoteConstants.timeStampKey, ascending: true)]
         privateDB.perform(query, inZoneWith: nil) { (records, error) in
             

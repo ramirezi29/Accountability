@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct UserDetailConstants {
+struct UserConstants {
     
-    static let UserDetailsKey = "UserDetails"
+    static let userTypeKey = "User"
     static let sponseeNameKey = "sponseeName"
     static let sponsorNameKey = "sponsorName"
     static let sponsorTelephoneNumberKey = "sponsorTelephoneNumber"

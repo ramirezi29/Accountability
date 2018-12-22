@@ -48,7 +48,7 @@ class Note {
 extension CKRecord {
     convenience init(note: Note) {
 
-        self.init(recordType: NoteConstants.NoteKey, recordID: note.ckRecordID)
+        self.init(recordType: NoteConstants.NoteTypeKey, recordID: note.ckRecordID)
         self.setValue(note.title, forKey: NoteConstants.titleKey)
         self.setValue(note.textBody, forKey: NoteConstants.textBodyKey)
         self.setValue(note.timeStamp, forKey: NoteConstants.timeStampKey)

@@ -21,13 +21,6 @@
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9rK-Yq-Nqv">
                                 <rect key="frame" x="0.0" y="680" width="414" height="216"/>
                             </pickerView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jbe-4q-CFt">
-                                <rect key="frame" x="352" y="44" width="30" height="30"/>
-                                <state key="normal" title="Edit"/>
-                                <connections>
-                                    <action selector="editButtonTapped:" destination="PIa-I6-a0Y" eventType="touchUpInside" id="c54-Zj-a4N"/>
-                                </connections>
-                            </button>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="(Sponsor Name)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Xkr-ar-HWz">
                                 <rect key="frame" x="39" y="201" width="237" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -62,7 +55,7 @@
                                 <state key="normal" title="(Location Button)"/>
                                 <connections>
                                     <action selector="locationButtonTapped:" destination="PIa-I6-a0Y" eventType="touchUpInside" id="Jer-mF-6Hq"/>
-                                    <segue destination="Zze-cv-TWm" kind="show" id="YnG-1M-ELI"/>
+                                    <segue destination="fJF-UH-OSc" kind="show" identifier="segueToLocationTVC" id="I16-N4-JFJ"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Current AA Step" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pcc-9n-smK">
@@ -82,15 +75,22 @@
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="E3n-yE-kfC">
                                 <rect key="frame" x="56" y="49" width="20" height="20"/>
                             </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jbe-4q-CFt">
+                                <rect key="frame" x="319" y="44" width="30" height="30"/>
+                                <state key="normal" title="Edit"/>
+                                <connections>
+                                    <action selector="editButtonTapped:" destination="PIa-I6-a0Y" eventType="touchUpInside" id="c54-Zj-a4N"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="9rK-Yq-Nqv" secondAttribute="bottom" id="3HV-YI-ZEo"/>
-                            <constraint firstItem="Bzs-Kv-5l4" firstAttribute="trailing" secondItem="Jbe-4q-CFt" secondAttribute="trailing" constant="32" id="B3o-hF-rAx"/>
+                            <constraint firstItem="Bzs-Kv-5l4" firstAttribute="trailing" secondItem="Jbe-4q-CFt" secondAttribute="trailing" constant="65" id="B3o-hF-rAx"/>
                             <constraint firstItem="E3n-yE-kfC" firstAttribute="top" secondItem="Bzs-Kv-5l4" secondAttribute="top" constant="5" id="Gju-dd-gne"/>
                             <constraint firstItem="9rK-Yq-Nqv" firstAttribute="leading" secondItem="Bzs-Kv-5l4" secondAttribute="leading" id="LR1-Nd-sLJ"/>
                             <constraint firstItem="9rK-Yq-Nqv" firstAttribute="trailing" secondItem="Bzs-Kv-5l4" secondAttribute="trailing" id="ezx-kZ-Sx4"/>
-                            <constraint firstItem="Jbe-4q-CFt" firstAttribute="leading" secondItem="E3n-yE-kfC" secondAttribute="trailing" constant="276" id="pGd-no-qal"/>
+                            <constraint firstItem="Jbe-4q-CFt" firstAttribute="leading" secondItem="E3n-yE-kfC" secondAttribute="trailing" constant="243" id="pGd-no-qal"/>
                             <constraint firstItem="Jbe-4q-CFt" firstAttribute="top" secondItem="Bzs-Kv-5l4" secondAttribute="top" id="szW-sb-s7C"/>
                             <constraint firstItem="E3n-yE-kfC" firstAttribute="leading" secondItem="Bzs-Kv-5l4" secondAttribute="leading" constant="56" id="tu9-Uo-1qd"/>
                         </constraints>
@@ -111,25 +111,50 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZD1-B6-Gtg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5917" y="-433"/>
+            <point key="canvasLocation" x="-5423" y="-139"/>
         </scene>
         <!--Locations To Avoid-->
         <scene sceneID="eMx-TO-MaJ">
             <objects>
-                <tableViewController id="fJF-UH-OSc" sceneMemberID="viewController">
+                <tableViewController id="fJF-UH-OSc" customClass="LocationTVC" customModule="Triggers" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="fZR-yg-Itw">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="locationCell" id="Eka-OR-0Um">
-                                <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="locationCell" rowHeight="56" id="Eka-OR-0Um" customClass="LocationTVCell" customModule="Triggers" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="56"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Eka-OR-0Um" id="tq6-tl-u7L">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="55.666666666666664"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="AIi-5J-WVE">
+                                            <rect key="frame" x="16" y="3" width="189" height="49.666666666666664"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cQ0-kb-h4b">
+                                                    <rect key="frame" x="0.0" y="0.0" width="57.333333333333336" height="49.666666666666664"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Location Label)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SMd-cc-fol">
+                                                    <rect key="frame" x="65.333333333333314" y="0.0" width="123.66666666666669" height="49.666666666666664"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="AIi-5J-WVE" firstAttribute="top" secondItem="tq6-tl-u7L" secondAttribute="top" constant="3" id="L3n-5P-r6P"/>
+                                        <constraint firstAttribute="trailing" secondItem="AIi-5J-WVE" secondAttribute="trailing" constant="209" id="LzY-Yw-LVg"/>
+                                        <constraint firstItem="AIi-5J-WVE" firstAttribute="leading" secondItem="tq6-tl-u7L" secondAttribute="leading" constant="16" id="lUS-AW-HCJ"/>
+                                        <constraint firstAttribute="bottom" secondItem="AIi-5J-WVE" secondAttribute="bottom" constant="3" id="m5w-kA-WRG"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="locationImageView" destination="cQ0-kb-h4b" id="3D7-fz-ZRP"/>
+                                    <outlet property="locationLabel" destination="SMd-cc-fol" id="ofB-2Q-hqf"/>
+                                    <outlet property="locationTitleLabel" destination="SMd-cc-fol" id="cOk-Sd-g8i"/>
                                     <segue destination="gDw-t1-9VE" kind="show" identifier="toDetailVC" id="pcR-Hq-OEo"/>
                                 </connections>
                             </tableViewCell>
@@ -139,39 +164,34 @@
                             <outlet property="delegate" destination="fJF-UH-OSc" id="QsH-qM-wml"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Locations To Avoid" id="D6S-Lp-fAx">
-                        <barButtonItem key="backBarButtonItem" title="Done" id="l0R-2i-ypK"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="f5U-mN-BQ8">
+                    <toolbarItems>
+                        <barButtonItem systemItem="done" id="aT7-Eb-tuD">
+                            <connections>
+                                <action selector="doneButtonTapped:" destination="fJF-UH-OSc" id="ARU-nU-hWX"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem systemItem="add" id="f5U-mN-BQ8">
                             <connections>
                                 <segue destination="gDw-t1-9VE" kind="show" identifier="" id="5RI-9k-Je8"/>
                             </connections>
                         </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="Locations To Avoid" id="D6S-Lp-fAx">
+                        <barButtonItem key="backBarButtonItem" title="Done" id="l0R-2i-ypK"/>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="doneButton" destination="aT7-Eb-tuD" id="S2H-QD-MoO"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8RT-rd-FaO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4017" y="-739"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="D7G-SE-qCB">
-            <objects>
-                <navigationController id="Zze-cv-TWm" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="y6D-0u-en5">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="fJF-UH-OSc" kind="relationship" relationship="rootViewController" id="0km-Lm-sN6"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MUk-TA-fBK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-4912" y="-739"/>
+            <point key="canvasLocation" x="-4017.3913043478265" y="-739.28571428571422"/>
         </scene>
         <!--Locations to Avoid-->
         <scene sceneID="6Ts-z0-IsE">
             <objects>
-                <viewController title="Locations to Avoid" id="gDw-t1-9VE" sceneMemberID="viewController">
+                <viewController title="Locations to Avoid" id="gDw-t1-9VE" customClass="LocationDetailVC" customModule="Triggers" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6S6-Ua-XQJ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -201,6 +221,9 @@
                                 <rect key="frame" x="178" y="189" width="59" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="(Search)"/>
+                                <connections>
+                                    <action selector="searchButtonTapped:" destination="gDw-t1-9VE" eventType="touchUpInside" id="bcf-aB-BsT"/>
+                                </connections>
                             </button>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="pjy-wM-MQo">
                                 <rect key="frame" x="0.0" y="234" width="414" height="635"/>
@@ -217,9 +240,24 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="j7t-ie-uvz"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" id="YYG-Vb-eMP">
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="7lZ-m5-LR2"/>
-                    </navigationItem>
+                    <toolbarItems>
+                        <barButtonItem title="Save" id="7lZ-m5-LR2">
+                            <connections>
+                                <action selector="saveButtonTapped:" destination="gDw-t1-9VE" id="r6i-vb-Uhg"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="Title" id="YYG-Vb-eMP"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="addressTextField" destination="EDU-7T-iqx" id="8uv-v0-7o3"/>
+                        <outlet property="enterAddressLabel" destination="KQw-26-lYr" id="EXz-9d-cdc"/>
+                        <outlet property="enterTitleLabel" destination="9C9-km-m2H" id="z2o-Hq-Lqi"/>
+                        <outlet property="locationTitleTextField" destination="Mc6-Dd-ozJ" id="gaB-MR-E7f"/>
+                        <outlet property="mapViewOutlet" destination="pjy-wM-MQo" id="Gh5-Lu-H0d"/>
+                        <outlet property="saveButton" destination="7lZ-m5-LR2" id="ZJo-Ec-fEz"/>
+                        <outlet property="searchButton" destination="Ynv-Zo-qKs" id="Xkn-jE-P2X"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Ml-c3-93n" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
