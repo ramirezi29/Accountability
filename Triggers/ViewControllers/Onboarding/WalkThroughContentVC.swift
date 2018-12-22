@@ -250,9 +250,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         guard let sponseeName = sponseeNameTextField.text else {return}
         
         guard let destinationVC = segue.destination as? HomeViewController else {return}
-        destinationVC.sponseeName = sponseeName
+        destinationVC.sponsorNameTextField.text = sponseeName
     }
-    
 }
 
 extension WalkThroughContentVC : UITextFieldDelegate {

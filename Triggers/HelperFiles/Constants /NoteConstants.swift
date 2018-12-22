@@ -10,9 +10,9 @@ import Foundation
 
 struct NoteConstants {
     
-    static let NoteKey = "EntryKey"
-    static let titleKey = "titleKey"
-    static let textBodyKey = "textBodyKey"
-    static let timeStampKey = "timeStampKey"
-    static let userNoteReferenceKey = "userNoteReferenceKey"
+    static let NoteTypeKey = "Note"
+    static let titleKey = "title"
+    static let textBodyKey = "textBody"
+    static let timeStampKey = "timeStamp"
+    static let userNoteReferenceKey = "userNoteReference"
 }

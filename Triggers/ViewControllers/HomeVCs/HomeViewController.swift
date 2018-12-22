@@ -11,12 +11,10 @@ import AVFoundation
 
 class HomeViewController: UIViewController {
     
-    
+    // MARK: - Properties
     @IBOutlet weak var editButton: UIButton!
-    
     @IBOutlet weak var currentAaStepLabel: UILabel!
     @IBOutlet weak var aaPickerView: UIPickerView!
-    
     @IBOutlet weak var locationButton: UIButton!
     
     //TextFields
@@ -27,87 +25,56 @@ class HomeViewController: UIViewController {
     
     //Activity Indicator
     @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
-    
-    //Landing pad
-    var sponseeName: String?
-    var sponsorName: String?
-    var sponsorTelephone: String?
-    var sponsorEmail: String?
-    var aaStep: Int?
-    
-    var userDetails: UserDetails?
-    // MARK: - Uncomment back this might whats missing for the segue from the onboarding VC to this HOme VC
-//    {
-//        didSet {
-//            updateViews()
-//        }
-//    }
-    
+
     var editBool = false
-    
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //TextFields
-
-        
-    //Dismiss Keyboard
-//        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: Selector(self.handle))
+        //Keyboard
+        self.view.endEditing(true)
         
         //Activity Spinner
-        self.activityIndicatorOutlet.isHidden = true
-        
+        self.activityIndicatorOutlet.isHidden = false
         
         // Picker View
         self.aaPickerView.isHidden = true
         self.aaPickerView.dataSource = self
         self.aaPickerView.delegate = self
         
-        
-       
-        
         //Background UI
         view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
         // MARK: - This is coming back Nill
         // ASK: - Look inot why its nil or why it returns
-        guard let userDetails = userDetails else {
-            print("\n\n🤫 guard let userDetails = userDetails returns nil or someting\n\n")
-            return}
         
-        
-        UserDetailsController.shared.fetchItems(userDetails: userDetails) { (userDetails, error) in
-            if (userDetails != nil) {
+        UserController.shared.fetchCurrentUser() { (success, error) in
+            if success {
                 DispatchQueue.main.async {
-                    self.activityIndicatorOutlet.isHidden = false
-                    self.activityIndicatorOutlet.startAnimating()
-                }
-                DispatchQueue.main.async {
-                    // Reload Table View but this isnt a table view
                     self.activityIndicatorOutlet.isHidden = true
-                    self.activityIndicatorOutlet.stopAnimating()
+                    self.activityIndicatorOutlet.startAnimating()
+                    self.updateViews()
                 }
-            } else {
                 
+            } else {
                 //present UI Alert that there was an error loading
                 
                 print("\n🤯 Error fechign Data \n")
-                
+                return
             }
         }
     }
     
-    
     func updateViews() {
-
-        guard let unwrappedSponseeName = sponseeName else {return}
         
-        sponseeNameTextField.text = unwrappedSponseeName
-        }
-
+        guard let loggedInUser = UserController.shared.loggedInUser
+            else { return }
+        sponseeNameTextField.text = loggedInUser.userName
+        sponsorNameTextField.text = loggedInUser.sponsorName
+        sponsorsPhoneNumberTextField.text = loggedInUser.sponsorTelephoneNumber
+        sponsorEmailTextField.text = loggedInUser.sponsorEmail
+        currentAaStepLabel.text = "\(loggedInUser.aaStep)"
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -158,7 +125,6 @@ class HomeViewController: UIViewController {
     
     @IBAction func editButtonTapped(_ sender: Any) {
         
-        
         switch editBool {
         case false:
             // Edit Button
@@ -190,17 +156,17 @@ class HomeViewController: UIViewController {
             editBool = true
         case true:
             
-            
-            guard let sponseeName = sponseeNameTextField.text,
+            guard let userName = sponseeNameTextField.text,
                 let sponsorName = sponsorNameTextField.text,
                 let sponsorTelephone = sponsorsPhoneNumberTextField.text,
                 let sponsorEmail = sponsorEmailTextField.text,
                 let currentStep = currentAaStepLabel.text else {return}
+            
             sponsorNameTextField.resignFirstResponder()
             
             // MARK: - CK Update
-            if let userDetails = userDetails {
-                UserDetailsController.shared.updateUserDetails(userDetails: userDetails, sponseeName: sponseeName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorTelephone, sponsorEmail: sponsorEmail, aaStep: Int(currentStep) ?? 0) { (success) in
+            if let loggedInUser = UserController.shared.loggedInUser {
+                UserController.shared.updateUserDetails(user: loggedInUser, userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorTelephone, sponsorEmail: sponsorEmail, aaStep: Int(currentStep) ?? 1) { (success) in
                     
                     if success {
                         print("🙏🏽Success Updating Entry")
@@ -216,7 +182,7 @@ class HomeViewController: UIViewController {
                 }
             } else {
                 //Mark: - Create
-                UserDetailsController.shared.createNewUserDetailsWith(sponseeName: sponseeName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorTelephone, sponsorEmail: sponsorEmail, aaStep: Int(currentStep) ?? 0) { (success) in
+                UserController.shared.createNewUserDetailsWith(userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorTelephone, sponsorEmail: sponsorEmail, aaStep: Int(currentStep) ?? 1) { (success) in
                     if success {
                         print("\n🙏🏽 Creating new userDetails to CK successful\n")
                         DispatchQueue.main.async {
@@ -237,7 +203,7 @@ class HomeViewController: UIViewController {
             // Text Fields
             textFieldsInactiveFalse()
             
-            // Saving the data picker
+            // pass the Picker View Data to the Step Label
             let selectedAaStep = aaPickerView.selectedRow(inComponent: 1) + 1
             currentAaStepLabel.text = "\(selectedAaStep)"
             
@@ -268,6 +234,13 @@ class HomeViewController: UIViewController {
     @IBAction func locationButtonTapped(_ sender: Any) {
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segueToLocationTVC" {
+            guard let destinvationVC = segue.destination as? LocationTVC else {return}
+            destinvationVC.user = UserController.shared.loggedInUser
+        }
+    }
+    
 }
 
 extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -294,7 +267,6 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             return "\(row + 1) "
         }
     }
-    
 }
 
 extension HomeViewController: UITextFieldDelegate {
