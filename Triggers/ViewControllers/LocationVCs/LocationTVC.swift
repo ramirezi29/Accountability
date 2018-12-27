@@ -11,6 +11,8 @@ import UIKit
 class LocationTVC: UITableViewController {
     
     @IBOutlet weak var doneButton: UIBarButtonItem!
+    @IBOutlet weak var activityViewOutlet: UIView!
+    @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
     
     //landing pad
     var location: Location?
@@ -27,9 +29,17 @@ class LocationTVC: UITableViewController {
     
     var loction: [Location] = []
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
+        //Activity Spinner
+        activityViewOutlet.backgroundColor = UIColor.clear
+        activityIndicatorOutlet.startAnimating()
+        
+        //Background UI
+        view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        
         //Fetch from CK
         guard let user = user else {
             print(" guard let user = user else is nil or something")
@@ -38,20 +48,22 @@ class LocationTVC: UITableViewController {
         
         LocationController.shared.fetchItemsFor(user: user) { (location, error) in
             if location != nil {
-                DispatchQueue.main.async {
-                    //unhide activity indicator
-                    //start animating activity indicator
-                    //Activity Spinner Start
-                }
+              
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
-                    //hide activity indicator
-                    //Activity Spinner Stop
+                    self.activityIndicatorOutlet.stopAnimating()
+                    self.activityViewOutlet.isHidden = true
+                    print("\nLocation Fetch was successful")
                 }
             } else {
-                // Present UI ALert
-                print("\n💀  Error fetcing location records from CK 💀n")
-                return
+                DispatchQueue.main.async {
+                    
+                    self.activityIndicatorOutlet.stopAnimating()
+                    self.activityViewOutlet.isHidden = true
+                    // Present UI ALert
+                    print("\n💀 Error fetcing location records from CK 💀")
+                    return
+                }
             }
         }
     }

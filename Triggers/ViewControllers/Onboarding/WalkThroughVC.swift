@@ -28,6 +28,7 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     var walkThroughPVC: WalkThroughPVC?
     var disableOnBardingBool = false
     var disableOnboardingKey = "disableOnboardingKey"
+    var walkThroughCVC: WalkThroughContentVC?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,9 +54,7 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         pageControl.pageIndicatorTintColor = UIColor.gray
         pageControl.backgroundColor = UIColor.clear
         pageControl.numberOfPages = 7
-        
-        
-  
+
     }
     
     func loadUserDefaults(){
@@ -64,13 +63,15 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     
     func updateUI() {
         if let index = walkThroughPVC?.currentIndex {
-            print("\ncurrent index: \(index)")
+            print("\(String(describing: walkThroughPVC?.currentIndex))")
             switch index {
             case 0...5:
-                self.nextButton.isEnabled = false
-                UIView.animate(withDuration: 0.8, delay: 0, options: [], animations: {
-                    self.nextButton.alpha = 0.0
-                }, completion: nil)
+                
+                print("Walk through PVC current index: \(index)")
+//                self.nextButton.isEnabled = false
+//                UIView.animate(withDuration: 0.8, delay: 0, options: [], animations: {
+//                    self.nextButton.alpha = 0.0
+//                }, completion: nil)
                 
 //                nextButton.isHidden = true
                 //Uncomment for later version if you want to show the nextButton on the walk through VC starting from index [0]
@@ -126,11 +127,12 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                 // check if already been viewed
                 if disableOnBardingBool == false {
                     disableOnBardingBool = true
+                    
                      UserDefaults.standard.set(true, forKey: "hasViewedWalkthrough")
                     dismiss(animated: true, completion: nil)
+                    
                     presentMainView()
                 }
-                print("🔶")
                 print("🕊User Defaults got hit and you are now be segued to Home VC")
                 
                 UserDefaults.standard.set(true, forKey: "hasViewedWalkthrough")
@@ -140,12 +142,12 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                 
                 
                 // Segue programatically to home view controller
-               
                 presentMainView()
+                
             default: break
+                
             }
-            print("\n♦️ you are on case number: \(index)")
-            print("🔷When you clicked Next you were on index: \(index) now your on index: \(index.advanced(by: 1))")
+            print("\n♦️ you are on case number: \(String(describing: walkThroughPVC?.currentIndex))")
         }
        updateUI()
     }

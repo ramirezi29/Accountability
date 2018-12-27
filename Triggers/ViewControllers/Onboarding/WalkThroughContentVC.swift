@@ -16,6 +16,7 @@ protocol WalkThroughContentVCDelegate: class {
 
 class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserNotificationCenterDelegate     {
     
+    // MARK: -  Outlets
     @IBOutlet var viewOutlet: UIView!
     
     @IBOutlet var headLineLabel: UILabel! {
@@ -39,38 +40,57 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     var subHeadLine = ""
     var imageFile = ""
     
+    
+    
     // Bools and Keys to for UIAlert
     var disableRestrictedAlertBool = false
     var disableDeniedAlertBool = false
     private let deniedBoolKey = "disabledDeniedAlertBool"
     private let restrictedBoolKey = "disabledRestrictedAlertBool"
     
-    lazy var sponseeNameTextField: UITextField = {
-        
-        let textField = UITextField()
-        
-        //        textField.addTarget(self, action: #selector(firePermissionRequests(_:)), for: .touchDragInside)
-        textField.backgroundColor = UIColor.blue
-        textField.placeholder = "Enter Name"
-        return textField
-    }()
     
+    // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
-        sponseeNameTextField.delegate = self
-        sponseeNameTextField.resignFirstResponder()
+        
+        //Text Fields
+        hideTextFields()
+        
+        //User Name Text Field
+        
+        
+        view.addSubview(userNameTextField)
+        userNameConstraints()
+        userNameTextField.delegate = self
+        userNameTextField.resignFirstResponder()
+        
+        
+        //Sponsors Name Text Field
+        view.addSubview(sponsorsNameTextField)
+        sponsorsNameContraints()
+        
+        
+        //Sponosrs Phone Number
+        view.addSubview(sponsorsPhoneNumberTextField)
+        sponorsPhoneNumberConstraints()
+        
+        //Sponosrs Email Address
+        view.addSubview(sponsorsEmailAddressTextField)
+        sponorsEmailConstraints()
+        
+        
+        //Current AA Step
+        view.addSubview(aaStepTextField)
+        aaStepConstraint()
+        //         aaStepTextField.placeholder = "Current AA Step"
+        //        aaStepTextField.textColor = UIColor.white
+        
         //userDefaults
         loadUserDefaults()
-    
-        //laction Request Button
-        sponseeNameTextField.isHidden = true
-        
-        
-        view.addSubview(sponseeNameTextField)
-        requestButtonConstraints()
         
         // Location Delegate
         locationManger.delegate = self
+        
         //viewbackground
         viewOutlet.backgroundColor = .black
         
@@ -83,43 +103,90 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         contentImageView.image  = UIImage(named: imageFile)
         
         if index == 5 {
+            
+            // UNNotifcation and Location Permission
             inquirePermissions()
             
-            sponseeNameTextField.isUserInteractionEnabled = false
-            sponseeNameTextField.isHidden = true
-            UIView.animateKeyframes(withDuration: 0.4, delay: 0.1, options: [], animations: {
-                self.sponseeNameTextField.alpha = 0.0
+            
+            //Text Fields
+            inactivateTextFields()
+            
+            // MARK: - Text Fields Fade Out Animation
+            UIView.animateKeyframes(withDuration: 0.9, delay: 0.1, options: [], animations: {
+                self.userNameTextField.alpha = 0.0
             }) { (success) in
-                self.sponseeNameTextField.isHidden = true
-                print("\nsponseeNameTextField in index 6 completed\n")
+                self.userNameTextField.isHidden = true
+                print("\nUser Text Fiela: Alpha 0\n")
             }
+            
+            UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
+                self.sponsorsNameTextField.alpha = 0.0
+            }) { (success) in
+                self.sponsorsNameTextField.isHidden = true
+            }
+            
+            UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
+                self.sponsorsPhoneNumberTextField.alpha = 0.0
+            }) { (success) in
+                self.sponsorsPhoneNumberTextField.isHidden = true
+            }
+            
+            UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
+                self.sponsorsEmailAddressTextField.alpha = 0.0
+            }) { (success) in
+                self.sponsorsEmailAddressTextField.isHidden = true
+            }
+            
+            UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
+                self.aaStepTextField.alpha = 0.0
+            }) { (success) in
+                self.aaStepTextField.isHidden = true
+            }
+            
         }
         
-        //        if index == 4 {
-        //            //            sponseeNameTextField.alpha = 0.0
-        //            sponseeNameTextField.isUserInteractionEnabled = false
-        //            sponseeNameTextField.isHidden = true
-        //            UIView.animateKeyframes(withDuration: 0.4, delay: 0.1, options: [], animations: {
-        //                self.sponseeNameTextField.alpha = 0.0
-        //            }) { (success) in
-        //                self.sponseeNameTextField.isHidden = true
-        //                print("\nsponseeNameTextField in index 6 completed\n")
-        //            }
-        //        }
-        
+        // MARK: - Index if Statments
         if index == 6 {
-            sponseeNameTextField.alpha = 0.0
-            sponseeNameTextField.isHidden = false
             
-            UIView.animateKeyframes(withDuration: 10.0, delay: 0.1, options: [], animations: {
-                self.sponseeNameTextField.alpha = 1.0
+            
+            textFieldAlphaZero()
+            showTextFields()
+            // MARK: - Text Fields Appear Animation
+            UIView.animateKeyframes(withDuration: 5.0, delay: 0.1, options: [], animations: {
+                self.userNameTextField.alpha = 1.0
             }) { (success) in
-                self.sponseeNameTextField.isUserInteractionEnabled = true
-                print("\nsponseeNameTextField in index 6 completed\n")
+                self.userNameTextField.isUserInteractionEnabled = true
+                print("\ns🚢 User NameTextField was successfuly shown to the User in index 6 \n")
             }
             
+            UIView.animateKeyframes(withDuration: 5.0, delay: 0.2, options: [], animations: {
+                self.sponsorsNameTextField.alpha = 1.0
+            }) { (sucess) in
+                self.sponsorsNameTextField.isUserInteractionEnabled = true
+                print("\ns🚢 Sponsor Name Text Field was successfuly shown to the User in index 6 \n")
+            }
+            
+            UIView.animateKeyframes(withDuration: 5.0, delay: 0.3, options: [], animations: {
+                self.sponsorsPhoneNumberTextField.alpha = 1.0
+            }) { (success) in
+                self.sponsorsPhoneNumberTextField.isUserInteractionEnabled = true
+                print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
+            }
+            
+            UIView.animateKeyframes(withDuration: 5.0, delay: 0.4, options: [], animations: {
+                self.sponsorsEmailAddressTextField.alpha = 1.0
+            }) { (success) in
+                self.sponsorsEmailAddressTextField.isUserInteractionEnabled = true
+                print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
+            }
+            
+            UIView.animateKeyframes(withDuration: 5.0, delay: 0.5, options: [], animations: {
+                self.aaStepTextField.alpha = 1.0
+            }) { (success) in
+                self.aaStepTextField.isUserInteractionEnabled = true
+                print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
+            }
         }
-        
     }
     
     
@@ -141,7 +208,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
                 print("Notification Access Denied")
             }
             
-            
             switch CLLocationManager.authorizationStatus() {
                 
             case .notDetermined:
@@ -156,20 +222,10 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     }
     
     
-    @objc private func firePermissionRequests(_ sender: UIButton?) {
-        //        requestLocation()
-        //        requestNotificationPermission()
-        
-        
-    }
-    
-    
     func loadUserDefaults() {
         disableDeniedAlertBool = UserDefaults.standard.bool(forKey: deniedBoolKey)
         disableRestrictedAlertBool = UserDefaults.standard.bool(forKey: restrictedBoolKey)
     }
-    
-    
     
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -234,29 +290,146 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         }
     }
     
-    func requestButtonConstraints() {
-        sponseeNameTextField.translatesAutoresizingMaskIntoConstraints = false
+    //Programatic Text Fields
+    //User Name
+    lazy var userNameTextField: UITextField = {
         
-        sponseeNameTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 250).isActive = true
+        let textField = UITextField()
         
-        sponseeNameTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1).isActive = true
-        sponseeNameTextField.trailingAnchor.constraint(equalToSystemSpacingAfter: view.trailingAnchor, multiplier: 0.8)
-        sponseeNameTextField.layer.cornerRadius = 9
+        textField.backgroundColor = UIColor.blue
+        textField.textColor = UIColor.white
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        
+        return textField
+    }()
+    
+    //SponsorName
+    lazy var sponsorsNameTextField: UITextField = {
+        
+        let textField = UITextField()
+        
+        textField.backgroundColor = UIColor.blue
+        textField.textColor = UIColor.white
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        
+        return textField
+    }()
+    
+    lazy var sponsorsPhoneNumberTextField: UITextField = {
+        
+        let textField = UITextField()
+        
+        textField.backgroundColor = UIColor.blue
+        textField.textColor = UIColor.white
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        return textField
+    }()
+    
+    lazy var sponsorsEmailAddressTextField: UITextField = {
+        
+        let textField = UITextField()
+        
+        textField.backgroundColor = UIColor.blue
+        textField.textColor = UIColor.white
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Email Address", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        return textField
+    }()
+    
+    lazy var aaStepTextField: UITextField = {
+        
+        let textField = UITextField()
+        
+        textField.backgroundColor = UIColor.blue
+        textField.textColor = UIColor.white
+        
+        textField.attributedPlaceholder = NSAttributedString(string: "If in treatment enter current Step", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        return textField
+    }()
+    
+    //User Name Constraints
+    func userNameConstraints() {
+        userNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        userNameTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        
+        userNameTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1).isActive = true
+        
+        userNameTextField.trailingAnchor.constraint(equalToSystemSpacingAfter: view.trailingAnchor, multiplier: 0.8)
+        
+        userNameTextField.layer.cornerRadius = 9
     }
     
+    //Sponsors Name Constraint
+    func sponsorsNameContraints() {
+        sponsorsNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        sponsorsNameTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 150).isActive = true
+        
+        sponsorsNameTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0.8).isActive = true
+        
+        sponsorsNameTextField.layer.cornerRadius = 9
+    }
+    
+    //Sponsor Telephone Constraints
+    func sponorsPhoneNumberConstraints() {
+        sponsorsPhoneNumberTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        sponsorsPhoneNumberTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
+        
+        sponsorsPhoneNumberTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0.8).isActive = true
+        
+        sponsorsPhoneNumberTextField.layer.cornerRadius = 9
+    }
+    
+    func sponorsEmailConstraints() {
+        sponsorsEmailAddressTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        sponsorsEmailAddressTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 250).isActive = true
+        
+        sponsorsEmailAddressTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0.8).isActive = true
+        
+        sponsorsEmailAddressTextField.layer.cornerRadius = 9
+    }
+    
+    func aaStepConstraint() {
+        aaStepTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        aaStepTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 300).isActive = true
+        
+        aaStepTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0.8).isActive = true
+        
+        aaStepTextField.layer.cornerRadius = 9
+    }
+    
+    
     // MARK: - Segue the onboarding textfilds to the Home VC
-// This doesnt get hit 
+    // This doesnt get hit
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let sponseeName = sponseeNameTextField.text else {return}
+        guard let usersName = userNameTextField.text, !usersName.isEmpty,
+            let sponsorsName = sponsorsNameTextField.text,
+            let sponsorsEmail = sponsorsEmailAddressTextField.text,
+            let sponsorsPhoneNumber = sponsorsPhoneNumberTextField.text,
+            let aaStep = aaStepTextField.text
+            else {return}
         
         guard let destinationVC = segue.destination as? HomeViewController else {return}
-        destinationVC.sponsorNameTextField.text = sponseeName
+        destinationVC.userNameTextField.text = usersName
+        destinationVC.sponsorNameTextField.text = sponsorsName
+        destinationVC.sponsorEmailTextField.text = sponsorsEmail
+        destinationVC.sponsorsPhoneNumberTextField.text = sponsorsPhoneNumber
+        destinationVC.currentAaStepLabel.text = aaStep
+        
     }
 }
 
 extension WalkThroughContentVC : UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
         
         if textField.text!.count + 1 >= 2 {
             delegate?.validUserNameEntered(username: string, isHidden: false)
@@ -265,14 +438,68 @@ extension WalkThroughContentVC : UITextFieldDelegate {
         
         if textField.text!.count - 1 < 2 {
             delegate?.validUserNameEntered(username: "", isHidden: true)
+            
         }
         
         return true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        sponseeNameTextField.resignFirstResponder()
-//        textField = sponseeNameTextField.resignFirstResponder()
+        userNameTextField.resignFirstResponder()
+        //        textField = sponseeNameTextField.resignFirstResponder()
         return true
+    }
+}
+
+extension WalkThroughContentVC {
+    
+    func hideTextFields() {
+        userNameTextField.isHidden = true
+        
+        sponsorsNameTextField.isHidden = true
+        
+        sponsorsPhoneNumberTextField.isHidden = true
+        
+        sponsorsEmailAddressTextField.isHidden = true
+        
+        aaStepTextField.isHidden = true
+    }
+    
+    func inactivateTextFields() {
+        userNameTextField.isUserInteractionEnabled = false
+        sponsorsNameTextField.isUserInteractionEnabled = false
+        sponsorsEmailAddressTextField.isUserInteractionEnabled = false
+        sponsorsPhoneNumberTextField.isUserInteractionEnabled = false
+        aaStepTextField.isUserInteractionEnabled = false
+    }
+    
+    // Testing purposes
+    func showTextFields() {
+        userNameTextField.isHidden = false
+        
+        sponsorsNameTextField.isHidden = false
+        
+        sponsorsPhoneNumberTextField.isHidden = false
+        
+        sponsorsEmailAddressTextField.isHidden = false
+        
+        aaStepTextField.isHidden = false
+        
+    }
+    
+    func textFieldAlphaZero(){
+        userNameTextField.alpha = 0.0
+        sponsorsNameTextField.alpha = 0.0
+        sponsorsEmailAddressTextField.alpha = 0.0
+        sponsorsPhoneNumberTextField.alpha = 0.0
+        aaStepTextField.alpha = 0.0
+    }
+    
+    func textFieldAlphaOne(){
+        userNameTextField.alpha = 1.0
+        sponsorsNameTextField.alpha = 1.0
+        sponsorsEmailAddressTextField.alpha = 1.0
+        sponsorsPhoneNumberTextField.alpha = 1.0
+        aaStepTextField.alpha = 1.0
     }
 }

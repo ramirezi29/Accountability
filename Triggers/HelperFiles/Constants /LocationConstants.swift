@@ -19,4 +19,9 @@ struct LocationConstants  {
     static let latitudeKey = "latitude"
     static let locationSegueID = "toDetailVC"
     static let locationCellID = "locationCell"
+    static let dismissActionKey = "locationDismiss"
+    static let telephoneSponsorActionKey = "sponsorTelephone"
+    static let emailSponsorActionKey = "sponsorEmail"
+    static let notifCatergoryKey = "locationCrossedCategory"
+    
 }
