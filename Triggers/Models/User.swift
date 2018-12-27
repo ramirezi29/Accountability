@@ -18,13 +18,14 @@ class User {
     var sponsorEmail: String?
     var aaStep: Int
     var ckRecordID: CKRecord.ID?
-    // Create a User Ref
+    var appleUserRef: CKRecord.Reference
+    
     
     var targetLocations: [Location] = []
     
     var notes: [Note] = []
     
-    init(userName: String, sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString)) {
+    init(userName: String, sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), appleUserRef: CKRecord.Reference) {
         
         self.userName = userName
         self.sponsorName = sponsorName
@@ -32,7 +33,7 @@ class User {
         self.aaStep = aaStep
         self.ckRecordID = ckRecordID
         self.sponsorEmail = sponsorEmail
-        
+        self.appleUserRef = appleUserRef
     }
     
     // NOTE: - Create a model object fromR a CKRecord -- 🔥Fetch
@@ -46,12 +47,14 @@ class User {
             
             let sponsorEmail = ckRecord[UserConstants.sponsorEmailKey] as? String,
             
-            let aaStep = ckRecord[UserConstants.aaStepKey] as? Int
+            let aaStep = ckRecord[UserConstants.aaStepKey] as? Int,
+            
+            let appleUserRef = ckRecord[UserConstants.appleUserRefKey] as? CKRecord.Reference
             
             else {return nil}
         
         
-        self.init(userName: userName, sponsorName: sponsorName, sponsorTelephoneNumber: sponsorTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep, ckRecordID: ckRecord.recordID)
+        self.init(userName: userName, sponsorName: sponsorName, sponsorTelephoneNumber: sponsorTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep, ckRecordID: ckRecord.recordID, appleUserRef: appleUserRef)
     }
 }
 
@@ -72,6 +75,8 @@ extension CKRecord {
         self.setValue(user.sponsorEmail, forKey: UserConstants.sponsorEmailKey)
         
         self.setValue(user.aaStep, forKey: UserConstants.aaStepKey)
+        
+        self.setValue(user.appleUserRef, forKey: UserConstants.appleUserRefKey)
             
        // NOTE: - In order to not save a brand new record
         user.ckRecordID = recordID

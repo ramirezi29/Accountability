@@ -22,17 +22,22 @@ class LocationController {
     typealias fetchCompletion = ([Location]?, NetworkingError?) -> Void
     typealias boolVoidCompletion = (Bool) -> Void
     
-//    func fetchItems(locations: Location, completion: @escaping fetchCompletion) {
-  func fetchItemsFor(user: User, completion: @escaping fetchCompletion) {
+    //    func fetchItems(locations: Location, completion: @escaping fetchCompletion) {
+    //    func fetchItemsFor(user: User, completion: @escaping fetchCompletion) {
+    
+    // MARK: - Fetch
+    func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping fetchCompletion) {
         // MARK: - This might need to be the ckRecordID for the parent not location
-    guard let userParentID = user.ckRecordID else {
-        completion(nil, .invalidData("Invalid User Parent ID"))
-        return
-    }
+        guard let user = user else {
+            completion(nil, .invalidData("Invalid User"))
+            return
+        }
         
-//        let userLocationReference = CKRecord.Reference(recordID: userParentID, action: .deleteSelf)
-    
-    
+       guard let userParentID = user.ckRecordID else {
+            completion(nil, .invalidData("Invalid User Parent ID"))
+            return
+        }
+ 
         let predicate = NSPredicate(format: "\(LocationConstants.usersLocationRefKey) == %@", userParentID)
         
         let query = CKQuery(recordType: LocationConstants.LocationTypeKey, predicate: predicate)
@@ -57,7 +62,9 @@ class LocationController {
         }
     }
     
+    // MARK: - Save
     func saveToCloudKit(locations: Location, completion: @escaping boolVoidCompletion) {
+        
         let locationRecord = CKRecord(location: locations)
         privateDB.save(locationRecord) { (record, error) in
             if let error = error {
@@ -75,10 +82,12 @@ class LocationController {
         }
     }
     
+    // MARK: - Create
     func createNewLocation(location: Location, geoCodeAddressString: String, addressTitle: String, userTargetLocationReference: CKRecord.Reference, longitude: Double, latitude: Double, completion: @escaping boolVoidCompletion) {
         
         let locationRecordID = location.ckRecordID
         let userLocationReference = CKRecord.Reference(recordID: locationRecordID , action: .deleteSelf)
+        //ASK: Why did are thsee dot syntax
         let latitude = location.latitude
         let longitude = location.longitude
         
@@ -232,4 +241,4 @@ class LocationController {
  }
  
  }
-*/
+ */

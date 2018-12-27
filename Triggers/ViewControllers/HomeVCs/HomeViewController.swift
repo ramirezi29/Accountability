@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var locationButton: UIButton!
     
     //TextFields
-    @IBOutlet weak var sponseeNameTextField: UITextField!
+    @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var sponsorNameTextField: UITextField!
     @IBOutlet weak var sponsorsPhoneNumberTextField: UITextField!
     @IBOutlet weak var sponsorEmailTextField: UITextField!
@@ -35,7 +35,8 @@ class HomeViewController: UIViewController {
         self.view.endEditing(true)
         
         //Activity Spinner
-        self.activityIndicatorOutlet.isHidden = false
+//        self.activityIndicatorOutlet.isHidden = false
+        self.activityIndicatorOutlet.startAnimating()
         
         // Picker View
         self.aaPickerView.isHidden = true
@@ -51,16 +52,20 @@ class HomeViewController: UIViewController {
         UserController.shared.fetchCurrentUser() { (success, error) in
             if success {
                 DispatchQueue.main.async {
-                    self.activityIndicatorOutlet.isHidden = true
-                    self.activityIndicatorOutlet.startAnimating()
+                    self.activityIndicatorOutlet.isHidden = false
+                    self.activityIndicatorOutlet.stopAnimating()
                     self.updateViews()
                 }
                 
             } else {
-                //present UI Alert that there was an error loading
                 
-                print("\n🤯 Error fechign Data \n")
-                return
+                DispatchQueue.main.async {
+                    self.activityIndicatorOutlet.stopAnimating()
+                    self.activityIndicatorOutlet.isHidden = true
+                    print("\n🤯 Error fechign Data \n")
+                    //present UI Alert that there was an error loading
+                    return
+                }
             }
         }
     }
@@ -69,7 +74,7 @@ class HomeViewController: UIViewController {
         
         guard let loggedInUser = UserController.shared.loggedInUser
             else { return }
-        sponseeNameTextField.text = loggedInUser.userName
+        userNameTextField.text = loggedInUser.userName
         sponsorNameTextField.text = loggedInUser.sponsorName
         sponsorsPhoneNumberTextField.text = loggedInUser.sponsorTelephoneNumber
         sponsorEmailTextField.text = loggedInUser.sponsorEmail
@@ -96,7 +101,7 @@ class HomeViewController: UIViewController {
     }
     
     func textFieldsInactiveFalse(){
-        sponseeNameTextField.isUserInteractionEnabled = false
+        userNameTextField.isUserInteractionEnabled = false
         sponsorNameTextField.isUserInteractionEnabled = false
         sponsorsPhoneNumberTextField.isUserInteractionEnabled = false
         sponsorEmailTextField.isUserInteractionEnabled = false
@@ -105,7 +110,7 @@ class HomeViewController: UIViewController {
     }
     
     func textFieldsInactiveTrue(){
-        sponseeNameTextField.isUserInteractionEnabled = true
+        userNameTextField.isUserInteractionEnabled = true
         sponsorNameTextField.isUserInteractionEnabled = true
         sponsorsPhoneNumberTextField.isUserInteractionEnabled = true
         sponsorEmailTextField.isUserInteractionEnabled = true
@@ -156,7 +161,7 @@ class HomeViewController: UIViewController {
             editBool = true
         case true:
             
-            guard let userName = sponseeNameTextField.text,
+            guard let userName = userNameTextField.text,
                 let sponsorName = sponsorNameTextField.text,
                 let sponsorTelephone = sponsorsPhoneNumberTextField.text,
                 let sponsorEmail = sponsorEmailTextField.text,

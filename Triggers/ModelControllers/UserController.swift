@@ -19,7 +19,7 @@ class UserController {
     
     var loggedInUser: User?
     
-    var usersLocationRefrence: CKRecord.ID?
+    var appleUserRecordID: CKRecord.ID?
     
     let privateDB = CKContainer.default().privateCloudDatabase
     
@@ -30,30 +30,45 @@ class UserController {
     // MARK: - Fetch
     func fetchCurrentUser(completion: @escaping fetchCompletion) {
         
-        // Test this to see if the predicate should be Value(true)
-        let predicate = NSPredicate(value: true)
-        /*
-         add this to the location controller
-          let predicate = NSPredicate(format: "\(LocationConstants.usersLocationRefKey) == %@", userDetailsReference)
-         */
         
-        // Create the query object, and set the sort order.
-        let query = CKQuery(recordType: UserConstants.userTypeKey, predicate: predicate)
-        
-        privateDB.perform(query, inZoneWith: nil) { (records, error) in
-            
+        CKContainer.default().fetchUserRecordID { (recordID, error) in
             if let error = error {
-                print("\n\n🚀 There was an error with fetching the records in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription) 🚀\n\n")
-                completion(false, .forwardedError(error))
+                print("\n\n🚀 There was an error with fetching users ID in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription) 🚀\n\n")
+                completion(false , .forwardedError(error))
                 return
             }
-            // Make sure we have records
-            guard let records = records, let userRecord = records.first else {
-                completion(false, .invalidData("\nINvalid Data\n"))
+            
+            guard let recordID = recordID else { completion(false, .invalidData("Record ID is invalid"))
                 return
             }
-            self.loggedInUser = User(ckRecord: userRecord)
-            completion(true, nil)
+            
+            self.appleUserRecordID = recordID
+            
+            
+            let predicate = NSPredicate(format: "\(UserConstants.appleUserRefKey) == %@", recordID)
+            /*
+             add this to the location controller
+             let predicate = NSPredicate(format: "\(LocationConstants.usersLocationRefKey) == %@", userDetailsReference)
+             */
+            
+            // Create the query object, and set the sort order.
+            let query = CKQuery(recordType: UserConstants.userTypeKey, predicate: predicate)
+            
+            self.privateDB.perform(query, inZoneWith: nil) { (records, error) in
+                
+                if let error = error {
+                    print("\n\n🚀 There was an error with fetching the records in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription) 🚀\n\n")
+                    completion(false, .forwardedError(error))
+                    return
+                }
+                // Make sure we have records
+                guard let records = records, let userRecord = records.first else {
+                    completion(false, .invalidData("\nINvalid Data\n"))
+                    return
+                }
+                self.loggedInUser = User(ckRecord: userRecord)
+                completion(true, nil)
+            }
         }
     }
     
@@ -68,7 +83,7 @@ class UserController {
                 completion(false)
                 return
             }
-        
+            
             self.loggedInUser = user
             
             completion(true)
@@ -78,8 +93,13 @@ class UserController {
     // MARK: - Create
     func createNewUserDetailsWith(userName: String, sponsorName: String, sponserTelephoneNumber: String, sponsorEmail: String, aaStep: Int, completion: @escaping boolVoidCompletion) {
         
-        let user = User(userName: userName, sponsorName: sponsorName, sponsorTelephoneNumber: sponserTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep)
-
+        //new
+        guard let appleUserRecordID = appleUserRecordID else { completion(false) ; return }
+        
+        let appleUserRef = CKRecord.Reference(recordID: appleUserRecordID, action: .deleteSelf)
+        
+        let user = User(userName: userName, sponsorName: sponsorName, sponsorTelephoneNumber: sponserTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep, appleUserRef: appleUserRef)
+        
         saveToCloudKit(user: user) { (success) in
             if success {
                 print("\n🙏🏽Successfully created record\n")
@@ -88,7 +108,7 @@ class UserController {
                 completion(false)
                 print("\n💀Error Creating Record💀\n")
                 //for test purposes fatal error
-//                fatalError("\nFatal Error , error creating record\n")
+                //                fatalError("\nFatal Error , error creating record\n")
             }
         }
         
