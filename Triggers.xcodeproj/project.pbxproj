@@ -30,6 +30,11 @@
 		4771460E21C9BB200016FFAB /* WalkThroughPVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4771460D21C9BB200016FFAB /* WalkThroughPVC.swift */; };
 		4771461021C9C4210016FFAB /* WalkThroughContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4771460F21C9C4210016FFAB /* WalkThroughContentVC.swift */; };
 		4771461221C9CFB00016FFAB /* WalkThroughVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4771461121C9CFB00016FFAB /* WalkThroughVC.swift */; };
+		477C945521DA76D6006F7E80 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C945421DA76D6006F7E80 /* NotificationController.swift */; };
+		47A602FD21D82C2700699EDF /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A602FC21D82C2700699EDF /* Folder.swift */; };
+		47A602FF21D82C7A00699EDF /* FolderConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A602FE21D82C7A00699EDF /* FolderConstants.swift */; };
+		47A6030121D83A1900699EDF /* FolderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A6030021D83A1900699EDF /* FolderController.swift */; };
+		47C4935E21D55FF7002659EE /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C4935D21D55FF7002659EE /* AlertController.swift */; };
 		47E29E1B21C80B0200FA44EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E1A21C80B0200FA44EE /* AppDelegate.swift */; };
 		47E29E2021C80B0200FA44EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47E29E1E21C80B0200FA44EE /* Main.storyboard */; };
 		47E29E2221C80B0400FA44EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47E29E2121C80B0400FA44EE /* Assets.xcassets */; };
@@ -70,6 +75,11 @@
 		4771460D21C9BB200016FFAB /* WalkThroughPVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkThroughPVC.swift; sourceTree = "<group>"; };
 		4771460F21C9C4210016FFAB /* WalkThroughContentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkThroughContentVC.swift; sourceTree = "<group>"; };
 		4771461121C9CFB00016FFAB /* WalkThroughVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkThroughVC.swift; sourceTree = "<group>"; };
+		477C945421DA76D6006F7E80 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		47A602FC21D82C2700699EDF /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
+		47A602FE21D82C7A00699EDF /* FolderConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderConstants.swift; sourceTree = "<group>"; };
+		47A6030021D83A1900699EDF /* FolderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderController.swift; sourceTree = "<group>"; };
+		47C4935D21D55FF7002659EE /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		47E29E1721C80B0200FA44EE /* Triggers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Triggers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		47E29E1A21C80B0200FA44EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		47E29E1F21C80B0200FA44EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -125,6 +135,8 @@
 			children = (
 				477145E621C953960016FFAB /* ColorGradientExtension.swift */,
 				477145E921C956CB0016FFAB /* ColorCollection.swift */,
+				47C4935D21D55FF7002659EE /* AlertController.swift */,
+				477C945421DA76D6006F7E80 /* NotificationController.swift */,
 			);
 			path = UIExtensions;
 			sourceTree = "<group>";
@@ -235,6 +247,7 @@
 				47E29E5221C8645E00FA44EE /* User.swift */,
 				472EA53321CC05740022EE0A /* Location.swift */,
 				47296FF421CB38D5007B9B1B /* Note.swift */,
+				47A602FC21D82C2700699EDF /* Folder.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -245,6 +258,7 @@
 				47E29E5B21C89C7400FA44EE /* UserController.swift */,
 				47296FF821CB3C56007B9B1B /* NoteController.swift */,
 				472EA53521CC05CB0022EE0A /* LocationController.swift */,
+				47A6030021D83A1900699EDF /* FolderController.swift */,
 			);
 			path = ModelControllers;
 			sourceTree = "<group>";
@@ -314,6 +328,7 @@
 				47E29E4121C82DAA00FA44EE /* LocationConstants.swift */,
 				47E29E5621C8653B00FA44EE /* UserDetailConstants.swift */,
 				47296FF621CB3942007B9B1B /* NoteConstants.swift */,
+				47A602FE21D82C7A00699EDF /* FolderConstants.swift */,
 			);
 			path = "Constants ";
 			sourceTree = "<group>";
@@ -413,6 +428,8 @@
 				47E29E1B21C80B0200FA44EE /* AppDelegate.swift in Sources */,
 				47296FF921CB3C56007B9B1B /* NoteController.swift in Sources */,
 				470408F321CD7A8E00884CFA /* LocationTVCell.swift in Sources */,
+				477C945521DA76D6006F7E80 /* NotificationController.swift in Sources */,
+				47A602FF21D82C7A00699EDF /* FolderConstants.swift in Sources */,
 				4771460E21C9BB200016FFAB /* WalkThroughPVC.swift in Sources */,
 				47E29E5F21C8B1E300FA44EE /* NetworkingError.swift in Sources */,
 				471665E021D441E6000DC53B /* textFieldExtension.swift in Sources */,
@@ -421,9 +438,12 @@
 				4771460021C9A8DC0016FFAB /* CalendarVC.swift in Sources */,
 				47E29E4F21C852DC00FA44EE /* LocationDetailVC.swift in Sources */,
 				472EA53421CC05740022EE0A /* Location.swift in Sources */,
+				47A602FD21D82C2700699EDF /* Folder.swift in Sources */,
 				47296FF521CB38D5007B9B1B /* Note.swift in Sources */,
+				47C4935E21D55FF7002659EE /* AlertController.swift in Sources */,
 				477145EA21C956CB0016FFAB /* ColorCollection.swift in Sources */,
 				47E29E3821C82A1900FA44EE /* LocationOnboardingVC.swift in Sources */,
+				47A6030121D83A1900699EDF /* FolderController.swift in Sources */,
 				47E29E5C21C89C7400FA44EE /* UserController.swift in Sources */,
 				470408F121CD743E00884CFA /* LocationTVC.swift in Sources */,
 				477145F421C99FE00016FFAB /* NotesTVCell.swift in Sources */,

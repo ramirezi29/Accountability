@@ -8,11 +8,13 @@
 
 import UIKit
 
-class LocationTVC: UITableViewController {
+class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var activityViewOutlet: UIView!
     @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
+    @IBOutlet weak var bottomView: UIView!
     
     //landing pad
     var location: Location?
@@ -26,12 +28,17 @@ class LocationTVC: UITableViewController {
         }
     }
 
-    
     var loction: [Location] = []
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //TableView
+        tableView.delegate = self
+        tableView.dataSource = self 
+        //Test Print
+        print("🍁🍁Number of locations when view did load loaded: \(loction.count)🍁🍁")
         
         //Activity Spinner
         activityViewOutlet.backgroundColor = UIColor.clear
@@ -41,49 +48,64 @@ class LocationTVC: UITableViewController {
         view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
         //Fetch from CK
-        guard let user = user else {
-            print(" guard let user = user else is nil or something")
-            return
-        }
+//        guard let user = user else {
+//            print(" guard let user = user else is nil or something")
+//            return
+//        }
         
-        LocationController.shared.fetchItemsFor(user: user) { (location, error) in
-            if location != nil {
-              
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    self.activityIndicatorOutlet.stopAnimating()
-                    self.activityViewOutlet.isHidden = true
-                    print("\nLocation Fetch was successful")
-                }
-            } else {
-                DispatchQueue.main.async {
-                    
-                    self.activityIndicatorOutlet.stopAnimating()
-                    self.activityViewOutlet.isHidden = true
-                    // Present UI ALert
-                    print("\n💀 Error fetcing location records from CK 💀")
-                    return
-                }
-            }
+        LocationController.shared.fetchItemsFor { (_, _) in
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.activityIndicatorOutlet.stopAnimating()
+                self.activityViewOutlet.isHidden = true
+                print("\nLocation Fetch was successful in the ViewDidLoad")
         }
+}
+        
+//        LocationController.shared.fetchItemsFor(user: user) { (location, error) in
+//            if location != nil {
+//
+//                DispatchQueue.main.async {
+//                    self.tableView.reloadData()
+//                    self.activityIndicatorOutlet.stopAnimating()
+//                    self.activityViewOutlet.isHidden = true
+//                    print("\nLocation Fetch was successful")
+//                }
+//            } else {
+//                DispatchQueue.main.async {
+//
+//                    self.activityIndicatorOutlet.stopAnimating()
+//                    self.activityViewOutlet.isHidden = true
+//                    // Present UI ALert
+//                    print("\n💀 Error fetcing location records from CK 💀")
+//                    return
+//                }
+//            }
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
+        print("View will appear just came up and the number of lcations are: \( self.loction.count)")
+       
     }
     
     // MARK: - Table view data source
-    
-    
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        
+        //TEST
+//        tableView.isScrollEnabled = false
+        
+        
         return LocationController.shared.locations.count
+        
+        
     }
     
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: LocationConstants.locationCellID, for: indexPath) as? LocationTVCell else {return UITableViewCell()}
         
         let location = LocationController.shared.locations[indexPath.row]
@@ -93,10 +115,15 @@ class LocationTVC: UITableViewController {
         return cell
     }
     
+    //Examine
+//    override func viewDidLayoutSubviews() {
+//        tableView.frame.size = tableView.contentSize
+//    }
+    
     
     
     // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
@@ -104,7 +131,7 @@ class LocationTVC: UITableViewController {
     
     
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
             let locationRecord = LocationController.shared.locations[indexPath.row]
@@ -128,7 +155,7 @@ class LocationTVC: UITableViewController {
     
     
     // MARK: - Rearrange Cells
-    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let location = LocationController.shared.locations[sourceIndexPath.row]
         LocationController.shared.locations.remove(at: sourceIndexPath.row)
         LocationController.shared.locations.insert(location, at: destinationIndexPath.row)
@@ -137,7 +164,7 @@ class LocationTVC: UITableViewController {
     
     
     // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
         return true
     }
@@ -156,6 +183,9 @@ class LocationTVC: UITableViewController {
         }
     }
     
+     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = .green
+    }
     
     
     @IBAction func doneButtonTapped(_ sender: Any) {

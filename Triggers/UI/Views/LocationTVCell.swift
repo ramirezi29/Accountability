@@ -10,14 +10,12 @@ import UIKit
 
 class LocationTVCell: UITableViewCell {
     
-    @IBOutlet weak var locationLabel: UILabel!
-    
     @IBOutlet weak var locationImageView: UIImageView!
     @IBOutlet weak var locationTitleLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
     }
     
     var location: Location? {
@@ -25,19 +23,18 @@ class LocationTVCell: UITableViewCell {
             updateViews()
         }
     }
-
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        
+    
     }
     
+ 
     func updateViews() {
         
         guard let location = location else {return}
         locationTitleLabel.text = location.locationTitle
-        locationImageView.image = UIImage(named: "noun_map pin_626096")
+        locationImageView.image = UIImage(named: "cloudImage") 
     }
 
 }

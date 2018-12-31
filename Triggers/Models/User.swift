@@ -23,6 +23,8 @@ class User {
     
     var targetLocations: [Location] = []
     
+    var folders: [Folder] = []
+    
     var notes: [Note] = []
     
     init(userName: String, sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), appleUserRef: CKRecord.Reference) {

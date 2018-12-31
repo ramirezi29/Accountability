@@ -418,8 +418,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         guard let destinationVC = segue.destination as? HomeViewController else {return}
         destinationVC.userNameTextField.text = usersName
-        destinationVC.sponsorNameTextField.text = sponsorsName
-        destinationVC.sponsorEmailTextField.text = sponsorsEmail
+        destinationVC.sponsorsNameTextField.text = sponsorsName
+        destinationVC.sponsorsEmailTextField.text = sponsorsEmail
         destinationVC.sponsorsPhoneNumberTextField.text = sponsorsPhoneNumber
         destinationVC.currentAaStepLabel.text = aaStep
         

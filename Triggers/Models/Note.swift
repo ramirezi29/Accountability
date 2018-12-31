@@ -18,7 +18,7 @@ class Note {
     var userNoteReference: CKRecord.Reference
     
     
-    init(title: String, textBody: String, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), userNoteReference: CKRecord.Reference ) {
+    init(title: String, textBody: String, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), userNoteReference: CKRecord.Reference) {
         self.title = title
         self.timeStamp = Date()
         self.textBody = textBody

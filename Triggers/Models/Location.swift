@@ -13,26 +13,28 @@ class Location {
     
     var geoCodeAddressString: String
     var locationTitle: String
-    //Use the time stamp in order to order
-    // USe NSPRedicat  on CloudKit QUerires 
-    var timeStamp: Date
-    var ckRecordID: CKRecord.ID
-    var userLocationReference: CKRecord.Reference
     // double Long and Lat
     var longitude: Double
     var latitude: Double
+    //Use the time stamp in order to order
+    // USe NSPRedicat  on CloudKit QUerires
+    var timeStamp: Date
+    var ckRecordID: CKRecord.ID
+    // NOTE: - Dec 27 turned this userlocationRef to an optional
+    var userLocationReference: CKRecord.Reference?
     
-    init(geoCodeAddressString: String, addressTitle: String, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), userLocationReference: CKRecord.Reference, longitude: Double, latitude: Double) {
+    init(geoCodeAddressString: String, addressTitle: String, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), longitude: Double, latitude: Double) {
+        
         self.geoCodeAddressString = geoCodeAddressString
         self.locationTitle = addressTitle
         self.timeStamp = Date()
-        self.ckRecordID = ckRecordID
-        
-        //ASK: DO i need to create a log in?
-        self.userLocationReference = userLocationReference
-        
         self.longitude = longitude
         self.latitude = latitude
+        self.ckRecordID = ckRecordID
+        
+        if let currentUserID = UserController.shared.loggedInUser?.ckRecordID {
+            self.userLocationReference = CKRecord.Reference(recordID: currentUserID, action: .deleteSelf)
+        }
     }
     
     var timeStampAsString: String {
@@ -43,24 +45,30 @@ class Location {
     convenience init?(ckRecord: CKRecord) {
         //Step 1. Unpack the values that i want from the CKREcord
         guard let geoCodeAddressString = ckRecord[LocationConstants.geoCodeAddressStringKey] as? String,
+            
             let addressTitle = ckRecord[LocationConstants.locationTitleKey] as? String,
-        let userLocationReference = ckRecord[LocationConstants.usersLocationRefKey] as? CKRecord.Reference,
+           
             let longitude = ckRecord[LocationConstants.longitudeKey] as? Double,
-        let latitude = ckRecord[LocationConstants.latitudeKey] as? Double
-        else {return nil}
-
+            
+            let latitude = ckRecord[LocationConstants.latitudeKey] as? Double
+            
+            else {return nil}
+        
+        let userLocationReference = ckRecord[LocationConstants.usersLocationRefKey] as? CKRecord.Reference
         // Step 2. Set tthose values as my initial values for my new instance
-        self.init(geoCodeAddressString: geoCodeAddressString, addressTitle: addressTitle, ckRecordID: ckRecord.recordID, userLocationReference: userLocationReference, longitude: longitude, latitude: latitude)
-//        self.usersLocationRefrence = usersLocationRefrence
-
+        self.init(geoCodeAddressString: geoCodeAddressString, addressTitle: addressTitle, ckRecordID: ckRecord.recordID, longitude: longitude, latitude: latitude)
+        
+        self.userLocationReference = userLocationReference
+        
     }
 }
 
 // NOTE: - 🔥Push -- Create a CKRecord using our model object
 extension CKRecord {
     convenience init(location: Location) {
-    
+        
         self.init(recordType: LocationConstants.LocationTypeKey, recordID: location.ckRecordID)
+        
         self.setValue(location.geoCodeAddressString, forKey: LocationConstants.geoCodeAddressStringKey)
         self.setValue(location.locationTitle, forKey: LocationConstants.locationTitleKey)
         self.setValue(location.timeStamp, forKey: LocationConstants.timeStampKey)
@@ -78,3 +86,14 @@ extension Location: Equatable {
         return true
     }
 }
+
+/*
+ 
+ init(geoCodeAddressString: String, addressTitle: String, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), userLocationReference: CKRecord.Reference, longitude: Double, latitude: Double) {
+ self.geoCodeAddressString = geoCodeAddressString
+ self.locationTitle = addressTitle
+ self.timeStamp = Date()
+ self.ckRecordID = ckRecordID
+ 
+ 
+ */
