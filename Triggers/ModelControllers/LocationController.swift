@@ -17,7 +17,11 @@ class LocationController {
     
     var locations = [Location]()
     
+    
     let privateDB = CKContainer.default().privateCloudDatabase
+    
+    //ASK: Not sure if this is correct
+    var locationUserRecordID: CKRecord.ID?
     
     typealias fetchCompletion = ([Location]?, NetworkingError?) -> Void
     typealias boolVoidCompletion = (Bool) -> Void
@@ -27,11 +31,14 @@ class LocationController {
     
     // MARK: - Fetch
     func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping fetchCompletion) {
+        
+        print("☃️When this page was loaded and the fetch func was first called there were \(locations.count) found")
         // MARK: - This might need to be the ckRecordID for the parent not location
         guard let user = user else {
             completion(nil, .invalidData("Invalid User"))
             return
         }
+        print("\n🐇Location Controller has user's print out as: \(user)\n \(String(describing: user.sponsorName))\n userRef: \(user.appleUserRef)\n ckRed: \(String(describing: user.ckRecordID))")
         
        guard let userParentID = user.ckRecordID else {
             completion(nil, .invalidData("Invalid User Parent ID"))
@@ -58,6 +65,7 @@ class LocationController {
             }
             let fetchItems = records.compactMap{ Location(ckRecord: $0) }
             self.locations = fetchItems
+            print("🎸 The fetch func finished fetching and there are: \(self.locations.count) locations")
             completion(fetchItems, nil)
         }
     }
@@ -66,6 +74,7 @@ class LocationController {
     func saveToCloudKit(locations: Location, completion: @escaping boolVoidCompletion) {
         
         let locationRecord = CKRecord(location: locations)
+        
         privateDB.save(locationRecord) { (record, error) in
             if let error = error {
                 print("\n\n🚀 There was an error with saving the record to CloudKit in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription) 🚀\n\n")
@@ -73,7 +82,7 @@ class LocationController {
                 return
             }
             guard let record = record, let newlocationRecord = Location(ckRecord: record) else {
-                print("\n💀 No Record came back from CloudKit\n")
+                print("\n💀 No Record was saved to CloudKit\n")
                 completion(false)
                 return
             }
@@ -83,30 +92,43 @@ class LocationController {
     }
     
     // MARK: - Create
-    func createNewLocation(location: Location, geoCodeAddressString: String, addressTitle: String, userTargetLocationReference: CKRecord.Reference, longitude: Double, latitude: Double, completion: @escaping boolVoidCompletion) {
+//    func createNewLocation(location: Location, geoCodeAddressString: String,
+    func createNewLocation(geoCodeAddressString: String, addressTitle: String, longitude: Double, latitude: Double, completion: @escaping boolVoidCompletion) {
         
-        let locationRecordID = location.ckRecordID
-        let userLocationReference = CKRecord.Reference(recordID: locationRecordID , action: .deleteSelf)
+//        let locationRecordID = location.ckRecordID
+//
+//        guard let userLocationRecordID = locationUserRecordID else {
+//            print("\nuserLocationRecordID is nil or something 😭")
+//            completion(false)
+//            return
+//        }
+//
+//        let userLocationReference = CKRecord.Reference(recordID: userLocationRecordID , action: .deleteSelf)
         //ASK: Why did are thsee dot syntax
-        let latitude = location.latitude
-        let longitude = location.longitude
         
-        let newLocation = Location(geoCodeAddressString: geoCodeAddressString, addressTitle: addressTitle, userLocationReference: userLocationReference, longitude: longitude, latitude: latitude)
+//        let latitude = location.latitude
+//        let longitude = location.longitude
+        
+       
+        // NOTE: - Dec 27 since i made the ref part of the init in the model. its no longer part of the Location (........) which lead to me not using the commented out code above
+        let newLocation = Location(geoCodeAddressString: geoCodeAddressString, addressTitle: addressTitle, longitude: longitude, latitude: latitude)
         
         saveToCloudKit(locations: newLocation) { (success) in
             if success {
-                print("\nSuccessfully created record\n")
+                print("\n🙏🏽Successfully created record\n")
                 completion(true)
             } else {
                 completion(false)
-                print("\nError Creating Record\n")
+                print("\n💀Error Creating Record\n")
                 //for test purposes fatal error
-                fatalError("\nFatal Error , error creating record\n")
+                fatalError("\n💀💀Fatal Error , error creating record💀💀\n")
             }
         }
     }
-    
+//     func updateTargetLocation(location: Location, geoCodeAddressString: String,
     func updateTargetLocation(location: Location, geoCodeAddressString: String, addressTitle: String, latitude: Double, longitude: Double, completion: @escaping boolVoidCompletion) {
+        
+        
         
         location.geoCodeAddressString = geoCodeAddressString
         location.locationTitle = addressTitle
@@ -120,6 +142,11 @@ class LocationController {
         operration.queuePriority = .high
         operration.qualityOfService = .userInteractive
         operration.completionBlock = {
+          
+            NotificationController.cancelLocalNotificationWith(identifier: location.locationTitle)
+            
+            
+            
             completion(true)
         }
         privateDB.add(operration)

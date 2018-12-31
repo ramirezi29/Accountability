@@ -94,7 +94,9 @@ class UserController {
     func createNewUserDetailsWith(userName: String, sponsorName: String, sponserTelephoneNumber: String, sponsorEmail: String, aaStep: Int, completion: @escaping boolVoidCompletion) {
         
         //new
-        guard let appleUserRecordID = appleUserRecordID else { completion(false) ; return }
+        guard let appleUserRecordID = appleUserRecordID else { completion(false)
+            return
+        }
         
         let appleUserRef = CKRecord.Reference(recordID: appleUserRecordID, action: .deleteSelf)
         

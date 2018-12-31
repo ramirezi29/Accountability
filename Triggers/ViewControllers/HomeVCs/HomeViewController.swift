@@ -19,17 +19,21 @@ class HomeViewController: UIViewController {
     
     //TextFields
     @IBOutlet weak var userNameTextField: UITextField!
-    @IBOutlet weak var sponsorNameTextField: UITextField!
+    @IBOutlet weak var sponsorsNameTextField: UITextField!
     @IBOutlet weak var sponsorsPhoneNumberTextField: UITextField!
-    @IBOutlet weak var sponsorEmailTextField: UITextField!
+    @IBOutlet weak var sponsorsEmailTextField: UITextField!
     
     //Activity Indicator
     @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
 
     var editBool = false
+    let networkErrorNotif = AlertController.presentAlertControllerWith(title: "Unable able to Save Entry", message: "The Internet connection appears to be offline")
+    let fetchErrorNotif  = AlertController.presentAlertControllerWith(title: "Unable to load data", message: "The Internet connection appears to be offline")
     
+    // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         //Keyboard
         self.view.endEditing(true)
@@ -46,13 +50,17 @@ class HomeViewController: UIViewController {
         //Background UI
         view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
+        //Textfields
+        textFieldsInactive()
+        textFieldsInvisable()
+        
         // MARK: - This is coming back Nill
         // ASK: - Look inot why its nil or why it returns
         
         UserController.shared.fetchCurrentUser() { (success, error) in
             if success {
                 DispatchQueue.main.async {
-                    self.activityIndicatorOutlet.isHidden = false
+                    self.activityIndicatorOutlet.isHidden = true
                     self.activityIndicatorOutlet.stopAnimating()
                     self.updateViews()
                 }
@@ -62,10 +70,13 @@ class HomeViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.activityIndicatorOutlet.stopAnimating()
                     self.activityIndicatorOutlet.isHidden = true
-                    print("\n🤯 Error fechign Data \n")
+                    AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+                    // prseent UI Alert expalining error
+                    self.present(self.fetchErrorNotif, animated: true, completion: nil)
                     //present UI Alert that there was an error loading
-                    return
                 }
+                print("\n🤯 Error fechign Data \n")
+                return
             }
         }
     }
@@ -75,9 +86,9 @@ class HomeViewController: UIViewController {
         guard let loggedInUser = UserController.shared.loggedInUser
             else { return }
         userNameTextField.text = loggedInUser.userName
-        sponsorNameTextField.text = loggedInUser.sponsorName
+        sponsorsNameTextField.text = loggedInUser.sponsorName
         sponsorsPhoneNumberTextField.text = loggedInUser.sponsorTelephoneNumber
-        sponsorEmailTextField.text = loggedInUser.sponsorEmail
+        sponsorsEmailTextField.text = loggedInUser.sponsorEmail
         currentAaStepLabel.text = "\(loggedInUser.aaStep)"
     }
     
@@ -100,23 +111,47 @@ class HomeViewController: UIViewController {
         }
     }
     
-    func textFieldsInactiveFalse(){
+    func textFieldsInactive() {
         userNameTextField.isUserInteractionEnabled = false
-        sponsorNameTextField.isUserInteractionEnabled = false
+        sponsorsNameTextField.isUserInteractionEnabled = false
         sponsorsPhoneNumberTextField.isUserInteractionEnabled = false
-        sponsorEmailTextField.isUserInteractionEnabled = false
+        sponsorsEmailTextField.isUserInteractionEnabled = false
         
         //also include the UI Stuff
     }
     
-    func textFieldsInactiveTrue(){
+    func textFieldsActive() {
         userNameTextField.isUserInteractionEnabled = true
-        sponsorNameTextField.isUserInteractionEnabled = true
+        sponsorsNameTextField.isUserInteractionEnabled = true
         sponsorsPhoneNumberTextField.isUserInteractionEnabled = true
-        sponsorEmailTextField.isUserInteractionEnabled = true
+        sponsorsEmailTextField.isUserInteractionEnabled = true
         
         //also include the UI Stuff
     }
+    
+    func textfildsVisable() {
+        userNameTextField.backgroundColor = .white
+        sponsorsNameTextField.backgroundColor  = .white
+        sponsorsPhoneNumberTextField.backgroundColor = .white
+        sponsorsEmailTextField.backgroundColor = .white
+        //current aa text field
+    }
+    
+    func textFieldsInvisable() {
+        userNameTextField.backgroundColor = .clear
+        sponsorsNameTextField.backgroundColor = .clear
+        sponsorsPhoneNumberTextField.backgroundColor = .clear
+        sponsorsEmailTextField.backgroundColor = .clear
+        //current aa text field
+        
+        userNameTextField.borderStyle = .none
+        sponsorsNameTextField.borderStyle = .none
+        sponsorsPhoneNumberTextField.borderStyle = .none
+        sponsorsEmailTextField.borderStyle = .none
+        //current aa text field
+    }
+    
+    
     /*
      // MARK: - Navigation
      
@@ -140,7 +175,8 @@ class HomeViewController: UIViewController {
             self.aaPickerView.isHidden = false
             
             // Text Fields
-            textFieldsInactiveTrue()
+            textFieldsActive()
+            textfildsVisable()
             
             // Picker View
             UIView.animate(withDuration: 0.6, delay: 0.1, options: .curveEaseIn, animations: {
@@ -161,13 +197,17 @@ class HomeViewController: UIViewController {
             editBool = true
         case true:
             
+            //Textfield
+            sponsorsNameTextField.resignFirstResponder()
+            textFieldsInvisable()
+            textFieldsInactive()
+            
             guard let userName = userNameTextField.text,
-                let sponsorName = sponsorNameTextField.text,
+                let sponsorName = sponsorsNameTextField.text,
                 let sponsorTelephone = sponsorsPhoneNumberTextField.text,
-                let sponsorEmail = sponsorEmailTextField.text,
+                let sponsorEmail = sponsorsEmailTextField.text,
                 let currentStep = currentAaStepLabel.text else {return}
             
-            sponsorNameTextField.resignFirstResponder()
             
             // MARK: - CK Update
             if let loggedInUser = UserController.shared.loggedInUser {
@@ -181,12 +221,17 @@ class HomeViewController: UIViewController {
                     } else {
                         AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                         // prseent UI Alert expalining error
-                        print("💀error with the upating the data")
+                        DispatchQueue.main.async {
+                            self.present(self.networkErrorNotif, animated: true, completion: nil)
+                            print("💀error with the upating the data")
+                        }
                         return
                     }
                 }
             } else {
                 //Mark: - Create
+              
+                
                 UserController.shared.createNewUserDetailsWith(userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorTelephone, sponsorEmail: sponsorEmail, aaStep: Int(currentStep) ?? 1) { (success) in
                     if success {
                         print("\n🙏🏽 Creating new userDetails to CK successful\n")
@@ -196,6 +241,7 @@ class HomeViewController: UIViewController {
                     } else {
                         AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                         // prseent UI Alert expalining error
+                        self.present(self.networkErrorNotif, animated: true, completion: nil)
                         print("💀error with the upating the data")
                         return
                     }
@@ -206,7 +252,7 @@ class HomeViewController: UIViewController {
             
             
             // Text Fields
-            textFieldsInactiveFalse()
+            textFieldsInactive()
             
             // pass the Picker View Data to the Step Label
             let selectedAaStep = aaPickerView.selectedRow(inComponent: 1) + 1
