@@ -40,14 +40,11 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     var subHeadLine = ""
     var imageFile = ""
     
-    
-    
     // Bools and Keys to for UIAlert
     var disableRestrictedAlertBool = false
     var disableDeniedAlertBool = false
     private let deniedBoolKey = "disabledDeniedAlertBool"
     private let restrictedBoolKey = "disabledRestrictedAlertBool"
-    
     
     // MARK: - Life Cyles
     override func viewDidLoad() {
@@ -57,7 +54,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         hideTextFields()
         
         //User Name Text Field
-        
         
         view.addSubview(userNameTextField)
         userNameConstraints()
@@ -82,9 +78,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         //Current AA Step
         view.addSubview(aaStepTextField)
         aaStepConstraint()
-        //         aaStepTextField.placeholder = "Current AA Step"
-        //        aaStepTextField.textColor = UIColor.white
-        
+
         //userDefaults
         loadUserDefaults()
         
@@ -148,7 +142,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         // MARK: - Index if Statments
         if index == 6 {
             
-            
             textFieldAlphaZero()
             showTextFields()
             // MARK: - Text Fields Appear Animation
@@ -189,7 +182,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         }
     }
     
-    
     func inquirePermissions() {
         
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
@@ -220,7 +212,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             self.locationManger.startUpdatingLocation()
         }
     }
-    
     
     func loadUserDefaults() {
         disableDeniedAlertBool = UserDefaults.standard.bool(forKey: deniedBoolKey)
@@ -281,6 +272,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             
         case .authorizedWhenInUse:
             print("\nuser granted authorizedWhenInUse\n")
+            
             //            presentMainView()
             
         case .authorizedAlways:
@@ -322,6 +314,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         textField.backgroundColor = UIColor.blue
         textField.textColor = UIColor.white
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        
         return textField
     }()
     
@@ -332,6 +325,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         textField.backgroundColor = UIColor.blue
         textField.textColor = UIColor.white
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Email Address", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        
         return textField
     }()
     
@@ -341,8 +335,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         textField.backgroundColor = UIColor.blue
         textField.textColor = UIColor.white
-        
         textField.attributedPlaceholder = NSAttributedString(string: "If in treatment enter current Step", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        
         return textField
     }()
     
@@ -407,7 +401,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     
     
     // MARK: - Segue the onboarding textfilds to the Home VC
-    // This doesnt get hit
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let usersName = userNameTextField.text, !usersName.isEmpty,
             let sponsorsName = sponsorsNameTextField.text,
@@ -416,20 +409,18 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             let aaStep = aaStepTextField.text
             else {return}
         
-        guard let destinationVC = segue.destination as? HomeViewController else {return}
+        guard let destinationVC = segue.destination as? HomeVC else {return}
         destinationVC.userNameTextField.text = usersName
         destinationVC.sponsorsNameTextField.text = sponsorsName
         destinationVC.sponsorsEmailTextField.text = sponsorsEmail
         destinationVC.sponsorsPhoneNumberTextField.text = sponsorsPhoneNumber
         destinationVC.currentAaStepLabel.text = aaStep
-        
     }
 }
 
 extension WalkThroughContentVC : UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
         
         if textField.text!.count + 1 >= 2 {
             delegate?.validUserNameEntered(username: string, isHidden: false)
@@ -438,7 +429,6 @@ extension WalkThroughContentVC : UITextFieldDelegate {
         
         if textField.text!.count - 1 < 2 {
             delegate?.validUserNameEntered(username: "", isHidden: true)
-            
         }
         
         return true
@@ -446,7 +436,6 @@ extension WalkThroughContentVC : UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         userNameTextField.resignFirstResponder()
-        //        textField = sponseeNameTextField.resignFirstResponder()
         return true
     }
 }
@@ -455,13 +444,9 @@ extension WalkThroughContentVC {
     
     func hideTextFields() {
         userNameTextField.isHidden = true
-        
         sponsorsNameTextField.isHidden = true
-        
         sponsorsPhoneNumberTextField.isHidden = true
-        
         sponsorsEmailAddressTextField.isHidden = true
-        
         aaStepTextField.isHidden = true
     }
     
@@ -476,15 +461,10 @@ extension WalkThroughContentVC {
     // Testing purposes
     func showTextFields() {
         userNameTextField.isHidden = false
-        
         sponsorsNameTextField.isHidden = false
-        
         sponsorsPhoneNumberTextField.isHidden = false
-        
         sponsorsEmailAddressTextField.isHidden = false
-        
         aaStepTextField.isHidden = false
-        
     }
     
     func textFieldAlphaZero(){

@@ -36,10 +36,7 @@ class Folder {
     // NOTE: - Fech ckRecord
     convenience init?(ckRecord: CKRecord) {
         
-        guard let folderTitle = ckRecord[FolderConstants.folderTitleKey] as? String
-            
-            
-            else {return nil}
+        guard let folderTitle = ckRecord[FolderConstants.folderTitleKey] as? String else { return nil }
         
         let userFolderReference = ckRecord[FolderConstants.userFolderReferenceKey] as? CKRecord.Reference
         
@@ -55,11 +52,8 @@ extension CKRecord {
     convenience init(folder: Folder) {
         
         self.init(recordType: FolderConstants.FolderTypeKey, recordID: folder.ckRecordID)
-        
         self.setValue(folder.folderTitle, forKey: FolderConstants.folderTitleKey)
-        
         self.setValue(folder.timeStamp, forKey: FolderConstants.timeStampKey)
-        
         self.setValue(folder.userFolderReference, forKey: FolderConstants.userFolderReferenceKey)
     }
 }

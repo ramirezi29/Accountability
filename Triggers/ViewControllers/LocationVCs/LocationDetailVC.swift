@@ -11,6 +11,7 @@ import MapKit
 import UserNotifications
 import AVFoundation
 import CloudKit
+import CoreLocation
 
 class LocationDetailVC: UIViewController {
     
@@ -22,29 +23,52 @@ class LocationDetailVC: UIViewController {
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var mapViewOutlet: MKMapView!
-   
+    
     @IBOutlet weak var actiivtyViewoutlet: UIView!
     @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
     
     //Mark: - Landing Pad
     var location: Location?
+    var user: User?
+    
+    
+    
     
     private let geocoder = CLGeocoder()
-    
+    private let locationManger = CLLocationManager()
     private let metersPerMile = 1609.344
     private var coordinate: CLLocationCoordinate2D?
     private var annotation: MKPointAnnotation?
     private let desiredRadius = 60.96
     private let devMntLat = 40.761806
     private let devMntLon = -111.890534
-    let badAddressNotif = AlertController.presentAlertControllerWith(title: "Address Not Found", message: "Sorry, Couldnt not find the specified address")
-    let networkErroNoif = AlertController.presentAlertControllerWith(title: "Network Error", message: "Error with your internet connection unable to save")
+    
+    let badAddressNotif = AlertController.presentAlertControllerWith(alertTitle: "Address Not Found", alertMessage: "Sorry, Couldnt not find the specified address", dismissActionTitle: "OK")
+    let networkErroNoif = AlertController.presentAlertControllerWith(alertTitle: "Network Error", alertMessage: "Error with your internet connection unable to save", dismissActionTitle: "OK")
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        locationManger.delegate = self as? CLLocationManagerDelegate
+        locationManger.desiredAccuracy = kCLLocationAccuracyBest
+        
+        
         actiivtyViewoutlet.backgroundColor = UIColor.clear
         activityIndicatorOutlet.isHidden = true
+        
+//        guard let usersCurrentLocation = locationManger.location?.coordinate else {
+//            print("\n ✈️ Error:let usersCurrentLocation = locationManger.location?.coordinate is NIL \n")
+//            return
+//
+//        }
+//
+//        locationManger.startUpdatingLocation()
+//        mapViewOutlet.showsUserLocation = true
+//
+//        let region = MKCoordinateRegion.init(center: usersCurrentLocation, latitudinalMeters: metersPerMile, longitudinalMeters: metersPerMile)
+//
+//        mapViewOutlet.setRegion(region, animated: true)
+        
         
         //Background UI
         view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
@@ -114,12 +138,12 @@ class LocationDetailVC: UIViewController {
         }
     }
     
- 
+    
     @IBAction func backButtonTapped(_ sender: Any) {
-   dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
-
+    
     @IBAction func saveButtonTapped(_ sender: UIButton) {
         
         print("\n Save button Taped")
@@ -147,7 +171,7 @@ class LocationDetailVC: UIViewController {
                     print("🙏🏽 Success updating Location")
                     DispatchQueue.main.async {
                         // Do any UI STuff here that would be triggered by a successful update
-//                        self.navigationController?.popViewController(animated: true)
+                       
                         self.dismiss(animated: true, completion: nil)
                     }
                 } else {
@@ -165,10 +189,13 @@ class LocationDetailVC: UIViewController {
             LocationController.shared.createNewLocation(geoCodeAddressString: addressLocation, addressTitle: locationTitle, longitude: long, latitude: lat) { (success) in
                 if success {
                     // call create
-                    NotificationController.createLocalNotifciation(with: locationTitle)
+                    
+                    // NOTE: - Sponosrs Name is not being passed in 
+                    NotificationController.createLocalNotifciationWith(contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Contact your accountability partner \(self.user?.sponsorName ?? "")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: UUID().uuidString), notifIdentifier: locationTitle)
+                    
                     print("\n🙏🏽Successfully created/saved location🙏🏽")
                     DispatchQueue.main.async {
-//                        self.navigationController?.popViewController(animated: true)
+                        //                        self.navigationController?.popViewController(animated: true)
                         self.dismiss(animated: true, completion: nil)
                     }
                 } else {
@@ -209,9 +236,6 @@ class LocationDetailVC: UIViewController {
         }
         
     }
-
+    
 }
 
-extension LocationDetailVC {
- 
-}

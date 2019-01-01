@@ -11,6 +11,7 @@
 		470408F321CD7A8E00884CFA /* LocationTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470408F221CD7A8E00884CFA /* LocationTVCell.swift */; };
 		470408F621CD7DC200884CFA /* CreditNameSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470408F521CD7DC100884CFA /* CreditNameSource.swift */; };
 		471665E021D441E6000DC53B /* textFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471665DF21D441E6000DC53B /* textFieldExtension.swift */; };
+		471A76F321DAAE1D002FB8CE /* FolderTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471A76F221DAAE1D002FB8CE /* FolderTVC.swift */; };
 		47296FF521CB38D5007B9B1B /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47296FF421CB38D5007B9B1B /* Note.swift */; };
 		47296FF721CB3942007B9B1B /* NoteConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47296FF621CB3942007B9B1B /* NoteConstants.swift */; };
 		47296FF921CB3C56007B9B1B /* NoteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47296FF821CB3C56007B9B1B /* NoteController.swift */; };
@@ -31,6 +32,7 @@
 		4771461021C9C4210016FFAB /* WalkThroughContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4771460F21C9C4210016FFAB /* WalkThroughContentVC.swift */; };
 		4771461221C9CFB00016FFAB /* WalkThroughVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4771461121C9CFB00016FFAB /* WalkThroughVC.swift */; };
 		477C945521DA76D6006F7E80 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C945421DA76D6006F7E80 /* NotificationController.swift */; };
+		477FA78521DC18F300EB6670 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477FA78421DC18F300EB6670 /* CloudKitManager.swift */; };
 		47A602FD21D82C2700699EDF /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A602FC21D82C2700699EDF /* Folder.swift */; };
 		47A602FF21D82C7A00699EDF /* FolderConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A602FE21D82C7A00699EDF /* FolderConstants.swift */; };
 		47A6030121D83A1900699EDF /* FolderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A6030021D83A1900699EDF /* FolderController.swift */; };
@@ -44,11 +46,14 @@
 		47E29E4221C82DAA00FA44EE /* LocationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E4121C82DAA00FA44EE /* LocationConstants.swift */; };
 		47E29E4821C8524A00FA44EE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 47E29E4A21C8524A00FA44EE /* Localizable.strings */; };
 		47E29E4F21C852DC00FA44EE /* LocationDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E4E21C852DC00FA44EE /* LocationDetailVC.swift */; };
-		47E29E5121C852F500FA44EE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E5021C852F500FA44EE /* HomeViewController.swift */; };
+		47E29E5121C852F500FA44EE /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E5021C852F500FA44EE /* HomeVC.swift */; };
 		47E29E5321C8645E00FA44EE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E5221C8645E00FA44EE /* User.swift */; };
 		47E29E5721C8653B00FA44EE /* UserDetailConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E5621C8653B00FA44EE /* UserDetailConstants.swift */; };
 		47E29E5C21C89C7400FA44EE /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E5B21C89C7400FA44EE /* UserController.swift */; };
 		47E29E5F21C8B1E300FA44EE /* NetworkingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E5E21C8B1E300FA44EE /* NetworkingError.swift */; };
+		47F5CDF721DC102100E0BE55 /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F5CDF621DC102100E0BE55 /* MonthView.swift */; };
+		47F5CDF921DC12B700E0BE55 /* WeekdaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F5CDF821DC12B700E0BE55 /* WeekdaysView.swift */; };
+		47F5CDFB21DC12D300E0BE55 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F5CDFA21DC12D300E0BE55 /* CalendarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +61,7 @@
 		470408F221CD7A8E00884CFA /* LocationTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTVCell.swift; sourceTree = "<group>"; };
 		470408F521CD7DC100884CFA /* CreditNameSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditNameSource.swift; sourceTree = "<group>"; };
 		471665DF21D441E6000DC53B /* textFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = textFieldExtension.swift; sourceTree = "<group>"; };
+		471A76F221DAAE1D002FB8CE /* FolderTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTVC.swift; sourceTree = "<group>"; };
 		47296FF421CB38D5007B9B1B /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		47296FF621CB3942007B9B1B /* NoteConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteConstants.swift; sourceTree = "<group>"; };
 		47296FF821CB3C56007B9B1B /* NoteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteController.swift; sourceTree = "<group>"; };
@@ -76,6 +82,7 @@
 		4771460F21C9C4210016FFAB /* WalkThroughContentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkThroughContentVC.swift; sourceTree = "<group>"; };
 		4771461121C9CFB00016FFAB /* WalkThroughVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkThroughVC.swift; sourceTree = "<group>"; };
 		477C945421DA76D6006F7E80 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		477FA78421DC18F300EB6670 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		47A602FC21D82C2700699EDF /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		47A602FE21D82C7A00699EDF /* FolderConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderConstants.swift; sourceTree = "<group>"; };
 		47A6030021D83A1900699EDF /* FolderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderController.swift; sourceTree = "<group>"; };
@@ -95,11 +102,14 @@
 		47E29E4921C8524A00FA44EE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		47E29E4B21C8524F00FA44EE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		47E29E4E21C852DC00FA44EE /* LocationDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailVC.swift; sourceTree = "<group>"; };
-		47E29E5021C852F500FA44EE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		47E29E5021C852F500FA44EE /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		47E29E5221C8645E00FA44EE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		47E29E5621C8653B00FA44EE /* UserDetailConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailConstants.swift; sourceTree = "<group>"; };
 		47E29E5B21C89C7400FA44EE /* UserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
 		47E29E5E21C8B1E300FA44EE /* NetworkingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingError.swift; sourceTree = "<group>"; };
+		47F5CDF621DC102100E0BE55 /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
+		47F5CDF821DC12B700E0BE55 /* WeekdaysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdaysView.swift; sourceTree = "<group>"; };
+		47F5CDFA21DC12D300E0BE55 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +167,7 @@
 			children = (
 				477145F121C99E640016FFAB /* NotesTVC.swift */,
 				477145F521C9A1FC0016FFAB /* NoteDetailVC.swift */,
+				471A76F221DAAE1D002FB8CE /* FolderTVC.swift */,
 			);
 			path = NoteVCs;
 			sourceTree = "<group>";
@@ -173,7 +184,7 @@
 		4771460121C9A8EB0016FFAB /* HomeVCs */ = {
 			isa = PBXGroup;
 			children = (
-				47E29E5021C852F500FA44EE /* HomeViewController.swift */,
+				47E29E5021C852F500FA44EE /* HomeVC.swift */,
 			);
 			path = HomeVCs;
 			sourceTree = "<group>";
@@ -183,6 +194,9 @@
 			children = (
 				477145FF21C9A8DC0016FFAB /* CalendarVC.swift */,
 				4771460421C9A9390016FFAB /* CalendarDetailVC.swift */,
+				47F5CDF621DC102100E0BE55 /* MonthView.swift */,
+				47F5CDF821DC12B700E0BE55 /* WeekdaysView.swift */,
+				47F5CDFA21DC12D300E0BE55 /* CalendarView.swift */,
 			);
 			path = CalendarVCs;
 			sourceTree = "<group>";
@@ -337,6 +351,7 @@
 			isa = PBXGroup;
 			children = (
 				47E29E5E21C8B1E300FA44EE /* NetworkingError.swift */,
+				477FA78421DC18F300EB6670 /* CloudKitManager.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -426,11 +441,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				47E29E1B21C80B0200FA44EE /* AppDelegate.swift in Sources */,
+				47F5CDF921DC12B700E0BE55 /* WeekdaysView.swift in Sources */,
+				471A76F321DAAE1D002FB8CE /* FolderTVC.swift in Sources */,
 				47296FF921CB3C56007B9B1B /* NoteController.swift in Sources */,
 				470408F321CD7A8E00884CFA /* LocationTVCell.swift in Sources */,
 				477C945521DA76D6006F7E80 /* NotificationController.swift in Sources */,
 				47A602FF21D82C7A00699EDF /* FolderConstants.swift in Sources */,
+				47F5CDF721DC102100E0BE55 /* MonthView.swift in Sources */,
+				477FA78521DC18F300EB6670 /* CloudKitManager.swift in Sources */,
 				4771460E21C9BB200016FFAB /* WalkThroughPVC.swift in Sources */,
+				47F5CDFB21DC12D300E0BE55 /* CalendarView.swift in Sources */,
 				47E29E5F21C8B1E300FA44EE /* NetworkingError.swift in Sources */,
 				471665E021D441E6000DC53B /* textFieldExtension.swift in Sources */,
 				470408F621CD7DC200884CFA /* CreditNameSource.swift in Sources */,
@@ -447,7 +467,7 @@
 				47E29E5C21C89C7400FA44EE /* UserController.swift in Sources */,
 				470408F121CD743E00884CFA /* LocationTVC.swift in Sources */,
 				477145F421C99FE00016FFAB /* NotesTVCell.swift in Sources */,
-				47E29E5121C852F500FA44EE /* HomeViewController.swift in Sources */,
+				47E29E5121C852F500FA44EE /* HomeVC.swift in Sources */,
 				472EA53621CC05CB0022EE0A /* LocationController.swift in Sources */,
 				47296FF721CB3942007B9B1B /* NoteConstants.swift in Sources */,
 				47E29E4221C82DAA00FA44EE /* LocationConstants.swift in Sources */,

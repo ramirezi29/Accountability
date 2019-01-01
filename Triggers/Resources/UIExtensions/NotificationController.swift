@@ -8,7 +8,7 @@
 
 import Foundation
 import UserNotifications
-
+import CoreLocation
 
 class NotificationController {
     
@@ -18,7 +18,7 @@ class NotificationController {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
     }
     
-   static func createLocalNotifciation(with notifIdentifier: String){
+    static func createLocalNotifciationWith(contentTitle: String, contentBody: String, circularRegion: CLCircularRegion, notifIdentifier: String){
         
         // Action
         let dismissAction = UNNotificationAction(identifier: LocationConstants.dismissActionKey, title: "Dismiss", options: [])
@@ -33,12 +33,14 @@ class NotificationController {
         
         // Content of the message
         let content = UNMutableNotificationContent()
-        content.title = "\(String(describing: locationTitleTextField.text)) has been crossed"
-        content.body = "Think This Through Do Not Enter and Call your Spnors"
+        content.title = contentTitle
+//    "\(String(describing: locationTitleTextField.text)) has been crossed"
+        content.body = contentBody
         content.badge = 1
         content.categoryIdentifier = LocationConstants.notifCatergoryKey
         
-        let region = CLCircularRegion(center: coordinate!, radius: desiredRadius, identifier: UUID().uuidString)
+        let region = circularRegion
+//            CLCircularRegion(center: coordinate!, radius: desiredRadius, identifier: UUID().uuidString)
         
         region.notifyOnEntry = true
         

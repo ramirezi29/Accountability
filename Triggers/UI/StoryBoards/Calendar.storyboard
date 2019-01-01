@@ -23,6 +23,16 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="Title" id="HS5-78-Bxt">
+                                        <barButtonItem key="leftBarButtonItem" style="plain" id="5hr-L4-8aA">
+                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xHH-k7-Hda">
+                                                <rect key="frame" x="16" y="7" width="94" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="CalenderDate"/>
+                                                <connections>
+                                                    <segue destination="s2P-ue-BbW" kind="presentation" id="5Ij-0d-P4J"/>
+                                                </connections>
+                                            </button>
+                                        </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" style="plain" id="zWB-OY-yMN">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hkP-1e-plw">
                                                 <rect key="frame" x="319" y="7" width="40" height="30"/>
@@ -30,11 +40,10 @@
                                                 <state key="normal" title="Share"/>
                                                 <connections>
                                                     <action selector="ckShareButton:" destination="Wq2-2c-vOx" eventType="touchUpInside" id="gyZ-mA-OQV"/>
-                                                    <action selector="ckShareButton:" destination="JYi-HP-gyc" eventType="touchUpInside" id="kWx-2k-i2A"/>
                                                 </connections>
                                             </button>
                                             <connections>
-                                                <action selector="shareButtonTapped:" destination="JYi-HP-gyc" id="1sl-sO-3W1"/>
+                                                <action selector="shareButtonTapped:" destination="JYi-HP-gyc" id="tpg-4V-yUS"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -47,19 +56,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xHH-k7-Hda">
-                                <rect key="frame" x="128" y="236" width="94" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="CalenderDate"/>
-                                <connections>
-                                    <segue destination="s2P-ue-BbW" kind="presentation" id="5Ij-0d-P4J"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="wq1-sx-1mS"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Location" id="IA0-bZ-Dj7"/>
+                    <connections>
+                        <outlet property="shareButton" destination="zWB-OY-yMN" id="2ov-ae-pKb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NOj-Md-ApR" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Wq2-2c-vOx" userLabel="Exit" sceneMemberID="exit"/>
@@ -69,7 +73,6 @@
         <!--Calendar DetailVC-->
         <scene sceneID="czt-kL-UMM">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mMI-ue-yBB" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="UIViewController-hx3-07-AVP" id="s2P-ue-BbW" customClass="CalendarDetailVC" customModule="Triggers" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qAW-QI-LXb">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -128,6 +131,7 @@
                         <outlet property="timeLabel" destination="w34-s6-zK2" id="XxJ-39-14T"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mMI-ue-yBB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2193" y="-276"/>
         </scene>
