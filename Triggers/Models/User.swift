@@ -9,8 +9,6 @@
 import Foundation
 import CloudKit
 
-// Create a log in process where they enter in the stuff to present in the dash board screen
-
 class User {
     var userName: String
     var sponsorName: String?
@@ -19,7 +17,6 @@ class User {
     var aaStep: Int
     var ckRecordID: CKRecord.ID?
     var appleUserRef: CKRecord.Reference
-    
     
     var targetLocations: [Location] = []
     
@@ -60,31 +57,24 @@ class User {
     }
 }
 
-// NOTE: - Create a CKRecord using our model object -- 🔥Pushextension user {
+// NOTE: - Create a CKRecord using our model object -- 🔥Push
 extension CKRecord {
     convenience init(user: User) {
         
         let recordID = user.ckRecordID ?? CKRecord.ID(recordName: UUID().uuidString)
         
         self.init(recordType: UserConstants.userTypeKey, recordID: recordID)
-        
         self.setValue(user.userName, forKey: UserConstants.sponseeNameKey)
-        
         self.setValue(user.sponsorName, forKey: UserConstants.sponsorNameKey)
-        
         self.setValue(user.sponsorTelephoneNumber, forKey: UserConstants.sponsorTelephoneNumberKey)
-        
         self.setValue(user.sponsorEmail, forKey: UserConstants.sponsorEmailKey)
-        
         self.setValue(user.aaStep, forKey: UserConstants.aaStepKey)
-        
         self.setValue(user.appleUserRef, forKey: UserConstants.appleUserRefKey)
-            
-       // NOTE: - In order to not save a brand new record
+        
+        // NOTE: - In order to not save a brand new record
         user.ckRecordID = recordID
     }
 }
-
 
 extension User: Equatable {
     

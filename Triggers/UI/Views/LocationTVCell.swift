@@ -28,13 +28,11 @@ class LocationTVCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     
     }
-    
- 
+
     func updateViews() {
         
         guard let location = location else {return}
         locationTitleLabel.text = location.locationTitle
         locationImageView.image = UIImage(named: "cloudImage") 
     }
-
 }

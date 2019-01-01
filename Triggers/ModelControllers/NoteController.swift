@@ -24,21 +24,19 @@ class NoteController {
     typealias boolVoidCompletion = (Bool) -> Void
     
     // MARK: - Fetch
-    func fetchItems(notes: Note, completion: @escaping fetchCompletion) {
+    func fetchItems(folder: Folder, completion: @escaping fetchCompletion) {
         
-        // Match item records whose owningList(newsletter) field points to the specified list record (instance of Newsletter)
-         let notesParentID = notes.ckRecordID
-        let userNoteReference = CKRecord.Reference(recordID: notesParentID, action: .deleteSelf)
-        let predicate = NSPredicate(format: "\(NoteConstants.userNoteReferenceKey) == %@", userNoteReference)
+        //Test Print
+        print("Random info From folder fetch: user: \(folder)")
         
-        /*
-         add this to the location controller
-         let predicate = NSPredicate(format: "\(LocationConstants.usersLocationRefKey) == %@", userDetailsReference)
-         */
+        let folderParentID = folder.ckRecordID
         
-        // Create the query object, and set the sort order.
+        let predicate = NSPredicate(format: "\(NoteConstants.folderReferenceKey) == %@", folderParentID)
+        
         let query = CKQuery(recordType: NoteConstants.NoteTypeKey, predicate: predicate)
+        
         query.sortDescriptors = [NSSortDescriptor(key: NoteConstants.timeStampKey, ascending: true)]
+        
         privateDB.perform(query, inZoneWith: nil) { (records, error) in
             
             if let error = error {
@@ -60,8 +58,9 @@ class NoteController {
     
     // MARK: - Save
     func saveToCloudKit(notes: Note, completion: @escaping boolVoidCompletion) {
+        
         let notesRecord = CKRecord(note: notes)
-
+        
         privateDB.save(notesRecord) { (record, error) in
             if let error = error {
                 print("\n\n🚀 There was an error with saving the record to CloudKit in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription) 🚀\n\n")
@@ -69,60 +68,56 @@ class NoteController {
                 return
             }
             guard let record = record, let newNote = Note(ckRecord: record) else {
+                
                 print("\n💀 No Record came back from CloudKit\n")
+                
                 completion(false)
                 return
             }
+            
             self.notes.append(newNote)
             completion(true)
         }
     }
-
+    
     // MARK: - Create
-    func createNewNoteWith(note: Note, title: String, textBody: String, userNoteReference: CKRecord.Reference, completion: @escaping boolVoidCompletion) {
-
-
-        // Note sure if i needed the CKRecord.ID version
-         let noteRecordID = note.ckRecordID
-        let userNoteReference = CKRecord.Reference(recordID: noteRecordID, action: .deleteSelf)
-        //Need to fix this line below
-        let newNote = Note(title: title, textBody: textBody, userNoteReference: userNoteReference)
+    func createNewNoteWith(title: String, textBody: String, folder: Folder, completion: @escaping boolVoidCompletion) {
         
-        // ASK: - Not Sure if this userRecord instance is needed
-        // create a record so that it can be saved
-//        let userRecord = CKRecord(note: <#T##Note#>)
+        let newNote = Note(title: title, textBody: textBody, folderReference: CKRecord.Reference(recordID: folder.ckRecordID, action: .deleteSelf))
+        
         saveToCloudKit(notes: newNote) { (success) in
             if success {
                 print("\nSuccessfully created record\n")
+                FolderController.shared.add(note: newNote, to: folder)
                 completion(true)
+                
             } else {
-                completion(false)
+                
                 print("\nError Creating Record\n")
+                
+                completion(false)
+                
                 //for test purposes fatal error
                 fatalError("\nFatal Error , error creating record\n")
             }
         }
-
     }
-
+    
     // MARK: - Update
-    //ASK: - DO i need to update a ckRefrence
     func updateNote(note: Note, title: String, textBody: String, completion: @escaping boolVoidCompletion) {
-       note.title = title
+        note.title = title
         note.textBody = textBody
-
+        
         let record = CKRecord(note: note)
-
-        //Note sure why Nil ??
+        
         let operration = CKModifyRecordsOperation(recordsToSave: [record], recordIDsToDelete: nil)
         operration.savePolicy = .changedKeys
         operration.queuePriority = .high
         operration.qualityOfService = .userInteractive
         operration.completionBlock = {
+            
             completion(true)
         }
         privateDB.add(operration)
     }
-
-
 }

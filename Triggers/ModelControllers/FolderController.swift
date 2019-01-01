@@ -23,6 +23,7 @@ class FolderController {
     
     typealias boolVoidCompletion = (Bool) -> Void
     
+    // MARK: - Fetch
     func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping fetchCompletion) {
         
         //Test Print
@@ -66,6 +67,7 @@ class FolderController {
         }
     }
     
+    // MARK: - Save
     func saveToCloudKit(folder: Folder, completion: @escaping boolVoidCompletion) {
         
         let folderRecord = CKRecord(folder: folder)
@@ -79,15 +81,60 @@ class FolderController {
             guard let record = record, let newFolderRecord = Folder(ckRecord: record)
                 
                 else {
-        
+                    
                     //Test Print
                     print("\n🤫 No Folder Record was saved to  Cloud😩\n")
                     completion(false)
                     return
             }
+            
             self.folders.append(newFolderRecord)
             completion(true)
-            
         }
+    }
+    
+    func createNewFolder(folderTitle: String, completion: @escaping boolVoidCompletion) {
+        
+        let newFolder = Folder(folderTitle: folderTitle)
+        
+        saveToCloudKit(folder: newFolder) { (success) in
+            if success {
+                //Test Print
+                print("\n🙏🏽 Succesfully created folder record\n")
+                completion(true)
+            } else {
+                //Test Print
+                print("\n💀 Error Creating Folder Record\n")
+                completion(false)
+                
+                //For Test Purposes Only Fatal Error
+                fatalError("\n💀💀Fatal Error, Error creating folder record💀💀\n")
+            }
+        }
+    }
+    
+    // Creat Entry and Folder
+    
+    func updateFolder(folder: Folder, folderTitle: String, completion: @escaping boolVoidCompletion) {
+        
+        folder.folderTitle = folderTitle
+        
+        let record = CKRecord(folder: folder)
+        
+        let operration = CKModifyRecordsOperation(recordsToSave: [record], recordIDsToDelete: nil)
+        operration.savePolicy = .changedKeys
+        operration.queuePriority = .high
+        operration.qualityOfService = .userInteractive
+        operration.completionBlock = {
+            
+            
+            completion(true)
+        }
+        privateDB.add(operration)
+    }
+    
+    // MARK: - Add Note to the specific Folder 
+    func add(note: Note, to folder: Folder) {
+        folder.notes.append(note)
     }
 }

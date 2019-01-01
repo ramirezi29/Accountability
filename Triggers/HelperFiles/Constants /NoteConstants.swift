@@ -14,5 +14,9 @@ struct NoteConstants {
     static let titleKey = "title"
     static let textBodyKey = "textBody"
     static let timeStampKey = "timeStamp"
-    static let userNoteReferenceKey = "userNoteReference"
+    static let folderReferenceKey = "folderReference"
+    static let folderCellID = "folderCell"
+    static let folderSegueID = "segueToNoteTVC"
+    static let noteCellID = "noteCell"
+    static let noteSegueID = "segueToNoteDetailVC"
 }

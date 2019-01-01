@@ -11,8 +11,6 @@ import CloudKit
 
 class UserController {
     
-    //      static let usersLocationRefKey = "usersLocationRefKey"
-    
     static let shared = UserController()
     
     private init() {}
@@ -44,12 +42,7 @@ class UserController {
             
             self.appleUserRecordID = recordID
             
-            
             let predicate = NSPredicate(format: "\(UserConstants.appleUserRefKey) == %@", recordID)
-            /*
-             add this to the location controller
-             let predicate = NSPredicate(format: "\(LocationConstants.usersLocationRefKey) == %@", userDetailsReference)
-             */
             
             // Create the query object, and set the sort order.
             let query = CKQuery(recordType: UserConstants.userTypeKey, predicate: predicate)
@@ -93,7 +86,6 @@ class UserController {
     // MARK: - Create
     func createNewUserDetailsWith(userName: String, sponsorName: String, sponserTelephoneNumber: String, sponsorEmail: String, aaStep: Int, completion: @escaping boolVoidCompletion) {
         
-        //new
         guard let appleUserRecordID = appleUserRecordID else { completion(false)
             return
         }
@@ -109,8 +101,8 @@ class UserController {
             } else {
                 completion(false)
                 print("\n💀Error Creating Record💀\n")
-                //for test purposes fatal error
-                //                fatalError("\nFatal Error , error creating record\n")
+                //                for test purposes fatal error
+                fatalError("\nFatal Error , error creating record\n")
             }
         }
         
@@ -125,21 +117,15 @@ class UserController {
         user.aaStep = aaStep
         let record = CKRecord(user: user )
         
-        //Note sure why Nil ??
         let operration = CKModifyRecordsOperation(recordsToSave: [record], recordIDsToDelete: nil)
         operration.savePolicy = .changedKeys
         operration.queuePriority = .high
         operration.qualityOfService = .userInteractive
         operration.completionBlock = {
+            
             completion(true)
         }
         privateDB.add(operration)
     }
-    
-    
 }
 
-
-/*  typealias fetchCharacterCompletion =  ([CharacterResult]?, NetworkingError?) -> Void
- 
- typealias FetchImageCompletion = ((UIImage?), NetworkingError?) -> Void*/

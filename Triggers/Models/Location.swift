@@ -47,12 +47,12 @@ class Location {
         guard let geoCodeAddressString = ckRecord[LocationConstants.geoCodeAddressStringKey] as? String,
             
             let addressTitle = ckRecord[LocationConstants.locationTitleKey] as? String,
-           
+            
             let longitude = ckRecord[LocationConstants.longitudeKey] as? Double,
             
             let latitude = ckRecord[LocationConstants.latitudeKey] as? Double
             
-            else {return nil}
+            else { return nil }
         
         let userLocationReference = ckRecord[LocationConstants.usersLocationRefKey] as? CKRecord.Reference
         // Step 2. Set tthose values as my initial values for my new instance
@@ -75,25 +75,14 @@ extension CKRecord {
         self.setValue(location.userLocationReference, forKey: LocationConstants.usersLocationRefKey)
         self.setValue(location.longitude, forKey: LocationConstants.longitudeKey)
         self.setValue(location.latitude, forKey: LocationConstants.latitudeKey)
-        
     }
 }
 
 extension Location: Equatable {
     static func == (lhs: Location, rhs: Location) -> Bool {
-        if lhs.ckRecordID != rhs.ckRecordID {return false}
+        if lhs.ckRecordID != rhs.ckRecordID { return false }
         
         return true
     }
 }
 
-/*
- 
- init(geoCodeAddressString: String, addressTitle: String, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), userLocationReference: CKRecord.Reference, longitude: Double, latitude: Double) {
- self.geoCodeAddressString = geoCodeAddressString
- self.locationTitle = addressTitle
- self.timeStamp = Date()
- self.ckRecordID = ckRecordID
- 
- 
- */

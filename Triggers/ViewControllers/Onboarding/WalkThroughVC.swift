@@ -37,6 +37,9 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         
         if disableOnBardingBool == true  {
          presentMainView()
+            
+            // NOTE: - Not sure if this is needed return
+            return
         }
         //View
         buttomViewOutlet.backgroundColor = .black
@@ -129,6 +132,8 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                     disableOnBardingBool = true
                     
                      UserDefaults.standard.set(true, forKey: "hasViewedWalkthrough")
+                    
+                    // NOTE: - This probably shouldnt be here check
                     dismiss(animated: true, completion: nil)
                     
                     presentMainView()

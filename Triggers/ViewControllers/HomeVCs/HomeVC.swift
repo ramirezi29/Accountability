@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class HomeViewController: UIViewController {
+class HomeVC: UIViewController {
     
     // MARK: - Properties
     @IBOutlet weak var editButton: UIButton!
@@ -25,21 +25,46 @@ class HomeViewController: UIViewController {
     
     //Activity Indicator
     @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
-
+    
+    //    @IBOutlet var tapGestureOutlet: UITapGestureRecognizer!
+    
     var editBool = false
-    let networkErrorNotif = AlertController.presentAlertControllerWith(title: "Unable able to Save Entry", message: "The Internet connection appears to be offline")
-    let fetchErrorNotif  = AlertController.presentAlertControllerWith(title: "Unable to load data", message: "The Internet connection appears to be offline")
+    
+    let networkErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Unable able to Save Entry", alertMessage: "The Internet connection appears to be offline", dismissActionTitle: "OK")
+    let fetchErrorNotif  = AlertController.presentAlertControllerWith(alertTitle: "Unable to load data", alertMessage: "The Internet connection appears to be offline", dismissActionTitle: "OK")
     
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = "Home"
+        
+        // Location
+        updateLocationButton()
+        
+        //Tap gesture
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(HomeVC.hideKeyboard))
+        
+        tapGesture.cancelsTouchesInView = true
+        self.view.addGestureRecognizer(tapGesture)
+        
+        // Text Field
+        self.userNameTextField.delegate = self
+        self.sponsorsNameTextField.delegate = self
+        self.sponsorsPhoneNumberTextField.delegate = self
+        self.sponsorsEmailTextField.delegate = self
+        
+        //Text fields and Keyboard
+        self.userNameTextField.returnKeyType = .next
+        self.sponsorsNameTextField.returnKeyType = .next
+        self.sponsorsPhoneNumberTextField.returnKeyType = .next
+        self.sponsorsEmailTextField.returnKeyType = .done
         
         //Keyboard
-        self.view.endEditing(true)
+        //        self.view.endEditing(true)
         
         //Activity Spinner
-//        self.activityIndicatorOutlet.isHidden = false
+        //        self.activityIndicatorOutlet.isHidden = false
         self.activityIndicatorOutlet.startAnimating()
         
         // Picker View
@@ -79,6 +104,15 @@ class HomeViewController: UIViewController {
                 return
             }
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+ //
+    }
+    
+    @objc func hideKeyboard() {
+        self.view.endEditing(true)
     }
     
     func updateViews() {
@@ -148,20 +182,8 @@ class HomeViewController: UIViewController {
         sponsorsNameTextField.borderStyle = .none
         sponsorsPhoneNumberTextField.borderStyle = .none
         sponsorsEmailTextField.borderStyle = .none
-        //current aa text field
     }
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
+
     
     @IBAction func editButtonTapped(_ sender: Any) {
         
@@ -196,9 +218,7 @@ class HomeViewController: UIViewController {
             // Edit Button Bool
             editBool = true
         case true:
-            
             //Textfield
-            sponsorsNameTextField.resignFirstResponder()
             textFieldsInvisable()
             textFieldsInactive()
             
@@ -207,7 +227,6 @@ class HomeViewController: UIViewController {
                 let sponsorTelephone = sponsorsPhoneNumberTextField.text,
                 let sponsorEmail = sponsorsEmailTextField.text,
                 let currentStep = currentAaStepLabel.text else {return}
-            
             
             // MARK: - CK Update
             if let loggedInUser = UserController.shared.loggedInUser {
@@ -230,8 +249,6 @@ class HomeViewController: UIViewController {
                 }
             } else {
                 //Mark: - Create
-              
-                
                 UserController.shared.createNewUserDetailsWith(userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorTelephone, sponsorEmail: sponsorEmail, aaStep: Int(currentStep) ?? 1) { (success) in
                     if success {
                         print("\n🙏🏽 Creating new userDetails to CK successful\n")
@@ -248,16 +265,12 @@ class HomeViewController: UIViewController {
                 }
             }
             
-            
-            
-            
             // Text Fields
             textFieldsInactive()
             
             // pass the Picker View Data to the Step Label
             let selectedAaStep = aaPickerView.selectedRow(inComponent: 1) + 1
             currentAaStepLabel.text = "\(selectedAaStep)"
-            
             
             // Edit Button
             editButton.setTitle("Edit", for: .normal)
@@ -269,17 +282,14 @@ class HomeViewController: UIViewController {
                 if succes {
                     self.aaPickerView.isHidden = true
                     print("\nCase True animation compeleted\n")
-                    
                 }
             }
-            
             
             print("\nEdit Button Tapped")
             
             // Edit Button Bool
             editBool = false
         }
-        
     }
     
     @IBAction func locationButtonTapped(_ sender: Any) {
@@ -294,14 +304,13 @@ class HomeViewController: UIViewController {
     
 }
 
-extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension HomeVC: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 2
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        
         
         switch component {
         case 0: return 1
@@ -320,10 +329,46 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 }
 
-extension HomeViewController: UITextFieldDelegate {
+extension HomeVC: UITextFieldDelegate {
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        switch textField {
+        case sponsorsPhoneNumberTextField:
+            sponsorsPhoneNumberTextField.keyboardType = .namePhonePad
+        print("spnosrs phone number text field selected")
+        case sponsorsEmailTextField:
+         sponsorsEmailTextField.keyboardType = .emailAddress
+            print("sponsor email text field selected")
+        
+        default: break
+        }
+        return true
+    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return true
+        switch textField {
+        case userNameTextField:
+            sponsorsNameTextField.becomeFirstResponder()
+            
+        case sponsorsNameTextField:
+            sponsorsPhoneNumberTextField.becomeFirstResponder()
+            
+            
+        case sponsorsPhoneNumberTextField:
+            sponsorsEmailTextField.becomeFirstResponder()
+
+            
+        default:
+            sponsorsEmailTextField.resignFirstResponder()
+            break
+        }
+        return false
+    }
+}
+
+extension HomeVC {
+    func updateLocationButton() {
+        let locationIcon = UIImage(imageLiteralResourceName: "cursor")
+        locationButton.setImage(locationIcon, for: .normal)
     }
 }

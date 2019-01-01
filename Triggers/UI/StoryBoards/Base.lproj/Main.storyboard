@@ -54,10 +54,10 @@
             </objects>
             <point key="canvasLocation" x="-3525" y="-616"/>
         </scene>
-        <!--UITableViewController-8Z9-zc-agE-->
+        <!--Notes-->
         <scene sceneID="WZb-7p-wdA">
             <objects>
-                <viewControllerPlaceholder storyboardIdentifier="UITableViewController-8Z9-zc-agE" storyboardName="Notes" referencedIdentifier="UITableViewController-8Z9-zc-agE" id="5sH-BZ-Lmc" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardIdentifier="UITableViewController-8Z9-zc-agE" storyboardName="Notes" id="5sH-BZ-Lmc" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="1Lu-lT-1u9"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sdq-3G-hkd" userLabel="First Responder" sceneMemberID="firstResponder"/>
