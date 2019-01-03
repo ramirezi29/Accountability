@@ -32,8 +32,6 @@ class LocationDetailVC: UIViewController {
     var user: User?
     
     
-    
-    
     private let geocoder = CLGeocoder()
     private let locationManger = CLLocationManager()
     private let metersPerMile = 1609.344
@@ -45,9 +43,12 @@ class LocationDetailVC: UIViewController {
     
     let badAddressNotif = AlertController.presentAlertControllerWith(alertTitle: "Address Not Found", alertMessage: "Sorry, Couldnt not find the specified address", dismissActionTitle: "OK")
     let networkErroNoif = AlertController.presentAlertControllerWith(alertTitle: "Network Error", alertMessage: "Error with your internet connection unable to save", dismissActionTitle: "OK")
+    
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         locationManger.delegate = self as? CLLocationManagerDelegate
         locationManger.desiredAccuracy = kCLLocationAccuracyBest
@@ -55,20 +56,9 @@ class LocationDetailVC: UIViewController {
         
         actiivtyViewoutlet.backgroundColor = UIColor.clear
         activityIndicatorOutlet.isHidden = true
-        
-//        guard let usersCurrentLocation = locationManger.location?.coordinate else {
-//            print("\n ✈️ Error:let usersCurrentLocation = locationManger.location?.coordinate is NIL \n")
-//            return
-//
-//        }
-//
-//        locationManger.startUpdatingLocation()
-//        mapViewOutlet.showsUserLocation = true
-//
-//        let region = MKCoordinateRegion.init(center: usersCurrentLocation, latitudinalMeters: metersPerMile, longitudinalMeters: metersPerMile)
-//
-//        mapViewOutlet.setRegion(region, animated: true)
-        
+       
+        //Button UI
+        searchButtonUI()
         
         //Background UI
         view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
@@ -142,11 +132,11 @@ class LocationDetailVC: UIViewController {
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
-    
-    
-    @IBAction func saveButtonTapped(_ sender: UIButton) {
+
         
-        print("\n Save button Taped")
+    @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
+    
+    print("\n Save button Taped")
         //Create a location based notification
         
         
@@ -236,6 +226,14 @@ class LocationDetailVC: UIViewController {
         }
         
     }
-    
 }
 
+extension LocationDetailVC {
+    
+    func searchButtonUI() {
+        searchButton.backgroundColor = .blue
+        searchButton.layer.cornerRadius = 5.0
+        searchButton.setTitleColor(.white, for: .normal)
+        searchButton.setTitle("Search", for: .normal)
+    }
+}

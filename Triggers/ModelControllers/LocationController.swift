@@ -103,7 +103,7 @@ class LocationController {
                 
                 completion(false)
                 //for test purposes fatal error
-                fatalError("\n💀💀Fatal Error , error creating location record💀💀\n")
+//                fatalError("\n💀💀Fatal Error , error creating location record💀💀\n")
             }
         }
     }

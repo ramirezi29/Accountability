@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--FolderTVC-->
+        <!--Notes-->
         <scene sceneID="6pL-BB-sFs">
             <objects>
                 <viewController id="Jux-hO-NBE" customClass="FolderTVC" customModule="Triggers" customModuleProvider="target" sceneMemberID="viewController">
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="1gK-x0-4JK">
-                                <rect key="frame" x="0.0" y="62" width="375" height="605"/>
+                                <rect key="frame" x="0.0" y="62" width="375" height="556"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="folderCell" textLabel="c9S-Bu-0JU" detailTextLabel="o7m-FW-5TR" style="IBUITableViewCellStyleValue1" id="4CH-dk-LiL">
@@ -81,6 +81,8 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jl1-LA-ZkL"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Notes" image="noteBook" landscapeImage="noteBook" largeContentSizeImage="homeIcon" id="42P-z1-gKy"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="newFolderButton" destination="9nN-pu-cWn" id="Je7-Zh-4lA"/>
                         <outlet property="tableView" destination="1gK-x0-4JK" id="2TS-PC-iTG"/>
@@ -257,6 +259,10 @@
             <point key="canvasLocation" x="-3258.4000000000001" y="-913.49325337331345"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="homeIcon" width="34.5" height="34.5"/>
+        <image name="noteBook" width="36.799999237060547" height="36.799999237060547"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="RKR-Ld-N7Z"/>
     </inferredMetricsTieBreakers>

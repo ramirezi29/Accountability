@@ -17,6 +17,7 @@
 		47296FF921CB3C56007B9B1B /* NoteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47296FF821CB3C56007B9B1B /* NoteController.swift */; };
 		472EA53421CC05740022EE0A /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472EA53321CC05740022EE0A /* Location.swift */; };
 		472EA53621CC05CB0022EE0A /* LocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472EA53521CC05CB0022EE0A /* LocationController.swift */; };
+		473681BD21DD8804001ED768 /* Location.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 473681BB21DD8804001ED768 /* Location.storyboard */; };
 		474651F721CA0EC700E23BA0 /* Notes.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 474651F621CA0EC700E23BA0 /* Notes.storyboard */; };
 		474651F921CA0FFB00E23BA0 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 474651F821CA0FFB00E23BA0 /* Home.storyboard */; };
 		477145E721C953960016FFAB /* ColorGradientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145E621C953960016FFAB /* ColorGradientExtension.swift */; };
@@ -67,6 +68,7 @@
 		47296FF821CB3C56007B9B1B /* NoteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteController.swift; sourceTree = "<group>"; };
 		472EA53321CC05740022EE0A /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		472EA53521CC05CB0022EE0A /* LocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationController.swift; sourceTree = "<group>"; };
+		473681BC21DD8804001ED768 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Triggers/UI/StoryBoards/Base.lproj/Location.storyboard; sourceTree = "<group>"; };
 		474651F621CA0EC700E23BA0 /* Notes.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Notes.storyboard; sourceTree = "<group>"; };
 		474651F821CA0FFB00E23BA0 /* Home.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		477145E621C953960016FFAB /* ColorGradientExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGradientExtension.swift; sourceTree = "<group>"; };
@@ -138,6 +140,13 @@
 				470408F521CD7DC100884CFA /* CreditNameSource.swift */,
 			);
 			path = ArtCredit;
+			sourceTree = "<group>";
+		};
+		4705CB1C21DC557B005AA127 /* MainVC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MainVC;
 			sourceTree = "<group>";
 		};
 		477145E821C9566E0016FFAB /* UIExtensions */ = {
@@ -280,6 +289,7 @@
 		47E29E3021C8295600FA44EE /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				4705CB1C21DC557B005AA127 /* MainVC */,
 				4771460121C9A8EB0016FFAB /* HomeVCs */,
 				4771460221C9A8F60016FFAB /* CalendarVCs */,
 				477145F821C9A21E0016FFAB /* LocationVCs */,
@@ -310,6 +320,7 @@
 		47E29E3321C8296D00FA44EE /* StoryBoards */ = {
 			isa = PBXGroup;
 			children = (
+				473681BB21DD8804001ED768 /* Location.storyboard */,
 				474651F621CA0EC700E23BA0 /* Notes.storyboard */,
 				4771460621C9AE160016FFAB /* Calendar.storyboard */,
 				477145EC21C961700016FFAB /* WalkThroughOnBoarding.storyboard */,
@@ -425,6 +436,7 @@
 				477145EE21C961700016FFAB /* WalkThroughOnBoarding.storyboard in Resources */,
 				474651F721CA0EC700E23BA0 /* Notes.storyboard in Resources */,
 				47E29E4821C8524A00FA44EE /* Localizable.strings in Resources */,
+				473681BD21DD8804001ED768 /* Location.storyboard in Resources */,
 				47E29E2521C80B0400FA44EE /* LaunchScreen.storyboard in Resources */,
 				47E29E2221C80B0400FA44EE /* Assets.xcassets in Resources */,
 				47E29E2021C80B0200FA44EE /* Main.storyboard in Resources */,
@@ -484,6 +496,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		473681BB21DD8804001ED768 /* Location.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				473681BC21DD8804001ED768 /* Base */,
+			);
+			name = Location.storyboard;
+			sourceTree = "<group>";
+		};
 		477145EC21C961700016FFAB /* WalkThroughOnBoarding.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

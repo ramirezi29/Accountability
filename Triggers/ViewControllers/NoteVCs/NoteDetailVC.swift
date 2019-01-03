@@ -71,7 +71,7 @@ class NoteDetailVC: UIViewController {
         //Test Print
         print("/n/n⛲️Save Button Tapped")
         
-        guard let noteTitle = titelTextField.text, let textBody = textBodyView.text else { return }
+        guard let noteTitle = titelTextField.text, let textBody = textBodyView.text, !textBody.isEmpty else { return }
         
         if let note = note {
             

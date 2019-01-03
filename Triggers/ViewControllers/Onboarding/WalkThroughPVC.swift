@@ -19,9 +19,39 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
      weak var walkthroughDelegate: WalkthroughPageViewControllerDelegate?
     var currentVC: WalkThroughContentVC?
     
-    var pageHeadings = ["0 Welcome","1 Statistics", "2 What is Geo-Fence", "3 How do we track your device", "4 Why We track your device", "5 On Boarding User Details", " 6Words of Encouragment"]
-    var pageImages = ["aloneChair", "manCrouched", "manCrouched", "cityTraffic", "cityTraffic", "cityTraffic", "manCrouched"] // can add more
-    var pageSubHeadings = ["0 Welcome", "1 Statistics", "2 What is Geo-Fence", "3 How do we track your device", "4 Why We track your device", "5 On Boarding User Details", "6 Words of Encouragment"]
+    var pageHeadings = ["Triggers",
+                        
+                        "Addiction recovery is difficult",
+                        
+                        "Triggers provides an additional layer of support",
+                        
+                        "Don't feel isolated",
+                        
+                        "Triggers is there to help",
+                        
+                        "Allow Location Services",
+                        
+                        "Ready? Let's get to work"]
+    
+    
+    
+    var pageSubHeadings = ["One Step Closer To Elimenating Your Triggers",
+                           
+                           "85% of individuals will relapse at one point during their journey of recover \n\n(wwww.addiction.gov)",
+                           
+                           "\n\nAs your companion, we can assist you stay away from locations that may cause a trigger to relapse",
+                           
+                           "Provide Triggers with the contact information of your accountability partner or sponsor",
+                           
+                           "We are with you ever Step of the way of your journey. \nAllow location services in order to better serve you",
+                           
+                           "Add another layer of accountability and support to your addiction recovery journey",
+                           
+                           ""]
+
+    
+    var pageImages = ["LocationLogo", "ambulance", "handshake", "friendship", "map", "gps", "landscape"] // can add more
+    
     
     var currentIndex = 0
     

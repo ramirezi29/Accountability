@@ -102,7 +102,7 @@ class UserController {
                 completion(false)
                 print("\n💀Error Creating Record💀\n")
                 //                for test purposes fatal error
-                fatalError("\nFatal Error , error creating record\n")
+//                fatalError("\nFatal Error , error creating record\n")
             }
         }
         

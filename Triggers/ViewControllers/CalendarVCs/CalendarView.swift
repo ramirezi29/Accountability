@@ -11,7 +11,7 @@ import UIKit
 
 struct Colors {
     static var darkGray = #colorLiteral(red: 0.3764705882, green: 0.3647058824, blue: 0.3647058824, alpha: 1)
-    static var darkRed = #colorLiteral(red: 0.5019607843, green: 0.1529411765, blue: 0.1764705882, alpha: 1)
+    static var darkRed = MyColor.hardBlue.value
 }
 
 struct Style {
@@ -257,9 +257,9 @@ class dateCVCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "00"
         label.textAlignment = .center
-        label.font=UIFont.systemFont(ofSize: 16)
+//        label.font=UIFont.systemFont(ofSize: 16)
         label.textColor=Colors.darkGray
-        label.translatesAutoresizingMaskIntoConstraints=false
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     

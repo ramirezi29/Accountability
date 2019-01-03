@@ -19,14 +19,46 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Triggers/ViewControllers/NoteVCs/FolderTVC.swift"
-            timestampString = "568069069.013158"
+            filePath = "Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+            timestampString = "568189806.6798019"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
-            landmarkName = "editButtonTapped(_:)"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Triggers.WalkThroughContentVC.viewDidLoad() -&gt; ()"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+                  timestampString = "568189808.102834"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "153"
+                  endingLineNumber = "153"
+                  offsetFromSymbolStart = "7360">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #11 () -&gt; () in Triggers.WalkThroughContentVC.viewDidLoad() -&gt; ()"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+                  timestampString = "568189808.118049"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "154"
+                  endingLineNumber = "154"
+                  offsetFromSymbolStart = "36">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
