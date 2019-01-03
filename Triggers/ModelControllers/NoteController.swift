@@ -98,7 +98,7 @@ class NoteController {
                 completion(false)
                 
                 //for test purposes fatal error
-                fatalError("\nFatal Error , error creating record\n")
+//                fatalError("\nFatal Error , error creating record\n")
             }
         }
     }

@@ -11,7 +11,7 @@ import UIKit
 class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var folder: [Folder] = []
- 
+    
     
     @IBOutlet weak var newFolderButton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
@@ -20,10 +20,13 @@ class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //test
+       
+        
         tableView.delegate = self
         tableView.dataSource = self
-
-        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        tableView.backgroundColor = .clear
+        loadViewBackGround()
         
         FolderController.shared.fetchItemsFor { (folder, error) in
             
@@ -52,11 +55,11 @@ class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    // MARK: - Table view data source
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
       tableView.reloadData()
+
         print("View will appear just came up and the number of folders are: \( self.folder.count)")
     }
     
@@ -65,11 +68,14 @@ class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
           tableView.isEditing = false
     }
     
+    // MARK: - Table view data source
+
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+        
         return FolderController.shared.folders.count
     }
     
+    //Cell for row at
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.folderCellID, for: indexPath)
@@ -82,6 +88,7 @@ class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
     }
     
+    // Can Edit
      func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         
         return true
@@ -93,20 +100,25 @@ class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             
             let folderRecord = FolderController.shared.folders[indexPath.row]
             
-            FolderController.shared.privateDB.delete(withRecordID: folderRecord.ckRecordID) { (_, error) in
-                if error != nil {
+            
+
+            FolderController.shared.privateDB.delete(withRecordID: folderRecord.ckRecordID) { (ckRecordID, _) in
+                if (ckRecordID != nil) {
                     
-                    DispatchQueue.main.async {
-                        //UI Stuff Activity Spinner
-                    }
-                } else {
                     FolderController.shared.folders.remove(at: indexPath.row)
                     DispatchQueue.main.async {
                         self.tableView.deleteRows(at: [indexPath], with: .fade)
+                        
+                         self.tableView.reloadData()
                     }
+                
+                } else {
+                    print("\nError Editing the Folder Record\n")
+                    let editingFolderError = AlertController.presentAlertControllerWith(alertTitle: "Error Updating Folder", alertMessage: "Check Your Internet Connection", dismissActionTitle: "OK")
+                    self.present(editingFolderError, animated: true, completion: nil)
                 }
-            }
         }
+    }
     }
         
      func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -134,7 +146,10 @@ class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
           guard let destinationVC = segue.destination as? NotesTVC,
             let indexPath = tableView.indexPathForSelectedRow else {return}
             
-            let folder = FolderController.shared.folders[indexPath.row]
+            print("\n\n🚀 the prepare for segue func is being called and this is the folder indexPath.row: \(FolderController.shared.folders[indexPath.row])\n\n")
+            
+            // ASK - It Breaks here at times
+             let folder = FolderController.shared.folders[indexPath.row]
             
             destinationVC.folder = folder
         }
@@ -160,24 +175,56 @@ extension FolderTVC {
     
     func addFolderAlert() {
         
+        var folderNameTextField: UITextField?
+        
         let myCustomerAlert = AlertController.presentAlertControllerWith(alertTitle: "New Folder", alertMessage: "Enter a name for this Folder", dismissActionTitle: "Cancel")
         
         myCustomerAlert.addTextField { (folderName) in
             folderName.placeholder = "Name"
+            folderNameTextField = folderName
             //Special Font?
         }
         
+       
         let saveFolderName = UIAlertAction(title: "Save", style: .default) { (_) in
             
-            guard let folderNameTextField = myCustomerAlert.textFields?.first?.text, !folderNameTextField.isEmpty else {return}
-            FolderController.shared.createNewFolder(folderTitle: folderNameTextField) { (success) in
+//            guard let folderNameTextField = myCustomerAlert.textFields?.first?.text, !folderNameTextField.isEmpty else {return}
+            guard let name = folderNameTextField?.text, !name.isEmpty else {return}
+            
+            // MARK: - Create New Folder
+            FolderController.shared.createNewFolder(folderTitle: name) { (success) in
                 if success {
                     
+                    // MARK: - Fetch Folder Items
+//                    FolderController.shared.fetchItemsFor(completion: { (folder, error) in
+                    
+//                        FolderController.shared.fetchItemsFor(completion: { (folders, _) in
+//                        })
                     DispatchQueue.main.async {
-                        FolderController.shared.fetchItemsFor(completion: { (_, _) in
-                        })
                         self.tableView.reloadData()
                     }
+//                        if folder != nil {
+                    
+                
+//                            }
+//                            print("\nSuccessfuly fetched folders\n")
+//                        } else {
+//                            print("\nThere was an error saving the folder's name with the UIAlert")
+//                            let folderErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error Updating the Folders", alertMessage: "Please Try Again, Check your network connection", dismissActionTitle: "OK")
+//                            DispatchQueue.main.async {
+//                                self.present(folderErrorNotif, animated: true, completion: nil)
+//                            }
+//                            return
+//                        }
+//                    })
+          
+                } else {
+                    print("There was an error creating the new folder record")
+                    DispatchQueue.main.async {
+                        let folderSaveErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error Creating Folder", alertMessage: "Please Try Again, Check your network connection", dismissActionTitle: "OK")
+                        self.present(folderSaveErrorNotif, animated: true, completion: nil)
+                    }
+                    return
                 }
             }
         }
@@ -191,7 +238,14 @@ extension FolderTVC {
 extension FolderTVC {
     
      func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        tableView.backgroundColor = .clear 
+        
         cell.backgroundColor = .clear
+    }
+}
+
+extension FolderTVC {
+    
+    func loadViewBackGround() {
+          view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
     }
 }

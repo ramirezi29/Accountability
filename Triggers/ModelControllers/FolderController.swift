@@ -108,7 +108,7 @@ class FolderController {
                 completion(false)
                 
                 //For Test Purposes Only Fatal Error
-                fatalError("\n💀💀Fatal Error, Error creating folder record💀💀\n")
+//                fatalError("\n💀💀Fatal Error, Error creating folder record💀💀\n")
             }
         }
     }

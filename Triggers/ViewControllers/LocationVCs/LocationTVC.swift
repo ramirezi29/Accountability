@@ -11,7 +11,6 @@ import UIKit
 class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var activityViewOutlet: UIView!
     @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
     @IBOutlet weak var bottomView: UIView!
@@ -34,9 +33,12 @@ class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bottomView.backgroundColor = .clear
+        
         //TableView
         tableView.delegate = self
-        tableView.dataSource = self 
+        tableView.dataSource = self
+        tableView.backgroundColor = .clear
         //Test Print
         print("🍁🍁Number of locations when view did load loaded: \(loction.count)🍁🍁")
         
@@ -179,20 +181,9 @@ class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     }
     
      func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
         cell.backgroundColor = .clear
-        tableView.backgroundColor = .clear
     }
-    
-    
-    @IBAction func doneButtonTapped(_ sender: Any) {
-        
-        dismiss(animated: true, completion: nil)
-    }
-    
 }
 
 extension LocationTVC {
-    
- 
 }

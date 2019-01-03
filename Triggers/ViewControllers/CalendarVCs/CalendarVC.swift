@@ -17,25 +17,42 @@ enum MyTheme {
 class CalendarVC: UIViewController {
     
     @IBOutlet weak var shareButton: UIBarButtonItem!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var themeButton: UIBarButtonItem!
+    
+    @IBAction func themeButtonTapped(_ sender: UIBarButtonItem) {
+        if theme == .dark {
+            sender.title = "Dark"
+            theme = .light
+            Style.themeLight()
+            
+        } else {
+            sender.title = "Light"
+            theme = .dark
+            Style.themeDark()
+            
+        }
+        self.view.backgroundColor=Style.bgColor
+        calenderView.changeTheme()
+    }
     
     var theme = MyTheme.dark
     
     override func viewDidLoad() {
-
+        
         
         super.viewDidLoad()
-        self.title = "My Calender"
-        self.navigationController?.navigationBar.isTranslucent=false
-        self.view.backgroundColor = Style.bgColor
+//        self.title = "My Calender"
+        self.navigationController?.navigationBar.isTranslucent = false
+        
+        self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
         view.addSubview(calenderView)
-        calenderView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive=true
-        calenderView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12).isActive=true
+        calenderView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive=true
+        calenderView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12).isActive = true
         calenderView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 12).isActive=true
         calenderView.heightAnchor.constraint(equalToConstant: 365).isActive=true
         
-        let rightBarBtn = UIBarButtonItem(title: "Light", style: .plain, target: self, action: #selector(rightBarBtnAction))
-        self.navigationItem.rightBarButtonItem = rightBarBtn
     }
     
     override func viewWillLayoutSubviews() {
@@ -43,19 +60,6 @@ class CalendarVC: UIViewController {
         calenderView.myCollectionView.collectionViewLayout.invalidateLayout()
     }
     
-    @objc func rightBarBtnAction(sender: UIBarButtonItem) {
-        if theme == .dark {
-            sender.title = "Dark"
-            theme = .light
-            Style.themeLight()
-        } else {
-            sender.title = "Light"
-            theme = .dark
-            Style.themeDark()
-        }
-        self.view.backgroundColor=Style.bgColor
-        calenderView.changeTheme()
-    }
     
     let calenderView: CalenderView = {
         let v = CalenderView(theme: MyTheme.dark)
@@ -64,7 +68,7 @@ class CalendarVC: UIViewController {
     }()
     
     @IBAction func shareButtonTapped(_ sender: Any) {
-      print("Share Button Tapped")
+        print("Share Button Tapped")
     }
 }
 
@@ -78,10 +82,6 @@ extension CalendarVC: UICloudSharingControllerDelegate {
         print("EXAMPLE")
         return "Sample Title"
     }
-    
-    
-    
-    
 }
 
 

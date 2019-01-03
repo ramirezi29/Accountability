@@ -17,7 +17,8 @@ protocol WalkThroughContentVCDelegate: class {
 class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserNotificationCenterDelegate     {
     
     // MARK: -  Outlets
-    @IBOutlet var viewOutlet: UIView!
+    @IBOutlet weak var borderView: UIView!
+    @IBOutlet weak var backGroundView: UIView!
     
     @IBOutlet var headLineLabel: UILabel! {
         didSet {
@@ -86,11 +87,18 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         locationManger.delegate = self
         
         //viewbackground
-        viewOutlet.backgroundColor = .black
+        borderView.backgroundColor = MyColor.offWhite.value
+        
+        backGroundView.backgroundColor = MyColor.powderBlue.value
+        backGroundView.alpha = 1
         
         //Text Color
-        headLineLabel.textColor = .white
-        subHeadLineLabel.textColor = .white 
+        headLineLabel.textColor = MyColor.offGrey.value
+        subHeadLineLabel.textColor = MyColor.offGrey.value
+        
+//        nameLabel.textColor = UIColor(displayP3Red: 55/255, green: 215/255, blue: 239/255, alpha: 1.0)
+        headLineLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 22)
+         subHeadLineLabel.font = UIFont(name: "HelveticaNeue", size: 20)
         
         headLineLabel.text = headLine
         subHeadLineLabel.text = subHeadLine
@@ -141,6 +149,14 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         // MARK: - Index if Statments
         if index == 6 {
+            
+            UIView.animate(withDuration: 2.0, delay: 0.2, usingSpringWithDamping: 2.0, initialSpringVelocity: 1.0, options: [.curveEaseIn], animations: {
+                self.contentImageView.center.x -= self.view.bounds.width
+            }) { (success) in
+                if success {
+                    print("🐶Animation for Image completed")
+                }
+            }
             
             textFieldAlphaZero()
             showTextFields()
@@ -288,8 +304,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         let textField = UITextField()
         
-        textField.backgroundColor = UIColor.blue
-        textField.textColor = UIColor.white
+        textField.backgroundColor = MyColor.offWhite.value
+        textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         
         return textField
@@ -300,8 +316,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         let textField = UITextField()
         
-        textField.backgroundColor = UIColor.blue
-        textField.textColor = UIColor.white
+        textField.backgroundColor = MyColor.offWhite.value
+        textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         
         return textField
@@ -311,8 +327,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         let textField = UITextField()
         
-        textField.backgroundColor = UIColor.blue
-        textField.textColor = UIColor.white
+        textField.backgroundColor = MyColor.offWhite.value
+        textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         
         return textField
@@ -322,8 +338,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         let textField = UITextField()
         
-        textField.backgroundColor = UIColor.blue
-        textField.textColor = UIColor.white
+        textField.backgroundColor = MyColor.offWhite.value
+        textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Email Address", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         
         return textField
@@ -333,9 +349,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         let textField = UITextField()
         
-        textField.backgroundColor = UIColor.blue
-        textField.textColor = UIColor.white
-        textField.attributedPlaceholder = NSAttributedString(string: "If in treatment enter current Step", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        textField.backgroundColor = MyColor.offWhite.value
+        textField.textColor = .black
+        textField.attributedPlaceholder = NSAttributedString(string: "If in treatment enter current Step", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
         
         return textField
     }()

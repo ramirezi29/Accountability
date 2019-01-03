@@ -18,12 +18,18 @@ class NotesTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //Landing Pad
     var folder: Folder?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Notes"
         
+        tabBarController?.selectedIndex = 2
+        
+        //Delegates
         tableView.delegate = self
         tableView.dataSource = self
+        
+        //Table view
+        tableView.backgroundColor = .clear 
         
         //background Color
         view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255,green: 213/255, blue: 214/255, alpha: 1.0))
@@ -60,6 +66,7 @@ class NotesTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
+     
     }
     
     // MARK: - Table view data source
@@ -148,6 +155,5 @@ extension NotesTVC {
      func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = .clear
-        tableView.backgroundColor = .clear
     }
 }

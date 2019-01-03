@@ -11,17 +11,20 @@ import UIKit
 class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     
     // MARK: - Oulets
-    
     @IBOutlet var bossViewOutlet: UIView!
     @IBOutlet weak var buttomViewOutlet: UIView!
     @IBOutlet var pageControl: UIPageControl!
     
     @IBOutlet var nextButton: UIButton! {
         didSet {
-            nextButton.layer.cornerRadius = 25.0
+            nextButton.layer.cornerRadius = 10.0
             nextButton.layer.masksToBounds = true
+            nextButton.backgroundColor = MyColor.hardBlue.value
+            nextButton.setTitleColor(MyColor.offWhite.value, for: .normal)
         }
     }
+    
+ 
     
     @IBOutlet var skipButton: UIButton!
     
@@ -41,9 +44,10 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
             // NOTE: - Not sure if this is needed return
             return
         }
+        
         //View
-        buttomViewOutlet.backgroundColor = .black
-        bossViewOutlet.backgroundColor = .red
+        buttomViewOutlet.backgroundColor = MyColor.offWhite.value
+        bossViewOutlet.backgroundColor = MyColor.powderBlue.value
 
         // index
         let index = walkThroughPVC?.currentIndex
@@ -53,11 +57,14 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         nextButton.isHidden = true
         
         // Page Control
-        pageControl.currentPageIndicatorTintColor = UIColor.white
+        pageControl.currentPageIndicatorTintColor = MyColor.hardBlue.value
         pageControl.pageIndicatorTintColor = UIColor.gray
         pageControl.backgroundColor = UIColor.clear
         pageControl.numberOfPages = 7
 
+    }
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
     
     func loadUserDefaults(){
@@ -71,25 +78,28 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
             case 0...5:
                 
                 print("Walk through PVC current index: \(index)")
-//                self.nextButton.isEnabled = false
-//                UIView.animate(withDuration: 0.8, delay: 0, options: [], animations: {
-//                    self.nextButton.alpha = 0.0
-//                }, completion: nil)
+                self.nextButton.isEnabled = false
                 
-//                nextButton.isHidden = true
-                //Uncomment for later version if you want to show the nextButton on the walk through VC starting from index [0]
-//                nextButton.setTitle("NEXT", for: .normal)
+                nextButton.setTitle("You Can Do It", for: .normal)
+                
+                UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations: {
+                    self.nextButton.alpha = 0.0
+                }, completion: nil)
+                
+                
+//                Uncomment for later version if you want to show the nextButton on the walk through VC starting from index [0]
+
 
             case 6:
             print("foo")
-//                nextButton.isEnabled = true
-//                  nextButton.isHidden = false
-//
-//                  UIView.animate(withDuration: 0.8, delay: 0.1, options: [], animations: {
-//                    self.nextButton.alpha = 1.0
-//                  }, completion: nil)
-//
-//                nextButton.setTitle("GET STARTED", for: .normal)
+                nextButton.isEnabled = true
+                  nextButton.isHidden = false
+
+                  UIView.animate(withDuration: 0.8, delay: 0.1, options: [.curveEaseIn], animations: {
+                    self.nextButton.alpha = 1.0
+                  }, completion: nil)
+
+                nextButton.setTitle("GET STARTED", for: .normal)
             default: break
                 
             }

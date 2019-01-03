@@ -2,15 +2,16 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "aloneChair.jpeg",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "noteBookIcon46.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "noteBook69.png",
       "scale" : "3x"
     }
   ],
