@@ -14,7 +14,9 @@ enum MyColor {
     case hardBlue
     case offGrey
     case offWhite
-    
+    case offWhiteLowAlpha
+    case softGreen
+    case blackGrey
 }
 
 extension MyColor {
@@ -26,11 +28,17 @@ extension MyColor {
             case .hardBlue:
                 return UIColor(red: 0/255, green: 164/255, blue: 252/255, alpha: 1.0)
             case .offGrey:
-               return UIColor(red: 0.7765, green: 0.7765, blue: 0.7765, alpha: 1.0)
+                return UIColor(red: 0.7765, green: 0.7765, blue: 0.7765, alpha: 1.0)
             case .offWhite:
-               return UIColor(red: 0.9569, green: 0.9647, blue: 0.9686, alpha: 1.0)
+                return UIColor(red: 0.9569, green: 0.9647, blue: 0.9686, alpha: 1.0)
+            case .softGreen:
+                return UIColor(red: 17/255, green: 193/255, blue: 73/255, alpha: 1.0)
+            case .offWhiteLowAlpha:
+                return UIColor(red: 0.9569, green: 0.9647, blue: 0.9686, alpha: 5.0)
+            case .blackGrey:
+                return UIColor(red: 22/255, green: 21/255, blue: 20/255, alpha: 1.0)
             }
         }
     }
 }
-//MyColor.navigationBarBackgroundColor.value
+//MyColor.powderBlue.value

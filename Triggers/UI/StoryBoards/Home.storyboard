@@ -42,17 +42,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7l4-48-ywM">
-                                <rect key="frame" x="39" y="362" width="180" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="180" id="QhX-73-cYs"/>
-                                    <constraint firstAttribute="height" constant="60" id="kD2-3Y-UmU"/>
-                                </constraints>
-                                <state key="normal" title="Location"/>
-                                <connections>
-                                    <action selector="locationButtonTapped:" destination="PIa-I6-a0Y" eventType="touchUpInside" id="Jer-mF-6Hq"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current AA Step" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pcc-9n-smK">
                                 <rect key="frame" x="47" y="163" width="125" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -86,7 +75,6 @@
                             <constraint firstAttribute="bottom" secondItem="9rK-Yq-Nqv" secondAttribute="bottom" constant="49" id="3HV-YI-ZEo"/>
                             <constraint firstItem="Kbc-Ai-F4g" firstAttribute="leading" secondItem="Bzs-Kv-5l4" secondAttribute="leading" constant="47" id="49m-sa-yej"/>
                             <constraint firstItem="Kbc-Ai-F4g" firstAttribute="top" secondItem="E3n-yE-kfC" secondAttribute="bottom" constant="70" id="6ma-vX-g0Z"/>
-                            <constraint firstItem="mOR-YW-d3v" firstAttribute="leading" secondItem="7l4-48-ywM" secondAttribute="leading" id="6p6-zb-vP2"/>
                             <constraint firstItem="wwx-1P-X3b" firstAttribute="top" secondItem="Xkr-ar-HWz" secondAttribute="bottom" constant="27" id="7xH-d4-UxR"/>
                             <constraint firstItem="Xkr-ar-HWz" firstAttribute="leading" secondItem="Bzs-Kv-5l4" secondAttribute="leading" constant="39" id="Boj-La-Xjd"/>
                             <constraint firstItem="Pcc-9n-smK" firstAttribute="baseline" secondItem="NP9-yD-jxs" secondAttribute="baseline" id="CVX-4R-6Xg"/>
@@ -94,7 +82,6 @@
                             <constraint firstItem="E3n-yE-kfC" firstAttribute="top" secondItem="Bzs-Kv-5l4" secondAttribute="top" constant="5" id="Gju-dd-gne"/>
                             <constraint firstItem="9rK-Yq-Nqv" firstAttribute="leading" secondItem="Bzs-Kv-5l4" secondAttribute="leading" id="LR1-Nd-sLJ"/>
                             <constraint firstItem="mOR-YW-d3v" firstAttribute="top" secondItem="wwx-1P-X3b" secondAttribute="bottom" constant="36" id="MoB-QB-eXq"/>
-                            <constraint firstItem="7l4-48-ywM" firstAttribute="top" secondItem="mOR-YW-d3v" secondAttribute="bottom" constant="8" id="O7D-eu-IQL"/>
                             <constraint firstItem="NP9-yD-jxs" firstAttribute="leading" secondItem="Pcc-9n-smK" secondAttribute="trailing" constant="24" id="Plk-2e-mbP"/>
                             <constraint firstItem="Xkr-ar-HWz" firstAttribute="leading" secondItem="wwx-1P-X3b" secondAttribute="leading" id="UaE-0g-tIk"/>
                             <constraint firstItem="wwx-1P-X3b" firstAttribute="trailing" secondItem="mOR-YW-d3v" secondAttribute="trailing" id="WxI-EJ-QTz"/>
@@ -121,7 +108,6 @@
                         <outlet property="activityIndicatorOutlet" destination="E3n-yE-kfC" id="cQQ-F6-Xqa"/>
                         <outlet property="currentAaStepLabel" destination="NP9-yD-jxs" id="cA7-OF-HDe"/>
                         <outlet property="editButton" destination="Jbe-4q-CFt" id="kjg-qx-FKN"/>
-                        <outlet property="locationButton" destination="7l4-48-ywM" id="Ota-FO-sZp"/>
                         <outlet property="sponsorsEmailTextField" destination="mOR-YW-d3v" id="sf5-yV-A7O"/>
                         <outlet property="sponsorsNameTextField" destination="Xkr-ar-HWz" id="8Sk-g1-0tI"/>
                         <outlet property="sponsorsPhoneNumberTextField" destination="wwx-1P-X3b" id="GDP-MC-0TL"/>

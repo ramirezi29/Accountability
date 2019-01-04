@@ -17,8 +17,9 @@ protocol WalkthroughPageViewControllerDelegate: class {
 class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
      weak var walkthroughDelegate: WalkthroughPageViewControllerDelegate?
-    var currentVC: WalkThroughContentVC?
     
+    var currentVC: WalkThroughContentVC?
+
     var pageHeadings = ["Triggers",
                         
                         "Addiction recovery is difficult",
@@ -26,6 +27,8 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
                         "Triggers provides an additional layer of support",
                         
                         "Don't feel isolated",
+                        
+                        "Contact Information",
                         
                         "Triggers is there to help",
                         
@@ -43,6 +46,8 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
                            
                            "Provide Triggers with the contact information of your accountability partner or sponsor",
                            
+                           "Enter at least one field",
+                           
                            "We are with you ever Step of the way of your journey. \nAllow location services in order to better serve you",
                            
                            "Add another layer of accountability and support to your addiction recovery journey",
@@ -50,7 +55,7 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
                            ""]
 
     
-    var pageImages = ["LocationLogo", "ambulance", "handshake", "friendship", "map", "gps", "landscape"] // can add more
+    var pageImages = ["LocationLogo", "ambulance", "handshake", "friendship", "paperplane", "map", "gps", "landscape"] 
     
     
     var currentIndex = 0
@@ -58,6 +63,7 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Set the data source to itself
         dataSource = self
         delegate = self
@@ -67,7 +73,10 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
             setViewControllers([startingViewController], direction: .forward, animated: true, completion: nil)
         }
     }
+    
+    
 }
+
 
 
 extension WalkThroughPVC {

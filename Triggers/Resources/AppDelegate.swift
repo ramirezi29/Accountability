@@ -16,11 +16,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        window = UIWindow()
         
+        let isOnboarded = UserDefaults.standard.bool(forKey: "hasViewedWalkthrough")
         
+        if isOnboarded {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            window?.rootViewController = storyboard.instantiateInitialViewController()
+        } else {
+            let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
+            window?.rootViewController = storyboard.instantiateInitialViewController()
+        }
+        
+        window?.makeKeyAndVisible()
         
         return true
     }
+    
     
 
 
