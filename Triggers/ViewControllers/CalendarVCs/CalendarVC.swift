@@ -42,17 +42,32 @@ class CalendarVC: UIViewController {
         
         
         super.viewDidLoad()
-//        self.title = "My Calender"
+        //        self.title = "My Calender"
         self.navigationController?.navigationBar.isTranslucent = false
         
         self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
         view.addSubview(calenderView)
-        calenderView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive=true
+        calenderView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
         calenderView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12).isActive = true
-        calenderView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 12).isActive=true
-        calenderView.heightAnchor.constraint(equalToConstant: 365).isActive=true
+        calenderView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 12).isActive = true
+        calenderView.heightAnchor.constraint(equalToConstant: 365).isActive = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         
+//        if UserDefaults.standard.bool(forKey: "hasViewedWalkthrough") {
+//            return
+//        }
+//        
+//        // Will take you to the onboarding storyboard if user defaults hasnt been hit above
+//        let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
+//        
+//        if let walkThroughVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughVC") as? WalkThroughVC {
+//            present(walkThroughVC, animated: true, completion: nil)
+//        }
+     
     }
     
     override func viewWillLayoutSubviews() {
@@ -84,11 +99,3 @@ extension CalendarVC: UICloudSharingControllerDelegate {
     }
 }
 
-
-/*
- 
- /        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0) ,
- //                                      bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
- 
- 
- */

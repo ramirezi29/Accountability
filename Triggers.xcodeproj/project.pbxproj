@@ -37,6 +37,7 @@
 		47A602FD21D82C2700699EDF /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A602FC21D82C2700699EDF /* Folder.swift */; };
 		47A602FF21D82C7A00699EDF /* FolderConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A602FE21D82C7A00699EDF /* FolderConstants.swift */; };
 		47A6030121D83A1900699EDF /* FolderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A6030021D83A1900699EDF /* FolderController.swift */; };
+		47C3099521DEA16900F578A1 /* StoryboardConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C3099421DEA16900F578A1 /* StoryboardConstants.swift */; };
 		47C4935E21D55FF7002659EE /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C4935D21D55FF7002659EE /* AlertController.swift */; };
 		47E29E1B21C80B0200FA44EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E1A21C80B0200FA44EE /* AppDelegate.swift */; };
 		47E29E2021C80B0200FA44EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47E29E1E21C80B0200FA44EE /* Main.storyboard */; };
@@ -55,6 +56,8 @@
 		47F5CDF721DC102100E0BE55 /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F5CDF621DC102100E0BE55 /* MonthView.swift */; };
 		47F5CDF921DC12B700E0BE55 /* WeekdaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F5CDF821DC12B700E0BE55 /* WeekdaysView.swift */; };
 		47F5CDFB21DC12D300E0BE55 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F5CDFA21DC12D300E0BE55 /* CalendarView.swift */; };
+		47FE313021DEB60F000A92FD /* UserDefaultConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FE312F21DEB60F000A92FD /* UserDefaultConstants.swift */; };
+		47FE313221DEE3AC000A92FD /* PageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FE313121DEE3AC000A92FD /* PageViewExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +91,7 @@
 		47A602FC21D82C2700699EDF /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		47A602FE21D82C7A00699EDF /* FolderConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderConstants.swift; sourceTree = "<group>"; };
 		47A6030021D83A1900699EDF /* FolderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderController.swift; sourceTree = "<group>"; };
+		47C3099421DEA16900F578A1 /* StoryboardConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardConstants.swift; sourceTree = "<group>"; };
 		47C4935D21D55FF7002659EE /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		47E29E1721C80B0200FA44EE /* Triggers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Triggers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		47E29E1A21C80B0200FA44EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -112,6 +116,8 @@
 		47F5CDF621DC102100E0BE55 /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
 		47F5CDF821DC12B700E0BE55 /* WeekdaysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdaysView.swift; sourceTree = "<group>"; };
 		47F5CDFA21DC12D300E0BE55 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		47FE312F21DEB60F000A92FD /* UserDefaultConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultConstants.swift; sourceTree = "<group>"; };
+		47FE313121DEE3AC000A92FD /* PageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,15 +155,16 @@
 			path = MainVC;
 			sourceTree = "<group>";
 		};
-		477145E821C9566E0016FFAB /* UIExtensions */ = {
+		477145E821C9566E0016FFAB /* HelperFiles */ = {
 			isa = PBXGroup;
 			children = (
 				477145E621C953960016FFAB /* ColorGradientExtension.swift */,
 				477145E921C956CB0016FFAB /* ColorCollection.swift */,
 				47C4935D21D55FF7002659EE /* AlertController.swift */,
 				477C945421DA76D6006F7E80 /* NotificationController.swift */,
+				47FE313121DEE3AC000A92FD /* PageViewExtension.swift */,
 			);
-			path = UIExtensions;
+			path = HelperFiles;
 			sourceTree = "<group>";
 		};
 		477145EB21C960560016FFAB /* Onboarding */ = {
@@ -246,7 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				470408F421CD7DAA00884CFA /* ArtCredit */,
-				477145E821C9566E0016FFAB /* UIExtensions */,
+				477145E821C9566E0016FFAB /* HelperFiles */,
 				47E29E1A21C80B0200FA44EE /* AppDelegate.swift */,
 				47E29E2121C80B0400FA44EE /* Assets.xcassets */,
 				47E29E2621C80B0400FA44EE /* Info.plist */,
@@ -354,6 +361,8 @@
 				47E29E5621C8653B00FA44EE /* UserDetailConstants.swift */,
 				47296FF621CB3942007B9B1B /* NoteConstants.swift */,
 				47A602FE21D82C7A00699EDF /* FolderConstants.swift */,
+				47C3099421DEA16900F578A1 /* StoryboardConstants.swift */,
+				47FE312F21DEB60F000A92FD /* UserDefaultConstants.swift */,
 			);
 			path = "Constants ";
 			sourceTree = "<group>";
@@ -465,6 +474,7 @@
 				47F5CDFB21DC12D300E0BE55 /* CalendarView.swift in Sources */,
 				47E29E5F21C8B1E300FA44EE /* NetworkingError.swift in Sources */,
 				471665E021D441E6000DC53B /* textFieldExtension.swift in Sources */,
+				47FE313221DEE3AC000A92FD /* PageViewExtension.swift in Sources */,
 				470408F621CD7DC200884CFA /* CreditNameSource.swift in Sources */,
 				4771461021C9C4210016FFAB /* WalkThroughContentVC.swift in Sources */,
 				4771460021C9A8DC0016FFAB /* CalendarVC.swift in Sources */,
@@ -482,12 +492,14 @@
 				47E29E5121C852F500FA44EE /* HomeVC.swift in Sources */,
 				472EA53621CC05CB0022EE0A /* LocationController.swift in Sources */,
 				47296FF721CB3942007B9B1B /* NoteConstants.swift in Sources */,
+				47FE313021DEB60F000A92FD /* UserDefaultConstants.swift in Sources */,
 				47E29E4221C82DAA00FA44EE /* LocationConstants.swift in Sources */,
 				477145F221C99E640016FFAB /* NotesTVC.swift in Sources */,
 				477145E721C953960016FFAB /* ColorGradientExtension.swift in Sources */,
 				47E29E5721C8653B00FA44EE /* UserDetailConstants.swift in Sources */,
 				477145F621C9A1FC0016FFAB /* NoteDetailVC.swift in Sources */,
 				4771460521C9A9390016FFAB /* CalendarDetailVC.swift in Sources */,
+				47C3099521DEA16900F578A1 /* StoryboardConstants.swift in Sources */,
 				47E29E5321C8645E00FA44EE /* User.swift in Sources */,
 				4771461221C9CFB00016FFAB /* WalkThroughVC.swift in Sources */,
 			);

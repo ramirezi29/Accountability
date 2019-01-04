@@ -15,7 +15,6 @@ class HomeVC: UIViewController {
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var currentAaStepLabel: UILabel!
     @IBOutlet weak var aaPickerView: UIPickerView!
-    @IBOutlet weak var locationButton: UIButton!
     
     //TextFields
     @IBOutlet weak var userNameTextField: UITextField!
@@ -36,12 +35,6 @@ class HomeVC: UIViewController {
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
-        
-        // Location
-        updateLocationButton()
         
         //Tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(HomeVC.hideKeyboard))
@@ -134,16 +127,16 @@ class HomeVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // NOTE: - In order to prevent the onboarding walk through from coming up again
-        if UserDefaults.standard.bool(forKey: "hasViewedWalkthrough") {
-            return
-        }
-        
-        // Will take you to the onboarding storyboard if user defaults hasnt been hit above
-        let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
-        
-        if let walkThroughVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughVC") as? WalkThroughVC {
-            present(walkThroughVC, animated: true, completion: nil)
-        }
+//        if UserDefaults.standard.bool(forKey: "hasViewedWalkthrough") {
+//            return
+//        }
+//        
+//        // Will take you to the onboarding storyboard if user defaults hasnt been hit above
+//        let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
+//        
+//        if let walkThroughVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughVC") as? WalkThroughVC {
+//            present(walkThroughVC, animated: true, completion: nil)
+//        }
     }
     
     func textFieldsInactive() {
@@ -293,8 +286,6 @@ class HomeVC: UIViewController {
         }
     }
     
-    @IBAction func locationButtonTapped(_ sender: Any) {
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueToLocationTVC" {
@@ -368,8 +359,5 @@ extension HomeVC: UITextFieldDelegate {
 }
 
 extension HomeVC {
-    func updateLocationButton() {
-        let locationIcon = UIImage(imageLiteralResourceName: "cursor")
-        locationButton.setImage(locationIcon, for: .normal)
-    }
+
 }

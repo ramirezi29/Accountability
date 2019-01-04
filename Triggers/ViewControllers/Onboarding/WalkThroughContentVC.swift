@@ -23,12 +23,14 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     @IBOutlet var headLineLabel: UILabel! {
         didSet {
             headLineLabel.numberOfLines = 0
+            headLineLabel.textColor = MyColor.blackGrey.value
         }
     }
     
     @IBOutlet var subHeadLineLabel: UILabel! {
         didSet {
             headLineLabel.numberOfLines = 0
+            headLineLabel.textColor = MyColor.blackGrey.value
         }
     }
     
@@ -53,14 +55,20 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         //Text Fields
         hideTextFields()
-        
+        contactButton.isHidden = true
         //User Name Text Field
         
         view.addSubview(userNameTextField)
         userNameConstraints()
         userNameTextField.delegate = self
-        userNameTextField.resignFirstResponder()
+        sponsorsNameTextField.delegate = self
+        sponsorsEmailAddressTextField.delegate = self
+        sponsorsPhoneNumberTextField.delegate = self
+        aaStepTextField.delegate = self 
         
+        //Contact Button
+        view.addSubview(contactButton)
+        contactButtonConstraints()
         
         //Sponsors Name Text Field
         view.addSubview(sponsorsNameTextField)
@@ -79,7 +87,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         //Current AA Step
         view.addSubview(aaStepTextField)
         aaStepConstraint()
-
+        
         //userDefaults
         loadUserDefaults()
         
@@ -93,108 +101,165 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         backGroundView.alpha = 1
         
         //Text Color
-        headLineLabel.textColor = MyColor.offGrey.value
-        subHeadLineLabel.textColor = MyColor.offGrey.value
         
-//        nameLabel.textColor = UIColor(displayP3Red: 55/255, green: 215/255, blue: 239/255, alpha: 1.0)
+        
+        //        nameLabel.textColor = UIColor(displayP3Red: 55/255, green: 215/255, blue: 239/255, alpha: 1.0)
         headLineLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 22)
-         subHeadLineLabel.font = UIFont(name: "HelveticaNeue", size: 20)
+        subHeadLineLabel.font = UIFont(name: "HelveticaNeue", size: 20)
         
         headLineLabel.text = headLine
         subHeadLineLabel.text = subHeadLine
         contentImageView.image  = UIImage(named: imageFile)
         
-        if index == 5 {
+        switch index {
+        case 2:
+            self.textFieldsDisappearAnimation()
+        case 3:
+            print("\n🔷 DOnt feel isolated view🌎\n")
             
-            // UNNotifcation and Location Permission
-            inquirePermissions()
+          self.hideTextFields()
+            self.contactButton.isHidden = true
+        case 4:
             
-            
-            //Text Fields
-            inactivateTextFields()
-            
-            // MARK: - Text Fields Fade Out Animation
-            UIView.animateKeyframes(withDuration: 0.9, delay: 0.1, options: [], animations: {
-                self.userNameTextField.alpha = 0.0
-            }) { (success) in
-                self.userNameTextField.isHidden = true
-                print("\nUser Text Fiela: Alpha 0\n")
-            }
-            
-            UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
-                self.sponsorsNameTextField.alpha = 0.0
-            }) { (success) in
-                self.sponsorsNameTextField.isHidden = true
-            }
-            
-            UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
-                self.sponsorsPhoneNumberTextField.alpha = 0.0
-            }) { (success) in
-                self.sponsorsPhoneNumberTextField.isHidden = true
-            }
-            
-            UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
-                self.sponsorsEmailAddressTextField.alpha = 0.0
-            }) { (success) in
-                self.sponsorsEmailAddressTextField.isHidden = true
-            }
-            
-            UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
-                self.aaStepTextField.alpha = 0.0
-            }) { (success) in
-                self.aaStepTextField.isHidden = true
-            }
-            
-        }
-        
-        // MARK: - Index if Statments
-        if index == 6 {
-            
-            UIView.animate(withDuration: 2.0, delay: 0.2, usingSpringWithDamping: 2.0, initialSpringVelocity: 1.0, options: [.curveEaseIn], animations: {
-                self.contentImageView.center.x -= self.view.bounds.width
-            }) { (success) in
-                if success {
-                    print("🐶Animation for Image completed")
+            let deadlineTime = DispatchTime.now() + .seconds(1)
+            DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+                print("test")
+                DispatchQueue.main.async {
+                    print("🎸🎸🎸🎸🎸TExt Fields should appear now")
+                    self.textFieldAppearAnimation()
+                    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(WalkThroughContentVC.hideKeyboard))
+                    
+                    tapGesture.cancelsTouchesInView = true
+                    self.view.addGestureRecognizer(tapGesture)
                 }
             }
             
-            textFieldAlphaZero()
-            showTextFields()
-            // MARK: - Text Fields Appear Animation
-            UIView.animateKeyframes(withDuration: 5.0, delay: 0.1, options: [], animations: {
-                self.userNameTextField.alpha = 1.0
-            }) { (success) in
-                self.userNameTextField.isUserInteractionEnabled = true
-                print("\ns🚢 User NameTextField was successfuly shown to the User in index 6 \n")
-            }
+            self.textFieldAlphaZero()
+            self.showTextFields()
+           
+        case 5:
+         self.contactButton.isHidden = true
+            hideTextFields()
             
-            UIView.animateKeyframes(withDuration: 5.0, delay: 0.2, options: [], animations: {
-                self.sponsorsNameTextField.alpha = 1.0
-            }) { (sucess) in
-                self.sponsorsNameTextField.isUserInteractionEnabled = true
-                print("\ns🚢 Sponsor Name Text Field was successfuly shown to the User in index 6 \n")
-            }
+        case 6:
             
-            UIView.animateKeyframes(withDuration: 5.0, delay: 0.3, options: [], animations: {
-                self.sponsorsPhoneNumberTextField.alpha = 1.0
-            }) { (success) in
-                self.sponsorsPhoneNumberTextField.isUserInteractionEnabled = true
-                print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
-            }
             
-            UIView.animateKeyframes(withDuration: 5.0, delay: 0.4, options: [], animations: {
-                self.sponsorsEmailAddressTextField.alpha = 1.0
-            }) { (success) in
-                self.sponsorsEmailAddressTextField.isUserInteractionEnabled = true
-                print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
-            }
             
-            UIView.animateKeyframes(withDuration: 5.0, delay: 0.5, options: [], animations: {
-                self.aaStepTextField.alpha = 1.0
-            }) { (success) in
-                self.aaStepTextField.isUserInteractionEnabled = true
-                print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
-            }
+            self.inquirePermissions()
+            
+            
+        default:
+            break
+        }
+        
+        //        if index == 6 {
+        //            print("🔥\(index), this hsould be six, TItle: Ready? Lets work")//            //Text Fields
+        ////            inactivateTextFields()
+        ////            textFieldsDisappearAnimation()
+        ////
+        ////             inquirePermissions()
+        ////            print("\nCurrently on index:\(index) and permission stuff got asked")
+        //        }
+        //
+        //        if index == 7 {
+        //             print("🔥\(index), this should be seven")
+        // UNNotifcation and Location Permission
+        //
+        
+        //            UIView.animate(withDuration: 4.0, delay: 0.2, usingSpringWithDamping: 2.0, initialSpringVelocity: 1.0, options: [.curveEaseIn], animations: {
+        //                self.contentImageView.frame.origin.y += 600
+        //            }) { (success) in
+        //                if success {
+        //                    print("🐶Animation for Image completed")
+        //                    self.textFieldAlphaZero()
+        //                    self.showTextFields()
+        ////                    self.textFieldAppearAnimation()
+        //                } else {
+        //                    print("\n🐶 There was an issuing sunny mountain annimation for some reason\n")
+        //                    self.textFieldAlphaZero()
+        //                    self.showTextFields()
+        ////                    self.textFieldAppearAnimation()
+        //                }
+        //            }
+        //            // MARK: - Text Fields Appear Animation
+        //        }
+    }
+    //    } // tester curly delte when done
+    
+    @objc func hideKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldsDisappearAnimation() {
+        UIView.animateKeyframes(withDuration: 0.9, delay: 0.1, options: [], animations: {
+            self.userNameTextField.alpha = 0.0
+        }) { (success) in
+            self.userNameTextField.isHidden = true
+            print("\nUser Text Fiela: Alpha 0\n")
+            
+        }
+        
+        UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
+            self.sponsorsNameTextField.alpha = 0.0
+        }) { (success) in
+            self.sponsorsNameTextField.isHidden = true
+        }
+        
+        UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
+            self.sponsorsPhoneNumberTextField.alpha = 0.0
+        }) { (success) in
+            self.sponsorsPhoneNumberTextField.isHidden = true
+        }
+        
+        UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
+            self.sponsorsEmailAddressTextField.alpha = 0.0
+        }) { (success) in
+            self.sponsorsEmailAddressTextField.isHidden = true
+        }
+        
+        UIView.animate(withDuration: 0.9, delay: 0.2, options: [], animations: {
+            self.aaStepTextField.alpha = 0.0
+        }) { (success) in
+            self.aaStepTextField.isHidden = true
+        }
+    }
+    
+    func textFieldAppearAnimation() {
+        print("🍁🍁🍁🍁🍁text field appear animation was called )")
+        UIView.animateKeyframes(withDuration: 2.0, delay: 0.0, options: [], animations: {
+            self.userNameTextField.alpha = 0.5
+        }) { (success) in
+            self.userNameTextField.isUserInteractionEnabled = true
+            self.contactButton.isHidden = false
+            print("\n ☎️ contact button appeared\n")
+        }
+        
+        UIView.animateKeyframes(withDuration: 2.0, delay: 0.2, options: [], animations: {
+            self.sponsorsNameTextField.alpha = 0.5
+        }) { (sucess) in
+            self.sponsorsNameTextField.isUserInteractionEnabled = true
+            //            print("\ns🚢 Sponsor Name Text Field was successfuly shown to the User in index 6 \n")
+        }
+        
+        UIView.animateKeyframes(withDuration: 2.0, delay: 0.4, options: [], animations: {
+            self.sponsorsPhoneNumberTextField.alpha = 0.5
+        }) { (success) in
+            self.sponsorsPhoneNumberTextField.isUserInteractionEnabled = true
+            //            print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
+        }
+        
+        UIView.animateKeyframes(withDuration: 2.0, delay: 0.6, options: [], animations: {
+            self.sponsorsEmailAddressTextField.alpha = 0.5
+        }) { (success) in
+            self.sponsorsEmailAddressTextField.isUserInteractionEnabled = true
+            //            print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
+        }
+        
+        UIView.animateKeyframes(withDuration: 2.0, delay: 0.8, options: [], animations: {
+            self.aaStepTextField.alpha = 0.5
+        }) { (success) in
+            self.aaStepTextField.isUserInteractionEnabled = true
+            //            print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
         }
     }
     
@@ -298,15 +363,35 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         }
     }
     
+    // Contact Button
+    lazy var contactButton: UIButton = {
+        
+        let contactButtonImage = UIImage(named: "phoneBook")
+        
+        let button = UIButton()
+        
+        button.setImage(contactButtonImage, for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+         button.frame = CGRect(x: 0, y: 0 , width: 60, height: 60)
+        button.imageEdgeInsets = UIEdgeInsets(top: 60,left: 60,bottom: 60,right: 60)
+        button.addTarget(self, action: #selector(contactButtonAction(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc private func contactButtonAction(_ sender: UIButton?) {
+        print("Contact Button Tapped")
+    }
+    
     //Programatic Text Fields
     //User Name
     lazy var userNameTextField: UITextField = {
         
         let textField = UITextField()
         
-        textField.backgroundColor = MyColor.offWhite.value
+        
+        textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
         return textField
     }()
@@ -316,9 +401,10 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         let textField = UITextField()
         
-        textField.backgroundColor = MyColor.offWhite.value
+        
+        textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
         return textField
     }()
@@ -327,9 +413,11 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         let textField = UITextField()
         
-        textField.backgroundColor = MyColor.offWhite.value
+        
+        
+        textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
         return textField
     }()
@@ -338,10 +426,12 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         let textField = UITextField()
         
-        textField.backgroundColor = MyColor.offWhite.value
-        textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Email Address", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         
+        
+        textField.backgroundColor = MyColor.offWhiteLowAlpha.value
+                textField.textColor = .black
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Email Address", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
+    
         return textField
     }()
     
@@ -349,12 +439,29 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         let textField = UITextField()
         
-        textField.backgroundColor = MyColor.offWhite.value
+
+        textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "If in treatment enter current Step", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        textField.attributedPlaceholder = NSAttributedString(string: "If in treatment enter current Step", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
         return textField
     }()
+    
+    // Contact Button Constraints
+    func contactButtonConstraints() {
+        contactButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            contactButton.leadingAnchor.constraint(equalTo: headLineLabel.trailingAnchor, constant: -60),
+            
+            contactButton.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: 0),
+//
+            contactButton.topAnchor.constraint(equalTo: borderView.topAnchor, constant: -60),
+//
+//            contactButton.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 0)
+            
+            ])
+    }
     
     //User Name Constraints
     func userNameConstraints() {
@@ -362,9 +469,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         userNameTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
         
-        userNameTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1).isActive = true
+        userNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
         
-        userNameTextField.trailingAnchor.constraint(equalToSystemSpacingAfter: view.trailingAnchor, multiplier: 0.8)
+        userNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 100).isActive = true
         
         userNameTextField.layer.cornerRadius = 9
     }
@@ -376,7 +483,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         sponsorsNameTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 150).isActive = true
         
-        sponsorsNameTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0.8).isActive = true
+        sponsorsNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
         
         sponsorsNameTextField.layer.cornerRadius = 9
     }
@@ -388,7 +495,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         sponsorsPhoneNumberTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
         
-        sponsorsPhoneNumberTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0.8).isActive = true
+        sponsorsPhoneNumberTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
         
         sponsorsPhoneNumberTextField.layer.cornerRadius = 9
     }
@@ -399,7 +506,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         sponsorsEmailAddressTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 250).isActive = true
         
-        sponsorsEmailAddressTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0.8).isActive = true
+        sponsorsEmailAddressTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
         
         sponsorsEmailAddressTextField.layer.cornerRadius = 9
     }
@@ -410,7 +517,10 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         aaStepTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 300).isActive = true
         
-        aaStepTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0.8).isActive = true
+        aaStepTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
+        
+        aaStepTextField.trailingAnchor.constraint(equalToSystemSpacingAfter: view.trailingAnchor, multiplier: 1).isActive = true
+        
         
         aaStepTextField.layer.cornerRadius = 9
     }
@@ -450,10 +560,39 @@ extension WalkThroughContentVC : UITextFieldDelegate {
         return true
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        userNameTextField.resignFirstResponder()
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        switch textField {
+        case userNameTextField:
+            userNameTextField.returnKeyType = .next
+        case sponsorsNameTextField:
+            sponsorsNameTextField.returnKeyType = .next
+        case sponsorsPhoneNumberTextField:
+            sponsorsPhoneNumberTextField.keyboardType = .phonePad
+            sponsorsPhoneNumberTextField.returnKeyType = .next
+        case sponsorsEmailAddressTextField:
+            sponsorsEmailAddressTextField.keyboardType = .emailAddress
+            sponsorsEmailAddressTextField.returnKeyType = .done
+            
+        default: break
+        }
         return true
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        switch textField {
+        case userNameTextField:
+            sponsorsNameTextField.becomeFirstResponder()
+        case sponsorsNameTextField:
+            sponsorsPhoneNumberTextField.becomeFirstResponder()
+        case sponsorsPhoneNumberTextField:
+            sponsorsEmailAddressTextField.becomeFirstResponder()
+        default:
+            sponsorsEmailAddressTextField.resignFirstResponder()
+        }
+        return false
+    }
+    
 }
 
 extension WalkThroughContentVC {
