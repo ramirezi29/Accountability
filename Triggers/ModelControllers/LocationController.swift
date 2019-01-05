@@ -60,7 +60,7 @@ class LocationController {
                 completion(nil, .invalidData("\nINvalid Data\n"))
                 return
             }
-            let fetchItems = records.compactMap{ Location(ckRecord: $0) }
+            let fetchItems = records.compactMap { Location(ckRecord: $0) }
             self.locations = fetchItems
             print("🎸 The fetch func finished fetching and there are: \(self.locations.count) locations")
             completion(fetchItems, nil)

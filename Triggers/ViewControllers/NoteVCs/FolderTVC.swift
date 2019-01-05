@@ -8,25 +8,31 @@
 
 import UIKit
 
-class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class FolderTVC: UITableViewController {
     
     var folder: [Folder] = []
     
     
     @IBOutlet weak var newFolderButton: UIBarButtonItem!
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activityView: UIView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //test
+        activityView.isHidden = true
+        
+        DispatchQueue.main.async {
+    self.activityIndicator.startAnimating()
+        }
        
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = .clear
-        loadViewBackGround()
+//        tableView.backgroundColor = .clear
+//        loadViewBackGround()
         
         FolderController.shared.fetchItemsFor { (folder, error) in
             
@@ -37,17 +43,14 @@ class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     
-                    // Activity Spinner Stop
-                    // Hide Act Spinner View = .hide
+                    self.navigationController?.title = "Folders"
+                    
+                    self.activityIndicator.isHidden = true
+                    self.activityIndicator.stopAnimating()
                 }
             } else {
                 DispatchQueue.main.async {
-                    // Activity Spinner Stop
-                    // Hide Act Spinner View = .hide
-                   let errorUIAlert = AlertController.presentAlertControllerWith(alertTitle: "Issue Getting Folders", alertMessage: "Check Your Internet Connection", dismissActionTitle: "OK")
-                    
-                    self.present(errorUIAlert, animated: true, completion: nil)
-                    
+                    self.navigationController?.title = "No Folders Found"
                 }
                 print("\n🤫 Error Fetching Folders from CK\n")
                 return
@@ -66,17 +69,20 @@ class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
           tableView.isEditing = false
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+        }
     }
     
     // MARK: - Table view data source
 
-     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return FolderController.shared.folders.count
     }
     
     //Cell for row at
-     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.folderCellID, for: indexPath)
         
@@ -89,13 +95,13 @@ class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     // Can Edit
-     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         
         return true
     }
     
     // Override to support editing the table view.
-     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
             let folderRecord = FolderController.shared.folders[indexPath.row]
@@ -121,7 +127,7 @@ class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     }
         
-     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         let folder = FolderController.shared.folders[sourceIndexPath.row]
         
@@ -134,7 +140,7 @@ class FolderTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     
-     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
      return true
      }
     
@@ -237,7 +243,7 @@ extension FolderTVC {
 
 extension FolderTVC {
     
-     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = .clear
     }
@@ -249,3 +255,11 @@ extension FolderTVC {
           view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
     }
 }
+
+
+/*
+ 
+ let errorUIAlert = AlertController.presentAlertControllerWith(alertTitle: "Issue Getting Folders", alertMessage: "Check Your Internet Connection", dismissActionTitle: "OK")
+ 
+ self.present(errorUIAlert, animated: true, completion: nil)
+ */

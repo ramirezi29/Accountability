@@ -16,6 +16,7 @@ class User {
     var sponsorEmail: String?
     var aaStep: Int
     var ckRecordID: CKRecord.ID?
+//    let userRecord: CKRecord
     var appleUserRef: CKRecord.Reference
     
     var targetLocations: [Location] = []
@@ -24,7 +25,15 @@ class User {
     
     var notes: [Note] = []
     
+//    let customZoneID = CKRecordZone.ID(zoneName: UserConstants.zoneName, ownerName: CKCurrentUserDefaultName)
+    
+    
+//    let share = CKShare(rootRecord: <#T##CKRecord#>)
+  
+    
     init(userName: String, sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), appleUserRef: CKRecord.Reference) {
+        
+        
         
         self.userName = userName
         self.sponsorName = sponsorName
@@ -71,6 +80,8 @@ extension CKRecord {
         self.setValue(user.aaStep, forKey: UserConstants.aaStepKey)
         self.setValue(user.appleUserRef, forKey: UserConstants.appleUserRefKey)
         
+        
+        
         // NOTE: - In order to not save a brand new record
         user.ckRecordID = recordID
     }
@@ -84,3 +95,37 @@ extension User: Equatable {
         return true
     }
 }
+
+
+/*
+ // Note: employeeRecord is the CKRecord I need to share
+ 
+ 
+ let share = CKShare(rootRecord: employeeRecord)
+ 
+ 
+ share[CKShareTitleKey] = "Some title" as CKRecordValue?share[CKShareTypeKey] = "Some type" as CKRecordValue?
+ 
+ 
+ let sharingController = UICloudSharingController
+ 
+ (preparationHandler: {(UICloudSharingController, handler:
+ @escaping (CKShare?, CKContainer?, Error?) -> Void) in
+ 
+ 
+ let modifyOp = CKModifyRecordsOperation(recordsToSave:
+ [employeeRecord, share], recordIDsToDelete: nil)
+ modifyOp.modifyRecordsCompletionBlock = { (record, recordID,
+ error) in
+ 
+ handler(share, CKContainer.default(), error)
+ }
+ CKContainer.default().privateCloudDatabase.add(modifyOp)
+ })
+ 
+ 
+ sharingController.availablePermissions = [.allowReadWrite,
+ .allowPrivate]
+ sharingController.delegate = self
+ self.present(sharingController, animated:true, completion:nil)
+ */

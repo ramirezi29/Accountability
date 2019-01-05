@@ -131,6 +131,7 @@ class LocationDetailVC: UIViewController {
     
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
 
         
@@ -162,7 +163,7 @@ class LocationDetailVC: UIViewController {
                     DispatchQueue.main.async {
                         // Do any UI STuff here that would be triggered by a successful update
                        
-                        self.dismiss(animated: true, completion: nil)
+                        self.navigationController?.popViewController(animated: true)
                     }
                 } else {
                     AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
@@ -186,7 +187,7 @@ class LocationDetailVC: UIViewController {
                     print("\n🙏🏽Successfully created/saved location🙏🏽")
                     DispatchQueue.main.async {
                         //                        self.navigationController?.popViewController(animated: true)
-                        self.dismiss(animated: true, completion: nil)
+                         self.navigationController?.popViewController(animated: true)
                     }
                 } else {
                     print("\n💀 Error saving Location to Cloud Kit 💀")

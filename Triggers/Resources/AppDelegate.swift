@@ -28,12 +28,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.rootViewController = storyboard.instantiateInitialViewController()
         }
         
+        UserController.shared.fetchCurrentUser { (_, _) in
+            
+            }
+        
+        
         window?.makeKeyAndVisible()
         
         return true
     }
     
-    
+
 
 
     func applicationWillResignActive(_ application: UIApplication) {

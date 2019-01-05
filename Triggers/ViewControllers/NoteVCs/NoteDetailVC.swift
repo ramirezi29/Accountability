@@ -12,7 +12,7 @@ import CloudKit
 
 class NoteDetailVC: UIViewController {
     
-    @IBOutlet weak var backButton: UIBarButtonItem!
+    
     @IBOutlet weak var savebutton: UIBarButtonItem!
     @IBOutlet weak var textBodyView: UITextView!
     @IBOutlet weak var titelTextField: UITextField!
@@ -24,6 +24,8 @@ class NoteDetailVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//         self.tabBarController?.tabBar.isHidden = true 
         
         updateViews()
         
@@ -62,11 +64,6 @@ class NoteDetailVC: UIViewController {
         self.view.endEditing(true)
     }
     
-    @IBAction func cancelButtonTapped(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-        print("back button tapped")
-    }
-    
     @IBAction func saveButtonTapped(_ sender: Any) {
         //Test Print
         print("/n/n⛲️Save Button Tapped")
@@ -82,7 +79,7 @@ class NoteDetailVC: UIViewController {
                     DispatchQueue.main.async {
                         
                         //ANY UI STUFF
-                        self.dismiss(animated: true, completion: nil)
+                        self.navigationController?.popViewController(animated: true)
                     }
                 } else {
                     AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
@@ -101,7 +98,7 @@ class NoteDetailVC: UIViewController {
                     if success {
                         print("\nSuccesfully created/saved note to CK and to a Folder\n")
                         DispatchQueue.main.async {
-                            self.dismiss(animated: true , completion: nil)
+                            self.navigationController?.popViewController(animated: true)
                         }
                     } else {
                         print("/n💀 Error Saving Note to CK and Folder /n")

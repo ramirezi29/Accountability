@@ -90,9 +90,9 @@
                                 <rect key="frame" x="16" y="16" width="343" height="539"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Heading" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GkP-cG-nbq">
-                                        <rect key="frame" x="106" y="20" width="131" height="57"/>
+                                        <rect key="frame" x="17" y="12" width="304" height="81"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="57" id="aKL-eT-Qcu"/>
+                                            <constraint firstAttribute="height" constant="81" id="aKL-eT-Qcu"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
@@ -100,9 +100,9 @@
                                     </label>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="GkP-cG-nbq" firstAttribute="top" secondItem="ehx-oq-BGa" secondAttribute="top" constant="20" id="YoK-G8-o8R"/>
-                                    <constraint firstItem="GkP-cG-nbq" firstAttribute="centerX" secondItem="ehx-oq-BGa" secondAttribute="centerX" id="hZf-mZ-rYY"/>
-                                    <constraint firstItem="GkP-cG-nbq" firstAttribute="width" secondItem="ehx-oq-BGa" secondAttribute="width" multiplier="0.8" constant="-143.40000000000003" id="wfO-iC-otz"/>
+                                    <constraint firstItem="GkP-cG-nbq" firstAttribute="top" secondItem="ehx-oq-BGa" secondAttribute="top" constant="12" id="YoK-G8-o8R"/>
+                                    <constraint firstItem="GkP-cG-nbq" firstAttribute="centerX" secondItem="ehx-oq-BGa" secondAttribute="centerX" constant="-2.5" id="hZf-mZ-rYY"/>
+                                    <constraint firstItem="GkP-cG-nbq" firstAttribute="width" secondItem="ehx-oq-BGa" secondAttribute="width" multiplier="0.8" constant="29.599999999999966" id="wfO-iC-otz"/>
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Vdp-KX-Bpg">
