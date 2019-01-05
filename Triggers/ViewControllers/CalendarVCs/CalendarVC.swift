@@ -37,6 +37,7 @@ class CalendarVC: UIViewController {
     }
     
     var theme = MyTheme.dark
+    var user: User?
     
     override func viewDidLoad() {
         
@@ -84,6 +85,30 @@ class CalendarVC: UIViewController {
     
     @IBAction func shareButtonTapped(_ sender: Any) {
         print("Share Button Tapped")
+        
+        guard let user = user else {
+            print("Calendar view no user found, its nill")
+            return
+            
+        }
+        
+//        let share = CKShare(rootRecord: user.ck)
+//        share[CKShareTitleKey] = "Some title" as CKRecordValue?share[CKShareTypeKey] = "Some type" as CKRecordValue?
+//        let sharingController = UICloudSharingController
+//        (preparationHandler: {(UICloudSharingController, handler:
+//            @escaping (CKShare?, CKContainer?, Error?) -> Void) in
+//            let modifyOp = CKModifyRecordsOperation(recordsToSave:
+//                [employeeRecord, share], recordIDsToDelete: nil)
+//            modifyOp.modifyRecordsCompletionBlock = { (record, recordID,
+//                error) in
+//                handler(share, CKContainer.default(), error)
+//            }
+//            CKContainer.default().privateCloudDatabase.add(modifyOp)
+//        })
+//        sharingController.availablePermissions = [.allowReadWrite,
+//                                                  .allowPrivate]
+//        sharingController.delegate = self
+//        self.present(sharingController, animated:true, completion:nil)
     }
 }
 

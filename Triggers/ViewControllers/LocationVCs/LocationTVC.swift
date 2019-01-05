@@ -8,12 +8,10 @@
 
 import UIKit
 
-class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class LocationTVC: UITableViewController {
     
-    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityViewOutlet: UIView!
     @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
-    @IBOutlet weak var bottomView: UIView!
     
     //landing pad
     var location: Location?
@@ -32,37 +30,24 @@ class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        bottomView.backgroundColor = .clear
-        
-        //TableView
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.backgroundColor = .clear
-        //Test Print
-        print("🍁🍁Number of locations when view did load loaded: \(loction.count)🍁🍁")
-        
-        //Activity Spinner
-        activityViewOutlet.backgroundColor = UIColor.clear
-        activityIndicatorOutlet.startAnimating()
-        
-        //Background UI
-        view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
-        
-        //Fetch from CK
 
         
-//        LocationController.shared.fetchItemsFor { (_, _) in
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//                self.activityIndicatorOutlet.stopAnimating()
-//                self.activityViewOutlet.isHidden = true
-//                print("\nLocation Fetch was successful in the ViewDidLoad")
-//        }
-//}
+
+//        tableView.backgroundColor = .clear
         
-//        LocationController.shared.fetchItemsFor(user: user) { (location, error) in
+        //Test Print
+        print("🍁🍁Number of locations when view did load loaded: \(loction.count)🍁🍁")
+        activityViewOutlet.isHidden = true
         
+        //Activity Spinner
+        DispatchQueue.main.async {
+            self.activityIndicatorOutlet.startAnimating()
+        }
+        
+        //Background UI
+//        view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        
+        //Fetch from CK
         LocationController.shared.fetchItemsFor { (location, _) in
         
             if location != nil {
@@ -70,14 +55,14 @@ class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     self.activityIndicatorOutlet.stopAnimating()
-                    self.activityViewOutlet.isHidden = true
+//                    self.activityViewOutlet.isHidden = true
                 }
                 print("\nLocation Fetch was successful")
             } else {
                 DispatchQueue.main.async {
 
-                    self.activityIndicatorOutlet.stopAnimating()
-                    self.activityViewOutlet.isHidden = true
+//                    self.activityIndicatorOutlet.stopAnimating()
+//                    self.activityViewOutlet.isHidden = true
                     // Present UI ALert
                 }
                 print("\n💀 Error fetcing location records from CK 💀")
@@ -95,8 +80,13 @@ class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
        
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.activityIndicatorOutlet.stopAnimating()
+    }
+    
     // MARK: - Table view data source
-     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+   override  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         
         return LocationController.shared.locations.count
@@ -104,7 +94,7 @@ class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     }
     
     
-     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  override   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: LocationConstants.locationCellID, for: indexPath) as? LocationTVCell else {return UITableViewCell()}
         
@@ -116,7 +106,7 @@ class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     }
 
     
-     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         
         return true
     }
@@ -124,7 +114,7 @@ class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     
     
     // Override to support editing the table view.
-     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
             let locationRecord = LocationController.shared.locations[indexPath.row]
@@ -148,7 +138,7 @@ class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     
     
     // MARK: - Rearrange Cells
-     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         let location = LocationController.shared.locations[sourceIndexPath.row]
         
@@ -161,7 +151,7 @@ class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     }
     
 
-     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
@@ -180,7 +170,7 @@ class LocationTVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         }
     }
     
-     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = .clear
     }
 }

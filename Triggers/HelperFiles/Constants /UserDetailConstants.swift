@@ -17,5 +17,6 @@ struct UserConstants {
     static let aaStepKey = "aaStep"
     static let sponsorEmailKey = "sponsorEmail"
     static let appleUserRefKey = "appleUserRef"
-    
+    static let zoneName = "userZone"
+    static let ownerName = "userOwnerName"
 }

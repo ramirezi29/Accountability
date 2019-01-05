@@ -9,6 +9,7 @@
 import UIKit
 import CoreLocation
 import UserNotifications
+import MessageUI
 
 protocol WalkThroughContentVCDelegate: class {
     func validUserNameEntered(username: String, isHidden: Bool)
@@ -42,6 +43,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     var headLine = ""
     var subHeadLine = ""
     var imageFile = ""
+    var user: User?
+    var location: Location?
+   
     
     // Bools and Keys to for UIAlert
     var disableRestrictedAlertBool = false
@@ -637,4 +641,74 @@ extension WalkThroughContentVC {
         sponsorsPhoneNumberTextField.alpha = 1.0
         aaStepTextField.alpha = 1.0
     }
+}
+
+extension WalkThroughContentVC {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        /*Test print*/
+        print("\nNotification item response tap: \(response.notification.request.identifier)")
+        
+        let sponsorName = user?.sponsorName ?? "Support Person"
+        let sponsorPhoneNumber = user?.sponsorTelephoneNumber ?? "18006624357"
+        let sponosrEmail = user?.sponsorEmail ?? ""
+        let sponsorText = user?.sponsorTelephoneNumber ?? "“741741" //include “Listen” in text message
+        
+        defer {
+            completionHandler()
+        }
+        //https://www.justthinktwice.gov/facts/what-addiction
+        switch response.actionIdentifier {
+            //The action that indicates the user explicitly dismissed the notification interface.
+        //This action is delivered only if the notification’s category object was configured with the customDismissAction option.
+        case UNNotificationDismissActionIdentifier:
+            print(" 'X' was tapped")
+            // Do something in order to record that the geo fence was crossed but the notification was dismissed
+            
+            //An action that indicates the user opened the app from the notification interface.
+        case UNNotificationDefaultActionIdentifier:
+            print("use")
+            
+        case LocationConstants.telephoneSponsorActionKey:
+            
+            print("call the sponsor: \(sponsorName), \(sponsorPhoneNumber) ")
+            
+        case LocationConstants.emailSponsorActionKey:
+            print("email \(sponosrEmail)")
+            showMailComposer()
+        
+        case LocationConstants.textMessageSponsorActionKey:
+            print("Text: \(sponsorName), \(sponsorText)")
+            
+            
+        default:
+            break
+        }
+        
+    }
+}
+
+
+extension WalkThroughContentVC {
+    
+    func showMailComposer() {
+        
+        let locationName = location?.locationTitle ?? "a place I shouldn't be at."
+        let sponsorName = user?.sponsorName ?? "Friend"
+        
+        //check if device can send mail
+        guard MFMailComposeViewController.canSendMail() else {
+            
+            // DO some UI to show that an email cant be sent
+            let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing Mail", alertMessage: "Your device does not support this feature", dismissActionTitle: "OK")
+            return
+        }
+        let composer = MFMailComposeViewController()
+//        composer.mailComposeDelegate = self
+//        composer.setToRecipients([sponosrEmail])
+        composer.setSubject("Contact me when you get this message")
+        composer.setMessageBody("\(sponsorName), I wanted to let you know that I got close to \(locationName) \n\n Contact me when you get this right away", isHTML: false)
+        
+        
+    }
+    
 }

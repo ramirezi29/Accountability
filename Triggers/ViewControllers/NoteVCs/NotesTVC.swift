@@ -8,31 +8,23 @@
 
 import UIKit
 
-class NotesTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
-    @IBOutlet weak var backButton: UIBarButtonItem!
-    
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var addButton: UIBarButtonItem!
-    
+class NotesTVC: UITableViewController {
+
     //Landing Pad
     var folder: Folder?
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tabBarController?.selectedIndex = 2
         
         //Delegates
         tableView.delegate = self
         tableView.dataSource = self
         
         //Table view
-        tableView.backgroundColor = .clear 
+//        tableView.backgroundColor = .clear 
         
         //background Color
-        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255,green: 213/255, blue: 214/255, alpha: 1.0))
+//        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255,green: 213/255, blue: 214/255, alpha: 1.0))
         
         // MARK: - Fetch
         guard let folder = folder else {
@@ -70,29 +62,30 @@ class NotesTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     // MARK: - Table view data source
-     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return NoteController.shared.notes.count
     }
     
     
-     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.noteCellID, for: indexPath) as? NotesTVCell else {return UITableViewCell()}
+         let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.noteCellID, for: indexPath) 
         
         let note = NoteController.shared.notes[indexPath.row]
         
-        cell.note = note
+        cell.textLabel?.text = note.title
+        cell.detailTextLabel?.text = note.timeStampAsString
         
         return cell
     }
     
     //canEditRowAt
-     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+   override  func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
     // Override to support editing the table view.
-     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
             let noteRecord = NoteController.shared.notes[indexPath.row]
@@ -112,7 +105,7 @@ class NotesTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     //moveRowAt
-     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+   override  func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         let note = NoteController.shared.notes[sourceIndexPath.row]
         
@@ -124,7 +117,7 @@ class NotesTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     //canMoveRowAt
-      func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    override  func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
 
      return true
      }
@@ -143,16 +136,12 @@ class NotesTVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             destinationVC.note = note
         }
     }
-    
-    // MARK: - Actions
-    @IBAction func backButtonTapped(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
+
 }
 
 extension NotesTVC {
     
-     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+   override  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = .clear
     }

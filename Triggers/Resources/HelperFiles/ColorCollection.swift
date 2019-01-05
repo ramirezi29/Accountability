@@ -41,4 +41,10 @@ extension MyColor {
         }
     }
 }
-//MyColor.powderBlue.value
+/*
+ Instead of textField.textColor = .black
+ 
+ use:
+ textField.backgroundColor = MyColor.blackGrey.value
+
+ */
