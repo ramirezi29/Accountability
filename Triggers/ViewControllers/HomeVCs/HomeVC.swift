@@ -13,8 +13,10 @@ class HomeVC: UIViewController {
     
     // MARK: - Properties
     @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var currentAaStepLabel: UILabel!
+    @IBOutlet weak var currentAAStepValueLabel: UILabel!
+    @IBOutlet weak var currentAANameLabel: UILabel!
     @IBOutlet weak var aaPickerView: UIPickerView!
+    
     
     //TextFields
     @IBOutlet weak var userNameTextField: UITextField!
@@ -36,6 +38,9 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Update AA Labels
+        updateCurrentAAStep()
+        
         //Tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(HomeVC.hideKeyboard))
         
@@ -54,6 +59,11 @@ class HomeVC: UIViewController {
         self.sponsorsPhoneNumberTextField.returnKeyType = .next
         self.sponsorsEmailTextField.returnKeyType = .done
         
+        
+        self.userNameTextField.autocorrectionType = .no
+        self.sponsorsNameTextField.autocorrectionType = .no
+        self.sponsorsPhoneNumberTextField.autocorrectionType = .no
+        self.sponsorsEmailTextField.autocorrectionType = .no
         //Keyboard
         //        self.view.endEditing(true)
         
@@ -73,14 +83,12 @@ class HomeVC: UIViewController {
         textFieldsInactive()
         textFieldsInvisable()
         
-        // MARK: - This is coming back Nill
-        // ASK: - Look inot why its nil or why it returns
-        
-        UserController.shared.fetchCurrentUser() { (success, error) in
+        UserController.shared.fetchCurrentUser { (success, error) in
             if success {
                 DispatchQueue.main.async {
                     self.activityIndicatorOutlet.isHidden = true
                     self.activityIndicatorOutlet.stopAnimating()
+                    self.updateCurrentAAStep()
                     self.updateViews()
                 }
                 
@@ -102,7 +110,7 @@ class HomeVC: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
- //
+        //
     }
     
     @objc func hideKeyboard() {
@@ -117,7 +125,7 @@ class HomeVC: UIViewController {
         sponsorsNameTextField.text = loggedInUser.sponsorName
         sponsorsPhoneNumberTextField.text = loggedInUser.sponsorTelephoneNumber
         sponsorsEmailTextField.text = loggedInUser.sponsorEmail
-        currentAaStepLabel.text = "\(loggedInUser.aaStep)"
+        currentAAStepValueLabel.text = "\(loggedInUser.aaStep)"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -127,16 +135,16 @@ class HomeVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // NOTE: - In order to prevent the onboarding walk through from coming up again
-//        if UserDefaults.standard.bool(forKey: "hasViewedWalkthrough") {
-//            return
-//        }
-//        
-//        // Will take you to the onboarding storyboard if user defaults hasnt been hit above
-//        let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
-//        
-//        if let walkThroughVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughVC") as? WalkThroughVC {
-//            present(walkThroughVC, animated: true, completion: nil)
-//        }
+        //        if UserDefaults.standard.bool(forKey: "hasViewedWalkthrough") {
+        //            return
+        //        }
+        //
+        //        // Will take you to the onboarding storyboard if user defaults hasnt been hit above
+        //        let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
+        //
+        //        if let walkThroughVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughVC") as? WalkThroughVC {
+        //            present(walkThroughVC, animated: true, completion: nil)
+        //        }
     }
     
     func textFieldsInactive() {
@@ -177,7 +185,7 @@ class HomeVC: UIViewController {
         sponsorsPhoneNumberTextField.borderStyle = .none
         sponsorsEmailTextField.borderStyle = .none
     }
-
+    
     
     @IBAction func editButtonTapped(_ sender: Any) {
         
@@ -219,12 +227,13 @@ class HomeVC: UIViewController {
             guard let userName = userNameTextField.text,
                 let sponsorName = sponsorsNameTextField.text,
                 let sponsorTelephone = sponsorsPhoneNumberTextField.text,
-                let sponsorEmail = sponsorsEmailTextField.text,
-                let currentStep = currentAaStepLabel.text else {return}
-            
+                let sponsorEmail = sponsorsEmailTextField.text else { return }
+            //use selectedAaStep bc that is the value that comes direclty from the picker
+            let selectedAaStep = aaPickerView.selectedRow(inComponent: 1)
+            currentAAStepValueLabel.text = "\(selectedAaStep)"
             // MARK: - CK Update
             if let loggedInUser = UserController.shared.loggedInUser {
-                UserController.shared.updateUserDetails(user: loggedInUser, userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorTelephone, sponsorEmail: sponsorEmail, aaStep: Int(currentStep) ?? 1) { (success) in
+                UserController.shared.updateUserDetails(user: loggedInUser, userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorTelephone, sponsorEmail: sponsorEmail, aaStep: Int(selectedAaStep)) { (success) in
                     
                     if success {
                         print("🙏🏽Success Updating Entry")
@@ -243,11 +252,11 @@ class HomeVC: UIViewController {
                 }
             } else {
                 //Mark: - Create
-                UserController.shared.createNewUserDetailsWith(userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorTelephone, sponsorEmail: sponsorEmail, aaStep: Int(currentStep) ?? 1) { (success) in
+                UserController.shared.createNewUserDetailsWith(userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorTelephone, sponsorEmail: sponsorEmail, aaStep: Int(selectedAaStep)) { (success) in
                     if success {
                         print("\n🙏🏽 Creating new userDetails to CK successful\n")
                         DispatchQueue.main.async {
-                            // Do some UI Stuff if a record is saved successfully
+                            
                         }
                     } else {
                         AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
@@ -263,8 +272,7 @@ class HomeVC: UIViewController {
             textFieldsInactive()
             
             // pass the Picker View Data to the Step Label
-            let selectedAaStep = aaPickerView.selectedRow(inComponent: 1) + 1
-            currentAaStepLabel.text = "\(selectedAaStep)"
+            
             
             // Edit Button
             editButton.setTitle("Edit", for: .normal)
@@ -287,6 +295,18 @@ class HomeVC: UIViewController {
     }
     
     
+    func updateCurrentAAStep() {
+        if let curentAAStepvalue = currentAAStepValueLabel.text {
+        if Int(curentAAStepvalue) == 0 {
+            currentAAStepValueLabel.isHidden = true
+            currentAANameLabel.text = "Currently Not in AA"
+            }
+        } else {
+            currentAAStepValueLabel.isHidden = false
+        currentAANameLabel.text = "Current AA Step"
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueToLocationTVC" {
             guard let destinvationVC = segue.destination as? LocationTVC else {return}
@@ -307,7 +327,7 @@ extension HomeVC: UIPickerViewDelegate, UIPickerViewDataSource {
         switch component {
         case 0: return 1
             
-        default: return 12
+        default: return 13
         }
     }
     
@@ -316,7 +336,7 @@ extension HomeVC: UIPickerViewDelegate, UIPickerViewDataSource {
         case 0:
             return "Step"
         default:
-            return "\(row + 1) "
+            return "\(row)"
         }
     }
 }
@@ -327,11 +347,11 @@ extension HomeVC: UITextFieldDelegate {
         switch textField {
         case sponsorsPhoneNumberTextField:
             sponsorsPhoneNumberTextField.keyboardType = .namePhonePad
-        print("spnosrs phone number text field selected")
+            print("spnosrs phone number text field selected")
         case sponsorsEmailTextField:
-         sponsorsEmailTextField.keyboardType = .emailAddress
+            sponsorsEmailTextField.keyboardType = .emailAddress
             print("sponsor email text field selected")
-        
+            
         default: break
         }
         return true
@@ -348,7 +368,7 @@ extension HomeVC: UITextFieldDelegate {
             
         case sponsorsPhoneNumberTextField:
             sponsorsEmailTextField.becomeFirstResponder()
-
+            
             
         default:
             sponsorsEmailTextField.resignFirstResponder()
@@ -359,5 +379,5 @@ extension HomeVC: UITextFieldDelegate {
 }
 
 extension HomeVC {
-
+    
 }

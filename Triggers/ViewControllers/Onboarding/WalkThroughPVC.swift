@@ -37,10 +37,10 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
                         "Ready? Let's get to work"]
     
     
-    
-    var pageSubHeadings = ["One Step Closer To Elimenating Your Triggers",
+    // R. (2011). New findings on biological factors predicting addiction relapse vulnerability. Current Psychiatry Reports, 13(5), 398–405."
+    var pageSubHeadings = ["One Step Closer To Eliminating Your Triggers",
                            
-                           "85% of individuals will relapse at one point during their journey of recover \n\n(wwww.addiction.gov)",
+                           "Research reflects that 85% of individuals relapse and return to drug use within the year following treatment \n\nSinha, R. (2011). Current Psychiatry Reports.",
                            
                            "\n\nAs your companion, we can assist you stay away from locations that may cause a trigger to relapse",
                            
@@ -72,9 +72,7 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
         if let startingViewController = walkThroughContentController(at: 0) {
             setViewControllers([startingViewController], direction: .forward, animated: true, completion: nil)
         }
-    }
-    
-    
+    } 
 }
 
 

@@ -67,7 +67,7 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Item" image="locationIcon" id="BFG-it-ahV"/>
-                    <navigationItem key="navigationItem" title="Locations to Avoid" id="Lqz-do-y7s">
+                    <navigationItem key="navigationItem" title="Locations to Avoid" largeTitleDisplayMode="always" id="Lqz-do-y7s">
                         <barButtonItem key="leftBarButtonItem" style="plain" id="Lcr-bZ-xiv">
                             <view key="customView" contentMode="scaleToFill" id="xfI-nV-vWg">
                                 <rect key="frame" x="16" y="5.5" width="83" height="33"/>
@@ -122,7 +122,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="44K-Xf-6fO">
-                                <rect key="frame" x="0.0" y="201" width="375" height="417"/>
+                                <rect key="frame" x="0.0" y="212" width="375" height="406"/>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="0AJ-Zj-kPM">
                                 <rect key="frame" x="20" y="79" width="335" height="87"/>
@@ -179,17 +179,17 @@
                             <constraint firstItem="GKQ-hS-3nh" firstAttribute="trailing" secondItem="0AJ-Zj-kPM" secondAttribute="trailing" constant="20" id="GsT-Nr-BDn"/>
                             <constraint firstItem="GKQ-hS-3nh" firstAttribute="trailing" secondItem="EhH-35-12m" secondAttribute="trailing" constant="16" id="JSJ-0o-ErP"/>
                             <constraint firstItem="0AJ-Zj-kPM" firstAttribute="centerX" secondItem="VRv-qa-JBv" secondAttribute="centerX" id="LqT-IT-dYn"/>
-                            <constraint firstItem="44K-Xf-6fO" firstAttribute="top" secondItem="GKQ-hS-3nh" secondAttribute="top" constant="137" id="OJd-lt-1wn"/>
+                            <constraint firstItem="44K-Xf-6fO" firstAttribute="top" secondItem="GKQ-hS-3nh" secondAttribute="top" constant="148" id="OJd-lt-1wn"/>
                             <constraint firstItem="0AJ-Zj-kPM" firstAttribute="leading" secondItem="GKQ-hS-3nh" secondAttribute="leading" constant="20" id="QS1-B9-sZc"/>
                             <constraint firstItem="EhH-35-12m" firstAttribute="leading" secondItem="GKQ-hS-3nh" secondAttribute="leading" constant="300" id="aUl-aF-KIZ"/>
                             <constraint firstItem="0AJ-Zj-kPM" firstAttribute="top" secondItem="GKQ-hS-3nh" secondAttribute="top" constant="15" id="ggl-hN-FWa"/>
                             <constraint firstItem="44K-Xf-6fO" firstAttribute="bottom" secondItem="GKQ-hS-3nh" secondAttribute="bottom" id="ooB-0S-as4"/>
-                            <constraint firstItem="44K-Xf-6fO" firstAttribute="firstBaseline" secondItem="EhH-35-12m" secondAttribute="baseline" constant="6.5" id="tkt-ui-6lK"/>
+                            <constraint firstItem="44K-Xf-6fO" firstAttribute="firstBaseline" secondItem="EhH-35-12m" secondAttribute="baseline" constant="17.5" id="tkt-ui-6lK"/>
                             <constraint firstItem="EhH-35-12m" firstAttribute="leading" secondItem="0AJ-Zj-kPM" secondAttribute="trailing" constant="-55" id="xGx-Xc-TGG"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="GKQ-hS-3nh"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Location" id="h9n-Zk-hQS">
+                    <navigationItem key="navigationItem" title="Location" largeTitleDisplayMode="always" id="h9n-Zk-hQS">
                         <leftBarButtonItems>
                             <barButtonItem systemItem="cancel" id="Llo-Tr-GfQ">
                                 <connections>

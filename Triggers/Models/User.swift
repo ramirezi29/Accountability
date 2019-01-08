@@ -31,7 +31,7 @@ class User {
 //    let share = CKShare(rootRecord: <#T##CKRecord#>)
   
     
-    init(userName: String, sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), appleUserRef: CKRecord.Reference) {
+    init(userName: String = "Your Name", sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), appleUserRef: CKRecord.Reference) {
         
         
         
