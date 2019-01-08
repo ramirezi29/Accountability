@@ -232,7 +232,7 @@ class LocationDetailVC: UIViewController {
 extension LocationDetailVC {
     
     func searchButtonUI() {
-        searchButton.backgroundColor = .blue
+        searchButton.backgroundColor = MyColor.hardBlue.value
         searchButton.layer.cornerRadius = 5.0
         searchButton.setTitleColor(.white, for: .normal)
         searchButton.setTitle("Search", for: .normal)

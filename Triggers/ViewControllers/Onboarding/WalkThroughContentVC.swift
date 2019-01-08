@@ -10,12 +10,15 @@ import UIKit
 import CoreLocation
 import UserNotifications
 import MessageUI
+import AVFoundation
+import ContactsUI
 
 protocol WalkThroughContentVCDelegate: class {
     func validUserNameEntered(username: String, isHidden: Bool)
 }
 
-class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserNotificationCenterDelegate     {
+// TOP VC
+class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
     
     // MARK: -  Outlets
     @IBOutlet weak var borderView: UIView!
@@ -38,30 +41,80 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     @IBOutlet weak var contentImageView: UIImageView!
     
     weak var delegate: WalkThroughContentVCDelegate?
+    
     private let locationManger = CLLocationManager()
+    private let center = UNUserNotificationCenter.current()
+    private let devMountainLatitude = 40.761806
+    private let devMountainLongitude = -111.890533
+    private let desiredRadius = 60.96
+    private let devMntID = "devMntID"
+    private let devMntRequestID = "devMntRequestID"
     var index = 0
     var headLine = ""
     var subHeadLine = ""
     var imageFile = ""
     var user: User?
     var location: Location?
-   
+    var loggedInUserExist: Bool?
+    
     
     // Bools and Keys to for UIAlert
     var disableRestrictedAlertBool = false
     var disableDeniedAlertBool = false
     private let deniedBoolKey = "disabledDeniedAlertBool"
     private let restrictedBoolKey = "disabledRestrictedAlertBool"
+    private let loggedInUserExistKey = "loggedInUserExist"
+    //Location
     
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        //Delegates
+        
+        //Save realted delegate
+        
+        
+        //location
+        locationManger.delegate = self
+        
+        let center = CLLocationCoordinate2D(latitude: devMountainLatitude, longitude: devMountainLongitude)
+        
+        let utahHousingActualregion = CLCircularRegion(center: center, radius: desiredRadius, identifier: devMntID)
+        
+        locationManger.startMonitoring(for: utahHousingActualregion)
+        
+        locationManger.desiredAccuracy = kCLLocationAccuracyBest
+        
+        locationManger.distanceFilter = 10
+        
+        //updateViews
+        
+        UserController.shared.fetchCurrentUser { (success, _) in
+            if success {
+                if ((UserController.shared.loggedInUser) != nil) || UserController.shared.loggedInUser?.ckRecordID != nil {
+                    self.loggedInUserExist = true
+                   
+                    
+                    
+                    print("User was fetched successfully with CKRECORD: \(String(describing: self.user?.appleUserRef)) and \(String(describing: UserController.shared.loggedInUser?.sponsorName)) and loggedInUserExist is \(String(describing: self.loggedInUserExist))")
+                }
+            }else {
+                print("No User CKR exists ")
+                self.loggedInUserExist = false
+            }
+             UserDefaults.standard.set(self.loggedInUserExist, forKey: self.loggedInUserExistKey)
+        }
+        
+        loadLoggedUserDefaults()
+        print("\(String(describing: self.loggedInUserExist))")
         //Text Fields
         hideTextFields()
-        contactButton.isHidden = true
-        //User Name Text Field
         
+        contactButton.isHidden = true
+        
+        //User Name Text Field
         view.addSubview(userNameTextField)
         userNameConstraints()
         userNameTextField.delegate = self
@@ -104,10 +157,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         backGroundView.backgroundColor = MyColor.powderBlue.value
         backGroundView.alpha = 1
         
-        //Text Color
-        
-        
-        //        nameLabel.textColor = UIColor(displayP3Red: 55/255, green: 215/255, blue: 239/255, alpha: 1.0)
         headLineLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 22)
         subHeadLineLabel.font = UIFont(name: "HelveticaNeue", size: 20)
         
@@ -116,83 +165,95 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         contentImageView.image  = UIImage(named: imageFile)
         
         switch index {
+            
         case 2:
             self.textFieldsDisappearAnimation()
         case 3:
             print("\n🔷 DOnt feel isolated view🌎\n")
             
-          self.hideTextFields()
+            self.hideTextFields()
             self.contactButton.isHidden = true
+            
+            
+            //            //Fetch the user
+            //            UserController.shared.fetchCurrentUser { (success, error) in
+            //                if success {
+            //                    DispatchQueue.main.async {
+            //                        // UI Stuff
+            //                    }
+            //
+            //                } else {
+            //
+            //                    DispatchQueue.main.async {
+            //                        //UI Stuff
+            //                    }
+            //                    print("\n🤯 Error fechign current user Data \n")
+            //                    return
+            //                }
+        //            }
         case 4:
             
-            let deadlineTime = DispatchTime.now() + .seconds(1)
-            DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-                print("test")
-                DispatchQueue.main.async {
-                    print("🎸🎸🎸🎸🎸TExt Fields should appear now")
-                    self.textFieldAppearAnimation()
-                    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(WalkThroughContentVC.hideKeyboard))
-                    
-                    tapGesture.cancelsTouchesInView = true
-                    self.view.addGestureRecognizer(tapGesture)
+            //Test print
+            loadLoggedUserDefaults()
+            
+            print("\(String(describing: self.loggedInUserExist)) and user defautls has it as \(UserDefaults.standard.bool(forKey: loggedInUserExistKey))")
+            
+            if loggedInUserExist == false {
+                self.textFieldAlphaZero()
+                self.showTextFields()
+                
+                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(WalkThroughContentVC.hideKeyboard))
+                
+                tapGesture.cancelsTouchesInView = true
+                self.view.addGestureRecognizer(tapGesture)
+                
+                let deadlineTime = DispatchTime.now() + .seconds(1)
+                
+                DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+                    print("test")
+                    DispatchQueue.main.async {
+                        print("🎸🎸🎸🎸🎸TExt Fields should appear now")
+                        self.textFieldAppearAnimation()
+                    }
                 }
             }
             
-            self.textFieldAlphaZero()
-            self.showTextFields()
-           
         case 5:
-         self.contactButton.isHidden = true
+            
+            self.contactButton.isHidden = true
             hideTextFields()
             
         case 6:
             
-            
-            
             self.inquirePermissions()
-            
             
         default:
             break
         }
-        
-        //        if index == 6 {
-        //            print("🔥\(index), this hsould be six, TItle: Ready? Lets work")//            //Text Fields
-        ////            inactivateTextFields()
-        ////            textFieldsDisappearAnimation()
-        ////
-        ////             inquirePermissions()
-        ////            print("\nCurrently on index:\(index) and permission stuff got asked")
-        //        }
-        //
-        //        if index == 7 {
-        //             print("🔥\(index), this should be seven")
-        // UNNotifcation and Location Permission
-        //
-        
-        //            UIView.animate(withDuration: 4.0, delay: 0.2, usingSpringWithDamping: 2.0, initialSpringVelocity: 1.0, options: [.curveEaseIn], animations: {
-        //                self.contentImageView.frame.origin.y += 600
-        //            }) { (success) in
-        //                if success {
-        //                    print("🐶Animation for Image completed")
-        //                    self.textFieldAlphaZero()
-        //                    self.showTextFields()
-        ////                    self.textFieldAppearAnimation()
-        //                } else {
-        //                    print("\n🐶 There was an issuing sunny mountain annimation for some reason\n")
-        //                    self.textFieldAlphaZero()
-        //                    self.showTextFields()
-        ////                    self.textFieldAppearAnimation()
-        //                }
-        //            }
-        //            // MARK: - Text Fields Appear Animation
-        //        }
     }
-    //    } // tester curly delte when done
+    
+    func loadLoggedUserDefaults(){
+        loggedInUserExist = UserDefaults.standard.bool(forKey: loggedInUserExistKey)
+    }
+    
     
     @objc func hideKeyboard() {
         self.view.endEditing(true)
     }
+    
+    func updateViews() {
+        
+        if loggedInUserExist == false {
+            guard let loggedInUser = UserController.shared.loggedInUser
+                else { return }
+            userNameTextField.text = loggedInUser.userName
+            sponsorsNameTextField.text = loggedInUser.sponsorName
+            sponsorsPhoneNumberTextField.text = loggedInUser.sponsorTelephoneNumber
+            sponsorsEmailAddressTextField.text = loggedInUser.sponsorEmail
+            aaStepTextField.text = "\(loggedInUser.aaStep)"
+        }
+    }
+    
     
     func textFieldsDisappearAnimation() {
         UIView.animateKeyframes(withDuration: 0.9, delay: 0.1, options: [], animations: {
@@ -230,9 +291,11 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     
     func textFieldAppearAnimation() {
         print("🍁🍁🍁🍁🍁text field appear animation was called )")
+        self.updateViews()
         UIView.animateKeyframes(withDuration: 2.0, delay: 0.0, options: [], animations: {
             self.userNameTextField.alpha = 0.5
         }) { (success) in
+            
             self.userNameTextField.isUserInteractionEnabled = true
             self.contactButton.isHidden = false
             print("\n ☎️ contact button appeared\n")
@@ -267,6 +330,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         }
     }
     
+    // MARK: - Permission Func
     func inquirePermissions() {
         
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
@@ -376,22 +440,17 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         button.setImage(contactButtonImage, for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
-         button.frame = CGRect(x: 0, y: 0 , width: 60, height: 60)
-        button.imageEdgeInsets = UIEdgeInsets(top: 60,left: 60,bottom: 60,right: 60)
         button.addTarget(self, action: #selector(contactButtonAction(_:)), for: .touchUpInside)
         return button
     }()
-    
-    @objc private func contactButtonAction(_ sender: UIButton?) {
-        print("Contact Button Tapped")
-    }
     
     //Programatic Text Fields
     //User Name
     lazy var userNameTextField: UITextField = {
         
         let textField = UITextField()
-        
+        //Test Purposes
+        //        textField.text = "Jan 07 User Name Exaample"
         
         textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
@@ -404,7 +463,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     lazy var sponsorsNameTextField: UITextField = {
         
         let textField = UITextField()
-        
+        //Test Purposes
+        //textField.text = "🐠🐠🐠🐠"
         
         textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
@@ -416,8 +476,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     lazy var sponsorsPhoneNumberTextField: UITextField = {
         
         let textField = UITextField()
-        
-        
+        //Test Purposes
+        //textField.text = "☔️☔️☔️☔️"
         
         textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
@@ -430,20 +490,21 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         let textField = UITextField()
         
-        
+        //Test Purposes
+        //textField.text = "🍎🍎🍎🍎"
         
         textField.backgroundColor = MyColor.offWhiteLowAlpha.value
-                textField.textColor = .black
+        textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Email Address", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
-    
+        
         return textField
     }()
     
     lazy var aaStepTextField: UITextField = {
         
         let textField = UITextField()
-        
-
+        //Test Purposes
+        //textField.text = "12"
         textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "If in treatment enter current Step", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
@@ -459,10 +520,10 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             contactButton.leadingAnchor.constraint(equalTo: headLineLabel.trailingAnchor, constant: -60),
             
             contactButton.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: 0),
-//
-            contactButton.topAnchor.constraint(equalTo: borderView.topAnchor, constant: -60),
-//
-//            contactButton.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 0)
+            //
+            contactButton.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 35),
+            //
+            //            contactButton.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 0)
             
             ])
     }
@@ -529,22 +590,29 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         aaStepTextField.layer.cornerRadius = 9
     }
     
+}
+
+extension WalkThroughContentVC {
     
-    // MARK: - Segue the onboarding textfilds to the Home VC
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let usersName = userNameTextField.text, !usersName.isEmpty,
-            let sponsorsName = sponsorsNameTextField.text,
-            let sponsorsEmail = sponsorsEmailAddressTextField.text,
-            let sponsorsPhoneNumber = sponsorsPhoneNumberTextField.text,
-            let aaStep = aaStepTextField.text
-            else {return}
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        //NOTE: - Uncomment in order for testing purposes
+        //print("🚀🚀🌎 didEnterRegion: User Entered location🌎🚀🚀")
         
-        guard let destinationVC = segue.destination as? HomeVC else {return}
-        destinationVC.userNameTextField.text = usersName
-        destinationVC.sponsorsNameTextField.text = sponsorsName
-        destinationVC.sponsorsEmailTextField.text = sponsorsEmail
-        destinationVC.sponsorsPhoneNumberTextField.text = sponsorsPhoneNumber
-        destinationVC.currentAaStepLabel.text = aaStep
+        
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
+        //NOTE: - Uncomment in order for testing purposes
+        //print("🌎 didStartMonitoringFor: The monitored regions are: \(manager.monitoredRegions)")
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        //NOTE: - Uncomment in order for testing purposes
+        //let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+        //uncomment in order for testing purposes
+        //print("🌎 didUpdateLocations: locations = \(locValue.latitude) \(locValue.longitude)")
     }
 }
 
@@ -554,6 +622,7 @@ extension WalkThroughContentVC : UITextFieldDelegate {
         
         if textField.text!.count + 1 >= 2 {
             delegate?.validUserNameEntered(username: string, isHidden: false)
+            //Note sure if this is needed, test
             return true
         }
         
@@ -591,8 +660,10 @@ extension WalkThroughContentVC : UITextFieldDelegate {
             sponsorsPhoneNumberTextField.becomeFirstResponder()
         case sponsorsPhoneNumberTextField:
             sponsorsEmailAddressTextField.becomeFirstResponder()
+        case sponsorsEmailAddressTextField:
+            aaStepTextField.becomeFirstResponder()
         default:
-            sponsorsEmailAddressTextField.resignFirstResponder()
+            aaStepTextField.resignFirstResponder()
         }
         return false
     }
@@ -643,6 +714,50 @@ extension WalkThroughContentVC {
     }
 }
 
+
+// MARK: - Contact Button Action
+extension WalkThroughContentVC: CNContactPickerDelegate {
+    
+    @objc private func contactButtonAction(_ sender: UIButton?) {
+        print("Contact Button Tapped")
+        
+        let picker = CNContactPickerViewController()
+        picker.delegate = self
+        picker.predicateForEnablingContact = NSPredicate(format: "emailAddresses.@count > 0")
+        picker.predicateForSelectionOfContact = NSPredicate(format: "emailAddresses.@count == 1")
+        present(picker, animated: true, completion: nil)
+    }
+    
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+        
+        for data in contact.phoneNumbers {
+            let contactInfo = data.value
+            sponsorsPhoneNumberTextField.text = contactInfo.stringValue
+        }
+        
+        let sponsorsName = contact.givenName
+        let sponsorsFamilyName = contact.familyName
+        
+        
+        sponsorsNameTextField.text = "\(sponsorsName) \(sponsorsFamilyName)"
+        
+        
+        let email = contact.emailAddresses.first
+        
+        let emailString = email?.value
+        
+        sponsorsEmailAddressTextField.text = "\(emailString ?? "")"
+    }
+}
+
+/*
+ if let imageData = contact.imageData {
+ let image = UIImage(data: imageData)
+ 
+ print("image: \(image)")
+ }
+ */
+
 extension WalkThroughContentVC {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         /*Test print*/
@@ -664,7 +779,7 @@ extension WalkThroughContentVC {
             print(" 'X' was tapped")
             // Do something in order to record that the geo fence was crossed but the notification was dismissed
             
-            //An action that indicates the user opened the app from the notification interface.
+        //An action that indicates the user opened the app from the notification interface.
         case UNNotificationDefaultActionIdentifier:
             print("use")
             
@@ -675,7 +790,7 @@ extension WalkThroughContentVC {
         case LocationConstants.emailSponsorActionKey:
             print("email \(sponosrEmail)")
             showMailComposer()
-        
+            
         case LocationConstants.textMessageSponsorActionKey:
             print("Text: \(sponsorName), \(sponsorText)")
             
@@ -687,28 +802,79 @@ extension WalkThroughContentVC {
     }
 }
 
-
 extension WalkThroughContentVC {
+    func saveInfoToCloudKit(completion: @escaping (Bool) -> Void) {
+        if loggedInUserExist == true {return}
+        guard let userName = userNameTextField.text,
+            let sponsorName = sponsorsNameTextField.text,
+            let sponsorsEmail = sponsorsEmailAddressTextField.text,
+            let sponsorsPhoneNumber = sponsorsPhoneNumberTextField.text,
+            let  aaStep = aaStepTextField.text else { return }
+        
+        UserController.shared.createNewUserDetailsWith(userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorsPhoneNumber, sponsorEmail: sponsorsEmail, aaStep: Int(aaStep) ?? 0) { (success) in
+            if success {
+                print("\n🙏🏽 Creating new userDetails to CK successful\n")
+                DispatchQueue.main.async {
+                    self.title = "Sucessflly Saved Example saveInfoToCloudKit func"
+                }
+                completion(true)
+            } else {
+                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+                // prseent UI Alert expalining error
+                print("💀error with the upating the data")
+                completion(false)
+                return
+            }
+        }
+    }
+}
+
+extension WalkThroughContentVC: MFMailComposeViewControllerDelegate {
+    
     
     func showMailComposer() {
+        let loggedInUser = UserController.shared.loggedInUser
         
         let locationName = location?.locationTitle ?? "a place I shouldn't be at."
-        let sponsorName = user?.sponsorName ?? "Friend"
+        let sponsorName = loggedInUser?.sponsorName ?? "Friend"
         
         //check if device can send mail
         guard MFMailComposeViewController.canSendMail() else {
             
             // DO some UI to show that an email cant be sent
-            let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing Mail", alertMessage: "Your device does not support this feature", dismissActionTitle: "OK")
+            let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing E-Mail", alertMessage: "Your device does not support this feature", dismissActionTitle: "OK")
+            present(notMailCompatable, animated: true, completion: nil)
             return
         }
+        
         let composer = MFMailComposeViewController()
-//        composer.mailComposeDelegate = self
-//        composer.setToRecipients([sponosrEmail])
+        //        composer.mailComposeDelegate = self
+        //        composer.setToRecipients([sponosrEmail])
         composer.setSubject("Contact me when you get this message")
         composer.setMessageBody("\(sponsorName), I wanted to let you know that I got close to \(locationName) \n\n Contact me when you get this right away", isHTML: false)
         
+        present(composer, animated: true, completion: nil)
         
     }
     
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        
+        if let _ = error {
+            controller.dismiss(animated: true, completion: nil)
+            return
+        }
+        
+        switch result {
+        case .cancelled:
+            print("🐦🐦🐦Cancled email")
+        case .failed:
+            print("🐦🐦🐦faled")
+        case .saved:
+            print("🐦🐦🐦mail savied")
+        case .sent:
+            print("🐦🐦🐦mail saved")
+        }
+        controller.dismiss(animated: true, completion: nil)
+    }
 }
+

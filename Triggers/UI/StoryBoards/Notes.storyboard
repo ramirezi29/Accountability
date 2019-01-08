@@ -42,7 +42,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="1cV-pg-rHc"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Enter Note" id="PFl-1K-HFe">
+                    <navigationItem key="navigationItem" title="Enter Note" largeTitleDisplayMode="always" id="PFl-1K-HFe">
                         <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="zzS-HT-1gq">
                             <connections>
                                 <action selector="saveButtonTapped:" destination="SeD-TK-5FM" id="0on-ey-pbo"/>
@@ -101,7 +101,7 @@
                             <outlet property="delegate" destination="JnH-e5-lHJ" id="L6M-UD-JmE"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Notes" id="Qxl-pn-xSa">
+                    <navigationItem key="navigationItem" title="Notes" largeTitleDisplayMode="always" id="Qxl-pn-xSa">
                         <barButtonItem key="backBarButtonItem" title="Back" id="c2c-XV-gTr"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" systemItem="compose" id="Fcl-TG-3pb">
                             <connections>
@@ -157,7 +157,7 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Notes" image="noteBook" id="DmT-Aa-AH0"/>
-                    <navigationItem key="navigationItem" title="Folders" id="9wm-3H-vOj">
+                    <navigationItem key="navigationItem" title="Folders" largeTitleDisplayMode="always" id="9wm-3H-vOj">
                         <barButtonItem key="backBarButtonItem" title="Back" id="5if-iy-sge"/>
                         <leftBarButtonItems>
                             <barButtonItem style="plain" systemItem="edit" id="Nxj-OY-gWh">

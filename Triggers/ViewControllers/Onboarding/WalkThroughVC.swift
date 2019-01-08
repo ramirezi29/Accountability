@@ -8,6 +8,11 @@
 
 import UIKit
 
+protocol SaveUserInfoDelegate: class {
+    func saveInfoToCloudKit(_ sender: WalkThroughVC, completion: @escaping (Bool) -> Void)
+}
+
+//Bottom VC
 class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     
     // MARK: - Oulets
@@ -27,11 +32,16 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
 
     @IBOutlet var skipButton: UIButton!
     
+      weak var saveInfoDelegate: SaveUserInfoDelegate?
+    
     var walkThroughPVC: WalkThroughPVC?
     var disableOnBardingBool = false
     var disableOnboardingKey = "disableOnboardingKey"
     var walkThroughCVC: WalkThroughContentVC?
     var hasSeenPermissions = false
+    var user: User?
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // user defualts
@@ -80,20 +90,23 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         if let index = walkThroughPVC?.currentIndex {
             print("\(String(describing: walkThroughPVC?.currentIndex))")
             switch index {
+            case 3:
+                nextButton.setTitle("Next", for: .normal)
 //            case 0...4:
 //
 //                print("The Walk through PVC is somewhere in between case 0 - 5, and the current index is, \(index)")
 //                self.nextButton.isEnabled = true
             case 4:
-                 nextButton.setTitle("Next", for: .normal)
-            case 5:
                 
-                if hasSeenPermissions == false {
-                    hasSeenPermissions = true
-                 nextButton.setTitle("I Understand", for: .normal)
+                if walkThroughCVC?.loggedInUserExist == nil {
+                 self.nextButton.setTitle("Save", for: .normal)
                 } else {
-                    nextButton.setTitle("Next", for: .normal)
+                    self.nextButton.setTitle("Next", for: .normal)
                 }
+                
+            case 5:
+                nextButton.setTitle("I Understand", for: .normal)
+               print("Case 5")
             case 6:
                 UIView.animate(withDuration: 0.9, delay: 0.1, options: [.curveEaseOut], animations: {
                     self.nextButton.backgroundColor =  MyColor.hardBlue.value
@@ -151,23 +164,43 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         }
     }
     
+    @IBAction func saveSaveButtonTapped(_ sender: Any) {
+    }
+    
+    
     @IBAction func nextButtonTapped(_ sender: Any) {
         
         if let index = walkThroughPVC?.currentIndex {
             
             switch index {
-            case 0...4:
+            case 0...3:
                 walkThroughPVC?.forwardPage()
                 
-                nextButton.setTitle("Next", for: .normal)
-                
+//                nextButton.setTitle("Next", for: .normal)
+            
+            case 4:
+                walkThroughPVC?.currentVC?.saveInfoToCloudKit(completion: { (success) in
+                    if success {
+                        DispatchQueue.main.async {
+                            
+                        }
+                    }
+                })
+                self.walkThroughPVC?.forwardPage()
+//                walkThroughPVC?.forwardPage()
+
+                print("case 4")
+             
+            
             case 5:
+                
                 walkThroughPVC?.forwardPage()
-              
+              print("case 5")
+                
             
             case 6:
                 walkThroughPVC?.forwardPage()
-                nextButton.setTitle("Next", for: .normal)
+
             case 7:
                 
                 // check if already been viewed
@@ -202,6 +235,7 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
 }
 
 extension WalkThroughVC : WalkThroughContentVCDelegate {
+    
     func validUserNameEntered(username: String, isHidden: Bool) {
         
         switch isHidden {
@@ -224,4 +258,5 @@ extension WalkThroughVC : WalkThroughContentVCDelegate {
         }
         
     }
+    
 }

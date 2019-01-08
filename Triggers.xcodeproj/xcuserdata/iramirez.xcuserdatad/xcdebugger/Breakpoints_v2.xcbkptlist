@@ -13,5 +13,227 @@
             stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/ViewControllers/Onboarding/WalkThroughVC.swift"
+            timestampString = "568618058.554819"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
+            landmarkName = "prepare(for:sender:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/ModelControllers/UserController.swift"
+            timestampString = "568616140.2531511"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "createNewUserDetailsWith(userName:sponsorName:sponserTelephoneNumber:sponsorEmail:aaStep:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/ModelControllers/UserController.swift"
+            timestampString = "568616140.253234"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "createNewUserDetailsWith(userName:sponsorName:sponserTelephoneNumber:sponsorEmail:aaStep:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/ViewControllers/NoteVCs/FolderTVC.swift"
+            timestampString = "568618058.5551341"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+            timestampString = "568618058.555202"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "WalkThroughContentVC"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Triggers.WalkThroughContentVC.loggedInUserExist.getter : Swift.Bool"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+                  timestampString = "568607313.3737839"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "77">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Triggers.WalkThroughContentVC.loggedInUserExist.setter : Swift.Bool"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+                  timestampString = "568607313.3762929"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "117">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Triggers.WalkThroughContentVC.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; Triggers.WalkThroughContentVC"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+                  timestampString = "568607313.379263"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "1701">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Triggers.WalkThroughContentVC.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;Triggers.WalkThroughContentVC&gt;"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+                  timestampString = "568607313.382404"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "58"
+                  endingLineNumber = "58"
+                  offsetFromSymbolStart = "1666">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+            timestampString = "568618058.555318"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Triggers.WalkThroughContentVC.viewDidLoad() -&gt; ()"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+                  timestampString = "568618058.898008"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "94"
+                  endingLineNumber = "94"
+                  offsetFromSymbolStart = "656">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Bool, Swift.Optional&lt;Triggers.NetworkingError&gt;) -&gt; () in Triggers.WalkThroughContentVC.viewDidLoad() -&gt; ()"
+                  moduleName = "Triggers"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iramirez/Desktop/Triggers/Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+                  timestampString = "568618058.900025"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "95"
+                  endingLineNumber = "95"
+                  offsetFromSymbolStart = "48">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
+            timestampString = "568618058.55541"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Triggers/ViewControllers/Onboarding/WalkThroughVC.swift"
+            timestampString = "568618058.5554889"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
+            landmarkName = "updateUI()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

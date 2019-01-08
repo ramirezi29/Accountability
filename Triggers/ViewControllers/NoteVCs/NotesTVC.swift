@@ -32,28 +32,7 @@ class NotesTVC: UITableViewController {
             return
         }
         
-        NoteController.shared.fetchItems(folder: folder) { (note, _) in
-            
-            if note != nil {
-                
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    
-                    // stop animating spinner
-                    // spinner view is hidding true
-                }
-                print("\n⛱ Successfully fetched folders from CK \n")
-            } else {
-                DispatchQueue.main.async {
-                    // stop animating spinner
-                    // spinner view is hidding true
-                    let networkError = AlertController.presentAlertControllerWith(alertTitle: "Unable to Load Your Notes", alertMessage: "Check your internet connection", dismissActionTitle: "OK")
-                    self.present(networkError, animated: true, completion: nil)
-                }
-                print("\n💀 Error fetching forders from CK\n")
-                return
-            }
-        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

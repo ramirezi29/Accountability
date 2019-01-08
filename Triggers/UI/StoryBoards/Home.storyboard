@@ -106,7 +106,8 @@
                     <connections>
                         <outlet property="aaPickerView" destination="9rK-Yq-Nqv" id="Y1t-DR-Ts7"/>
                         <outlet property="activityIndicatorOutlet" destination="E3n-yE-kfC" id="cQQ-F6-Xqa"/>
-                        <outlet property="currentAaStepLabel" destination="NP9-yD-jxs" id="cA7-OF-HDe"/>
+                        <outlet property="currentAANameLabel" destination="Pcc-9n-smK" id="hGl-Id-Rpw"/>
+                        <outlet property="currentAAStepValueLabel" destination="NP9-yD-jxs" id="cA7-OF-HDe"/>
                         <outlet property="editButton" destination="Jbe-4q-CFt" id="kjg-qx-FKN"/>
                         <outlet property="sponsorsEmailTextField" destination="mOR-YW-d3v" id="sf5-yV-A7O"/>
                         <outlet property="sponsorsNameTextField" destination="Xkr-ar-HWz" id="8Sk-g1-0tI"/>
