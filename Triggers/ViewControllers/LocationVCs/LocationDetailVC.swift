@@ -28,9 +28,13 @@ class LocationDetailVC: UIViewController {
     @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
     
     //Mark: - Landing Pad
-    var location: Location?
+    var location: Location? {
+        didSet {
+            loadViewIfNeeded()
+            addAnnotation()
+        }
+    }
     var user: User?
-    
     
     private let geocoder = CLGeocoder()
     private let locationManger = CLLocationManager()
@@ -47,24 +51,47 @@ class LocationDetailVC: UIViewController {
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
+        mapViewOutlet.showsUserLocation = true
         
+         let usersLocation = mapViewOutlet.userLocation
         
+        let region = MKCoordinateRegion(center: mapViewOutlet.userLocation.coordinate, latitudinalMeters: 1609.344, longitudinalMeters: 1609.344)
+    
+        mapViewOutlet.setRegion(region, animated: true)
+            
+
         
         locationManger.delegate = self as? CLLocationManagerDelegate
+        print(mapViewOutlet.isUserLocationVisible)
         locationManger.desiredAccuracy = kCLLocationAccuracyBest
-        
         
         actiivtyViewoutlet.backgroundColor = UIColor.clear
         activityIndicatorOutlet.isHidden = true
-       
+        
         //Button UI
         searchButtonUI()
         
         //Background UI
         view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
-
+        
         loadViewIfNeeded()
         updateViews()
+        
+    }
+    
+    func addAnnotation() {
+        guard let location = location,
+            let latitude = CLLocationDegrees(exactly: location.latitude),
+            let longitude = CLLocationDegrees(exactly: location.longitude)
+            else { return }
+        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let pointAnnotation = MKPointAnnotation()
+        pointAnnotation.coordinate = coordinate
+        mapViewOutlet.addAnnotation(pointAnnotation)
+        
+         let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: self.metersPerMile, longitudinalMeters: self.metersPerMile)
+        print(mapViewOutlet.isUserLocationVisible)
+        self.mapViewOutlet.setRegion(viewRegion, animated: true)
         
     }
     
@@ -130,19 +157,17 @@ class LocationDetailVC: UIViewController {
         dismiss(animated: true, completion: nil)
         self.navigationController?.popViewController(animated: true)
     }
-
-        
-    @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
     
-    print("\n Save button Taped")
+    
+    @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
+        
+        print("\n Save button Taped")
         //Create a location based notification
         guard let locationTitle = locationTitleTextField.text, !locationTitle.isEmpty, let addressLocation = addressTextField.text, !addressLocation.isEmpty else {return}
         
-        
-        
         let lat = coordinate?.latitude ?? devMntLat
         let long = coordinate?.longitude ?? devMntLon
-
+        
         // MARK: - Update
         if let location = location {
             LocationController.shared.updateTargetLocation(location: location, geoCodeAddressString: addressLocation, addressTitle: locationTitle, latitude: lat, longitude: long) { (success) in
@@ -150,7 +175,7 @@ class LocationDetailVC: UIViewController {
                     print("🙏🏽 Success updating Location")
                     DispatchQueue.main.async {
                         // Do any UI STuff here that would be triggered by a successful update
-                       
+                        
                         self.navigationController?.popViewController(animated: true)
                     }
                 } else {
@@ -167,15 +192,13 @@ class LocationDetailVC: UIViewController {
             
             LocationController.shared.createNewLocation(geoCodeAddressString: addressLocation, addressTitle: locationTitle, longitude: long, latitude: lat) { (success) in
                 if success {
-                    // call create
                     
-                    // NOTE: - Sponosrs Name is not being passed in 
                     NotificationController.createLocalNotifciationWith(contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Contact your accountability partner \(UserController.shared.loggedInUser?.sponsorName ?? "")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: UUID().uuidString), notifIdentifier: locationTitle)
                     
                     print("\n🙏🏽Successfully created/saved location🙏🏽")
                     DispatchQueue.main.async {
-                        //                        self.navigationController?.popViewController(animated: true)
-                         self.navigationController?.popViewController(animated: true)
+                        
+                        self.navigationController?.popViewController(animated: true)
                     }
                 } else {
                     print("\n💀 Error saving Location to Cloud Kit 💀")
@@ -185,7 +208,7 @@ class LocationDetailVC: UIViewController {
                 }
             }
         }
-    }// Last curly for search button tapped
+    }
     
     @IBAction func searchButtonTapped(_ sender: UIButton) {
         print("Search Button Tapped")

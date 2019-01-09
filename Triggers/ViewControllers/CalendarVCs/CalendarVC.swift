@@ -39,21 +39,19 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     
     // MARK: - Life Cyles
     override func viewDidLoad() {
+        super.viewDidLoad()
         
-        self.activityIndicatorView.isHidden = true 
+        view.addSubview(calenderView)
+        
+        self.activityIndicatorView.isHidden = true
         updateViewsRelatedToSobrietyItems()
         
         sobrietyDateView.layer.cornerRadius = 15
         soberSinceDateValueLabel.numberOfLines = 0
         modifiyDatePicker()
-    
-        self.activityIndicator.isHidden = true 
         
-        soberSinceDateValueLabel.numberOfLines = 0
+        self.activityIndicator.isHidden = true
         
-        super.viewDidLoad()
-        
-        view.addSubview(calenderView)
         
         self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
@@ -106,18 +104,11 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     }
     
     // MARK: - Actions
-    
     @IBAction func sobrietySaveButtonTapped(_ sender: IRButton) {
         //TestPrint
         print("\nSave Button Tapped")
         
         UserDefaults.standard.setValue(sobrietyDatePicker.date, forKey: sobrietyUserDefaultKey)
-        
-        //Add a second user defaults to record/save the
-        
-        
-        //set the date to the label
-        
         
         updateViewsRelatedToSobrietyItems()
         
@@ -132,7 +123,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
             self.animateInSobrietyView()
         }
     }
-
+    
     @IBAction func checkInButtonTapped(_ sender: Any) {
         let checkInAlertController = AlertController.presentActionSheetAlertControllerWith(alertTitle: nil, alertMessage: nil, dismissActionTitle: "Cancel")
         
@@ -151,13 +142,13 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         [composeEmailAction, phoneCallAction, composeTextAction].forEach { checkInAlertController.addAction($0)}
         
         DispatchQueue.main.async {
+            checkInAlertController.popoverPresentationController?.sourceView = self.view
+            checkInAlertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
+            checkInAlertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
             self.present(checkInAlertController, animated: true, completion: nil)
         }
     }
 }
-
-
-
 
 // MARK: - Email
 extension CalendarVC: MFMailComposeViewControllerDelegate {
@@ -174,12 +165,12 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
             // DO some UI to show that an email cant be sent
             let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing E-Mail", alertMessage: "Your device does not support this feature", dismissActionTitle: "OK")
             
-                DispatchQueue.main.async {
-                     self.present(notMailCompatable, animated: true)
-                    self.activityIndicator.isHidden = true
-                    self.activityIndicator.stopAnimating()
-                    
-                }
+            DispatchQueue.main.async {
+                self.present(notMailCompatable, animated: true)
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
+                
+            }
             
             return
         }
@@ -354,15 +345,15 @@ extension CalendarVC {
 
 extension CalendarVC {
     func updateLabelUI() {
-//        soberSinceLabel.font = MyFont.sfDisplayMedium43.value
-//        soberSinceDateValueLabel.font = MyFont.sfDisplayMedium43.value
-//        numberOfDaysSoberLabel.font = MyFont.sFMedium17.value
-//        numberOfDaysSoberValueLabel.font = MyFont.sFMedium17.value
+        //        soberSinceLabel.font = MyFont.sfDisplayMedium43.value
+        //        soberSinceDateValueLabel.font = MyFont.sfDisplayMedium43.value
+        //        numberOfDaysSoberLabel.font = MyFont.sFMedium17.value
+        //        numberOfDaysSoberValueLabel.font = MyFont.sFMedium17.value
     }
 }
 
 /*
-    self.navigationController?.navigationBar.isTranslucent = false 
+ self.navigationController?.navigationBar.isTranslucent = false
  
  //Future Versions will have themes
  //    @IBAction func themeButtonTapped(_ sender: UIBarButtonItem) {

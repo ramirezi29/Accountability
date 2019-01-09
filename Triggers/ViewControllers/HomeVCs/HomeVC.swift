@@ -8,18 +8,18 @@
 
 import UIKit
 import AVFoundation
+import ContactsUI
 
 class HomeVC: UIViewController {
     
     // MARK: - Properties
-    @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var currentAAStepValueLabel: UILabel!
     @IBOutlet weak var currentAANameLabel: UILabel!
     @IBOutlet weak var aaPickerView: UIPickerView!
+    @IBOutlet weak var logoContactButton: UIButton!
     
-    
-    
-    
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
     //TextFields
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var sponsorsNameTextField: UITextField!
@@ -27,11 +27,13 @@ class HomeVC: UIViewController {
     @IBOutlet weak var sponsorsEmailTextField: UITextField!
     
     //Activity Indicator
-    @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
-    
-    //    @IBOutlet var tapGestureOutlet: UITapGestureRecognizer!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicatorView: UIView!
     
     var editBool = false
+    var isContactBookVisable = false
+    let phoneBookImage = UIImage(named: "phoneBook")
+    let locationLogoImage = UIImage(named: "LocationLogo")
     
     let networkErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Unable able to Save Entry", alertMessage: "The Internet connection appears to be offline", dismissActionTitle: "OK")
     let fetchErrorNotif  = AlertController.presentAlertControllerWith(alertTitle: "Unable to load data", alertMessage: "The Internet connection appears to be offline", dismissActionTitle: "OK")
@@ -40,6 +42,13 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.logoContactButton.isUserInteractionEnabled = false
+        self.navigationController?.view.backgroundColor = .clear
+        
+        //activity indicator
+        self.activityIndicatorView.isHidden = true
+        self.cancelButton.isEnabled = false
+        self.cancelButton.tintColor = .clear
         //Update AA Labels
         updateCurrentAAStep()
         
@@ -61,17 +70,34 @@ class HomeVC: UIViewController {
         self.sponsorsPhoneNumberTextField.returnKeyType = .next
         self.sponsorsEmailTextField.returnKeyType = .done
         
+        self.userNameTextField.layer.cornerRadius = 4
+        self.sponsorsNameTextField.layer.cornerRadius = 4
+        self.sponsorsPhoneNumberTextField.layer.cornerRadius = 4
+        self.sponsorsEmailTextField.layer.cornerRadius = 4
+        
+        
+        self.sponsorsNameTextField.layer.cornerRadius = 4
+        self.sponsorsPhoneNumberTextField.layer.cornerRadius = 4
+        self.sponsorsEmailTextField.layer.cornerRadius = 4
+        
+        textFieldsTextOffWhiteColor()
+        
+        //Place holder
+        userNameTextField.attributedPlaceholder = NSAttributedString(string: "Your Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        
+        sponsorsNameTextField.attributedPlaceholder = NSAttributedString(string: "Support Person's Name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
+        
+        sponsorsPhoneNumberTextField.attributedPlaceholder = NSAttributedString(string: "Support Person's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
+        
+        
+        sponsorsEmailTextField.attributedPlaceholder = NSAttributedString(string: "Support  Peronn's name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
         self.userNameTextField.autocorrectionType = .no
         self.sponsorsNameTextField.autocorrectionType = .no
         self.sponsorsPhoneNumberTextField.autocorrectionType = .no
         self.sponsorsEmailTextField.autocorrectionType = .no
-        //Keyboard
-        //        self.view.endEditing(true)
         
-        //Activity Spinner
-        //        self.activityIndicatorOutlet.isHidden = false
-        self.activityIndicatorOutlet.startAnimating()
+        self.activityIndicator.startAnimating()
         
         // Picker View
         self.aaPickerView.isHidden = true
@@ -88,8 +114,7 @@ class HomeVC: UIViewController {
         UserController.shared.fetchCurrentUser { (success, error) in
             if success {
                 DispatchQueue.main.async {
-                    self.activityIndicatorOutlet.isHidden = true
-                    self.activityIndicatorOutlet.stopAnimating()
+                    self.activityIndicator.stopAnimating()
                     self.updateCurrentAAStep()
                     self.updateViews()
                 }
@@ -97,8 +122,8 @@ class HomeVC: UIViewController {
             } else {
                 
                 DispatchQueue.main.async {
-                    self.activityIndicatorOutlet.stopAnimating()
-                    self.activityIndicatorOutlet.isHidden = true
+                    self.activityIndicator.stopAnimating()
+                    
                     AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                     // prseent UI Alert expalining error
                     self.present(self.fetchErrorNotif, animated: true, completion: nil)
@@ -110,9 +135,34 @@ class HomeVC: UIViewController {
         }
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
-        //
+        print("viewWillDisappear")
+        // There's a glitch with this app
+//        editBool = false
+//        textFieldsInvisable()
+//        textFieldsInactive()
+//        self.cancelButton.isEnabled = false
+//        self.cancelButton.tintColor = .clear
+//        self.aaPickerView.alpha = 0.0
+//        self.aaPickerView.isHidden = true
+//        textFieldsTextOffWhiteColor()
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped(_:)))
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("viewDidDisappear")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("viewWillAppear")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("viewDidAppear")
     }
     
     @objc func hideKeyboard() {
@@ -130,23 +180,34 @@ class HomeVC: UIViewController {
         currentAAStepValueLabel.text = "\(loggedInUser.aaStep)"
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    // MARK: - Actions
+    @IBAction func contactButtonTapped(_ sender: Any) {
+        showContcts()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        // NOTE: - In order to prevent the onboarding walk through from coming up again
-        //        if UserDefaults.standard.bool(forKey: "hasViewedWalkthrough") {
-        //            return
-        //        }
-        //
-        //        // Will take you to the onboarding storyboard if user defaults hasnt been hit above
-        //        let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
-        //
-        //        if let walkThroughVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughVC") as? WalkThroughVC {
-        //            present(walkThroughVC, animated: true, completion: nil)
-        //        }
+    @IBAction func cancelButtonTapped(_ sender: Any) {
+        self.logoContactButton.isUserInteractionEnabled = false
+        textFieldsInvisable()
+        textFieldsInactive()
+        self.cancelButton.isEnabled = false
+        self.cancelButton.tintColor = .clear
+        UIView.animate(withDuration: 0.6, delay: 0.0, options: .curveEaseIn, animations: {
+            self.aaPickerView.alpha = 0.0
+            self.logoContactButton.alpha = 0
+            
+        }) { (succes) in
+            if succes {
+                self.aaPickerView.isHidden = true
+                print("\nCase True animation compeleted\n")
+            }
+        }
+        
+        print("\nEdit Button Tapped")
+        
+        // Edit Button Bool
+        editBool = false
+        textFieldsTextOffWhiteColor()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped(_:)))
     }
     
     func textFieldsInactive() {
@@ -188,13 +249,37 @@ class HomeVC: UIViewController {
         sponsorsEmailTextField.borderStyle = .none
     }
     
+    func textFieldsTextBlackColor() {
+        //Text Field Text Color
+        self.userNameTextField.textColor = .black
+        self.sponsorsNameTextField.textColor = .black
+        self.sponsorsPhoneNumberTextField.textColor = .black
+        self.sponsorsEmailTextField.textColor = .black
+        
+    }
+    
+    func textFieldsTextOffWhiteColor() {
+        //Text Field Text Color
+        self.userNameTextField.textColor = MyColor.offWhite.value
+        self.sponsorsNameTextField.textColor = MyColor.offWhite.value
+        self.sponsorsPhoneNumberTextField.textColor = MyColor.offWhite.value
+        self.sponsorsEmailTextField.textColor = MyColor.offWhite.value
+        
+    }
     
     @IBAction func editButtonTapped(_ sender: Any) {
-        
         switch editBool {
         case false:
+            
             // Edit Button
-            editButton.setTitle("Done", for: .normal)
+            self.logoToPhoneBook()
+            
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(editButtonTapped(_:)))
+            
+            textFieldsTextBlackColor()
+            
+            self.cancelButton.isEnabled = true
+            self.cancelButton.tintColor = nil
             
             // Picker View
             self.aaPickerView.alpha = 0
@@ -223,8 +308,14 @@ class HomeVC: UIViewController {
             editBool = true
         case true:
             //Textfield
+            
+            self.phoneBookToLogo()
+            
+            self.cancelButton.isEnabled = false
+            self.cancelButton.tintColor = .clear
             textFieldsInvisable()
             textFieldsInactive()
+            textFieldsTextOffWhiteColor()
             
             guard let userName = userNameTextField.text,
                 let sponsorName = sponsorsNameTextField.text,
@@ -247,8 +338,8 @@ class HomeVC: UIViewController {
                         // prseent UI Alert expalining error
                         DispatchQueue.main.async {
                             self.present(self.networkErrorNotif, animated: true, completion: nil)
-                            print("💀error with the upating the data")
                         }
+                        print("💀error with the upating the data")
                         return
                     }
                 }
@@ -273,11 +364,7 @@ class HomeVC: UIViewController {
             // Text Fields
             textFieldsInactive()
             
-            // pass the Picker View Data to the Step Label
-            
-            
-            // Edit Button
-            editButton.setTitle("Edit", for: .normal)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped(_:)))
             
             // Picker View
             UIView.animate(withDuration: 0.6, delay: 0.0, options: .curveEaseIn, animations: {
@@ -299,13 +386,13 @@ class HomeVC: UIViewController {
     
     func updateCurrentAAStep() {
         if let curentAAStepvalue = currentAAStepValueLabel.text {
-        if Int(curentAAStepvalue) == 0 {
-            currentAAStepValueLabel.isHidden = true
-            currentAANameLabel.text = "Currently Not in AA"
+            if Int(curentAAStepvalue) == 0 {
+                currentAAStepValueLabel.isHidden = true
+                currentAANameLabel.text = "Currently Not in AA"
             }
         } else {
             currentAAStepValueLabel.isHidden = false
-        currentAANameLabel.text = "Current AA Step"
+            currentAANameLabel.text = "Current AA Step"
         }
     }
     
@@ -382,4 +469,70 @@ extension HomeVC: UITextFieldDelegate {
 
 extension HomeVC {
     
+    func logoToPhoneBook() {
+        UIView.animateKeyframes(withDuration: 1.5, delay: 0.0, options: [], animations: {
+            //Transition Logo to Contact book icon
+            
+            self.logoContactButton.alpha = 0
+            
+        }) { (success) in
+            UIView.animate(withDuration: 1.5, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 2, options: [.curveEaseIn], animations: {
+                
+                self.logoContactButton.alpha = 1
+                self.logoContactButton.setImage(self.phoneBookImage, for: .normal)
+                
+            }, completion: { (success) in
+                self.logoContactButton.isUserInteractionEnabled = true
+            })
+        }
+    }
+    
+    func phoneBookToLogo() {
+        self.logoContactButton.isUserInteractionEnabled = false
+        UIView.animateKeyframes(withDuration: 1, delay: 0.0, options: [], animations: {
+            //Transition Logo to Contact book icon
+            self.logoContactButton.alpha = 0
+            
+        }) { (success) in
+            UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 2, options: [.curveEaseIn], animations: {
+                self.logoContactButton.alpha = 1
+                self.logoContactButton.setImage(self.locationLogoImage, for: .normal)
+                
+            }, completion: { (success) in
+            })
+        }
+    }
 }
+
+
+extension HomeVC: CNContactPickerDelegate {
+    
+    func showContcts() {
+        let picker = CNContactPickerViewController()
+        picker.delegate = self
+        picker.predicateForEnablingContact = NSPredicate(format: "emailAddresses.@count > 0")
+        picker.predicateForSelectionOfContact = NSPredicate(format: "emailAddresses.@count == 1")
+        
+        present(picker, animated: true, completion: nil)
+    }
+    
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+        
+        for data in contact.phoneNumbers {
+            let contactInfo = data.value
+            sponsorsPhoneNumberTextField.text = contactInfo.stringValue
+        }
+        
+        let sponsorsName = contact.givenName
+        let sponsorsFamilyName = contact.familyName
+        
+        sponsorsNameTextField.text = "\(sponsorsName) \(sponsorsFamilyName)"
+        
+        let email = contact.emailAddresses.first
+        
+        let emailString = email?.value
+        
+        sponsorsEmailTextField.text = "\(emailString ?? "")"
+    }
+}
+
