@@ -32,20 +32,20 @@ class LocationTVC: UITableViewController {
         super.viewDidLoad()
 
         
-
-//        tableView.backgroundColor = .clear
+       view.setGradientToTableView(tableView: tableView, UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
-        //Test Print
-        print("🍁🍁Number of locations when view did load loaded: \(loction.count)🍁🍁")
+        
+//          tableView.addVerticalGradientLayer(topColor: , bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+//
+        //
+        
+        
         activityViewOutlet.isHidden = true
         
         //Activity Spinner
         DispatchQueue.main.async {
             self.activityIndicatorOutlet.startAnimating()
         }
-        
-        //Background UI
-//        view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
         //Fetch from CK
         LocationController.shared.fetchItemsFor { (location, _) in
@@ -90,7 +90,6 @@ class LocationTVC: UITableViewController {
 
         
         return LocationController.shared.locations.count
-
     }
     
     
@@ -171,7 +170,8 @@ class LocationTVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = .clear
+       cell.backgroundColor = .clear
+        
     }
 }
 

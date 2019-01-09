@@ -12,8 +12,6 @@ import CoreLocation
 
 class NotificationController {
     
-    
-    
     static func cancelLocalNotificationWith(identifier: String) {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
     }
@@ -34,19 +32,15 @@ class NotificationController {
         // Content of the message
         let content = UNMutableNotificationContent()
         content.title = contentTitle
-//    "\(String(describing: locationTitleTextField.text)) has been crossed"
         content.body = contentBody
         content.badge = 1
         content.categoryIdentifier = LocationConstants.notifCatergoryKey
         
         let region = circularRegion
-//            CLCircularRegion(center: coordinate!, radius: desiredRadius, identifier: UUID().uuidString)
         
         region.notifyOnEntry = true
         
         let trigger = UNLocationNotificationTrigger(region: region, repeats: true)
-        
-        
         
         let request = UNNotificationRequest(identifier: notifIdentifier, content: content, trigger: trigger)
         
@@ -60,5 +54,4 @@ class NotificationController {
         }
         
     }
-    
 }

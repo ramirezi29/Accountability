@@ -16,23 +16,19 @@ class NotesTVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        view.setGradientToTableView(tableView: tableView, UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        
         //Delegates
         tableView.delegate = self
         tableView.dataSource = self
-        
-        //Table view
-//        tableView.backgroundColor = .clear 
-        
-        //background Color
-//        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255,green: 213/255, blue: 214/255, alpha: 1.0))
+
         
         // MARK: - Fetch
         guard let folder = folder else {
             print("\n'folder' in NotesTVC was Nil or something and the fetch func failed")
             return
         }
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

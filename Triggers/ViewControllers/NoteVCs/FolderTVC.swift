@@ -22,6 +22,7 @@ class FolderTVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.setGradientToTableView(tableView: tableView, UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         activityView.isHidden = true
         
         DispatchQueue.main.async {
@@ -30,8 +31,8 @@ class FolderTVC: UITableViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-//        tableView.backgroundColor = .clear
-//        loadViewBackGround()
+        
+        
         
         FolderController.shared.fetchItemsFor { (folder, error) in
             

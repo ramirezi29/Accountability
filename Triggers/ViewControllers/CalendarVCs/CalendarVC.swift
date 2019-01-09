@@ -17,50 +17,48 @@ enum MyTheme {
 
 class CalendarVC: UIViewController, UINavigationBarDelegate {
     
-    @IBOutlet weak var shareButton: UIBarButtonItem!
-    
+    // MARK: - IBoutlets
+    @IBOutlet weak var activityIndicatorView: UIView!
+    @IBOutlet weak var sobrietySaveButton: UIButton!
+    @IBOutlet var sobrietyDateView: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var daysSoberLabel: UILabel!
-    //Use for future versions
-    @IBOutlet weak var themeButton: UIBarButtonItem!
-    @IBOutlet weak var daysSoberCountLabel: UILabel!
-    
-    @IBOutlet weak var restButton: UIButton!
-    @IBAction func themeButtonTapped(_ sender: UIBarButtonItem) {
-        if theme == .dark {
-            sender.title = "Dark"
-            theme = .light
-            Style.themeLight()
-            
-        } else {
-            sender.title = "Light"
-            theme = .dark
-            Style.themeDark()
-            
-        }
-        self.view.backgroundColor=Style.bgColor
-        calenderView.changeTheme()
-    }
+    @IBOutlet weak var soberSinceLabel: UILabel!
+    @IBOutlet weak var soberSinceDateValueLabel: UILabel!
+    @IBOutlet weak var sobrietyDatePicker: UIDatePicker!
+    @IBOutlet weak var numberOfDaysSoberLabel: UILabel!
+    @IBOutlet weak var numberOfDaysSoberValueLabel: UILabel!
     
     var theme = MyTheme.dark
     var user: User?
+    private let localeUSA = "en_US"
+    private let sobrietyUserDefaultKey = "sobrietyUserDefaultKey"
     
+    var sobrietyDate: Date? {
+        return UserDefaults.standard.value(forKey: sobrietyUserDefaultKey) as? Date
+    }
+    
+    // MARK: - Life Cyles
     override func viewDidLoad() {
         
+        self.activityIndicatorView.isHidden = true 
+        updateViewsRelatedToSobrietyItems()
+        
+        sobrietyDateView.layer.cornerRadius = 15
+        soberSinceDateValueLabel.numberOfLines = 0
+        modifiyDatePicker()
+    
         self.activityIndicator.isHidden = true 
         
-        daysSoberCountLabel.numberOfLines = 0
-        
+        soberSinceDateValueLabel.numberOfLines = 0
         
         super.viewDidLoad()
-        //        self.title = "My Calender"
-        self.navigationController?.navigationBar.isTranslucent = false
         
-        updateSoberDate()
+        view.addSubview(calenderView)
         
         self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
-        view.addSubview(calenderView)
+        updateLabelUI()
+        
         calenderView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
         calenderView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12).isActive = true
         calenderView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 12).isActive = true
@@ -84,20 +82,59 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         return v
     }()
     
-    func updateSoberDate() {
+    
+    func updateViewsRelatedToSobrietyItems() {
         
-        let today = Date()
-        //        let currentDay = NSDateComponents.current
-        let nextDay = today.add(days: 1)
+        guard let sobrietyDate = sobrietyDate else { return }
         
-        //        daysSoberCountLabel.text = "\(nextDay?.compare(today))"
-        daysSoberCountLabel.text = "\(nextDay)"
-        print("\nDays Sober Count:\(daysSoberCountLabel.text)")
+        let userCalendar = Calendar.current
+        
+        let dateComponents = userCalendar.dateComponents([.day], from: sobrietyDate, to: Date())
+        
+        guard let numberOfDaysSober = dateComponents.day else { return }
+        
+        numberOfDaysSoberValueLabel.text = "\(numberOfDaysSober)"
+        
+        let dateFormater = DateFormatter()
+        dateFormater.locale = Locale(identifier: localeUSA)
+        dateFormater.timeStyle = .none
+        dateFormater.dateStyle = .medium
+        let formattedSobrietyDate = dateFormater.string(from: sobrietyDate)
+        
+        soberSinceDateValueLabel.text = formattedSobrietyDate
+        
     }
     
     // MARK: - Actions
+    
+    @IBAction func sobrietySaveButtonTapped(_ sender: IRButton) {
+        //TestPrint
+        print("\nSave Button Tapped")
+        
+        UserDefaults.standard.setValue(sobrietyDatePicker.date, forKey: sobrietyUserDefaultKey)
+        
+        //Add a second user defaults to record/save the
+        
+        
+        //set the date to the label
+        
+        
+        updateViewsRelatedToSobrietyItems()
+        
+        animateOutOfSobrietyView()
+        
+    }
+    
+    
+    @IBAction func editButtonTapped(_ sender: Any) {
+        print("Edit buton tapped")
+        DispatchQueue.main.async {
+            self.animateInSobrietyView()
+        }
+    }
+
     @IBAction func checkInButtonTapped(_ sender: Any) {
-        let checkInAlertController = AlertController.presentAlertControllerWith(alertTitle: "Check in", alertMessage: "Check in with your accountability person", dismissActionTitle: "Cancel")
+        let checkInAlertController = AlertController.presentActionSheetAlertControllerWith(alertTitle: nil, alertMessage: nil, dismissActionTitle: "Cancel")
         
         let composeEmailAction = UIAlertAction(title: "Email \(user?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
             self.composeEmail()
@@ -113,21 +150,14 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         
         [composeEmailAction, phoneCallAction, composeTextAction].forEach { checkInAlertController.addAction($0)}
         
-        present(checkInAlertController, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            self.present(checkInAlertController, animated: true, completion: nil)
+        }
     }
-    
-    @IBAction func shareButtonTapped(_ sender: Any) {
-    }
-    
-    @IBAction func restButtonTapped(_ sender: UIButton) {
-    }
-    @IBAction func resetButtonTapped(_ sender: Any) {
-        //Test Print
-        print("current days sober: \(daysSoberCountLabel.description)")
-        daysSoberCountLabel.text = "\(0)"
-    }
-    
 }
+
+
+
 
 // MARK: - Email
 extension CalendarVC: MFMailComposeViewControllerDelegate {
@@ -143,15 +173,17 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
             
             // DO some UI to show that an email cant be sent
             let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing E-Mail", alertMessage: "Your device does not support this feature", dismissActionTitle: "OK")
-            present(notMailCompatable, animated: true) {
+            
                 DispatchQueue.main.async {
+                     self.present(notMailCompatable, animated: true)
                     self.activityIndicator.isHidden = true
                     self.activityIndicator.stopAnimating()
                     
                 }
-            }
+            
             return
         }
+        
         fetchCurrentuser()
         
         let composeEmail = MFMailComposeViewController()
@@ -161,17 +193,18 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
         composeEmail.setMessageBody("Hi there, I just wanted to check in and give you a quick update.", isHTML: false)
         
         DispatchQueue.main.async {
-            self.present(composeEmail, animated: true)
             self.activityIndicator.isHidden = true
             self.activityIndicator.stopAnimating()
-            
-            }
+            self.present(composeEmail, animated: true)
         }
+    }
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         
         if let _ = error {
-            controller.dismiss(animated: true, completion: nil)
+            DispatchQueue.main.async {
+                controller.dismiss(animated: true, completion: nil)
+            }
             return
         }
         
@@ -182,7 +215,7 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
             print("🐦🐦🐦faled")
             DispatchQueue.main.async {
                 self.activityIndicator.isHidden = true
-               self.activityIndicator.stopAnimating()
+                self.activityIndicator.stopAnimating()
             }
         case .saved:
             print("🐦🐦🐦mail savied")
@@ -211,7 +244,9 @@ extension CalendarVC: MFMessageComposeViewControllerDelegate {
         guard MFMessageComposeViewController.canSendText() else {
             // DO some UI to show that an email cant be sent
             let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing Text Message", alertMessage: "At this time, your device does not support this feature", dismissActionTitle: "OK")
-            present(notMailCompatable, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                self.present(notMailCompatable, animated: true, completion: nil)
+            }
             return
         }
         
@@ -278,15 +313,72 @@ extension CalendarVC {
             if success {
                 guard let loggedInUser = UserController.shared.loggedInUser
                     else { return }
+                //Test print
                 print(loggedInUser.userName)
-                print(loggedInUser.sponsorName)
-                print(loggedInUser.sponsorTelephoneNumber)
-                print(loggedInUser.sponsorEmail)
                 print("\(loggedInUser.aaStep)")
-                
             } else {
                 print("\nUnable to fetch current user\n")
             }
         }
     }
 }
+
+extension CalendarVC {
+    func animateOutOfSobrietyView() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.sobrietyDateView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.sobrietyDateView.alpha = 0
+            //            self.visualBlurrrView.effect = nil
+        }) { (success: Bool) in
+            self.sobrietyDateView.removeFromSuperview()
+        }
+    }
+    
+    func animateInSobrietyView() {
+        self.view.addSubview(self.sobrietyDateView)
+        self.sobrietyDateView.center = self.view.center
+        
+        self.sobrietyDateView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        self.sobrietyDateView.alpha = 0
+        
+        UIView.animate(withDuration: 0.4) {
+            self.sobrietyDateView.alpha = 1
+            self.sobrietyDateView.transform = CGAffineTransform.identity
+        }
+    }
+    
+    func modifiyDatePicker() {
+        sobrietyDatePicker.datePickerMode = .date
+    }
+}
+
+extension CalendarVC {
+    func updateLabelUI() {
+//        soberSinceLabel.font = MyFont.sfDisplayMedium43.value
+//        soberSinceDateValueLabel.font = MyFont.sfDisplayMedium43.value
+//        numberOfDaysSoberLabel.font = MyFont.sFMedium17.value
+//        numberOfDaysSoberValueLabel.font = MyFont.sFMedium17.value
+    }
+}
+
+/*
+    self.navigationController?.navigationBar.isTranslucent = false 
+ 
+ //Future Versions will have themes
+ //    @IBAction func themeButtonTapped(_ sender: UIBarButtonItem) {
+ //        if theme == .dark {
+ //            sender.title = "Dark"
+ //            theme = .light
+ //            Style.themeLight()
+ //
+ //        } else {
+ //            sender.title = "Light"
+ //            theme = .dark
+ //            Style.themeDark()
+ //
+ //        }
+ //        self.view.backgroundColor=Style.bgColor
+ //        calenderView.changeTheme()
+ //    }
+ 
+ */

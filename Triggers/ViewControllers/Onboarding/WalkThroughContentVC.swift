@@ -44,11 +44,11 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     
     private let locationManger = CLLocationManager()
     private let center = UNUserNotificationCenter.current()
-    private let devMountainLatitude = 40.761806
-    private let devMountainLongitude = -111.890533
+    private let londonLatitude = 51.50998
+    private let londonLongitude = -0.1337
     private let desiredRadius = 60.96
-    private let devMntID = "devMntID"
-    private let devMntRequestID = "devMntRequestID"
+    private let londonID = "devMntID"
+    private let londonRequestID = "devMntRequestID"
     var index = 0
     var headLine = ""
     var subHeadLine = ""
@@ -61,6 +61,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     // Bools and Keys to for UIAlert
     var disableRestrictedAlertBool = false
     var disableDeniedAlertBool = false
+    private var permissionInquired = false
     private let deniedBoolKey = "disabledDeniedAlertBool"
     private let restrictedBoolKey = "disabledRestrictedAlertBool"
     private let loggedInUserExistKey = "loggedInUserExist"
@@ -70,33 +71,25 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        //Delegates
-        
-        //Save realted delegate
-        
-        
         //location
         locationManger.delegate = self
         
-        let center = CLLocationCoordinate2D(latitude: devMountainLatitude, longitude: devMountainLongitude)
+        let center = CLLocationCoordinate2D(latitude: londonLatitude, longitude: londonLongitude)
         
-        let utahHousingActualregion = CLCircularRegion(center: center, radius: desiredRadius, identifier: devMntID)
+        let devMountainRegion = CLCircularRegion(center: center, radius: desiredRadius, identifier: londonID)
         
-        locationManger.startMonitoring(for: utahHousingActualregion)
+        locationManger.startMonitoring(for: devMountainRegion)
         
         locationManger.desiredAccuracy = kCLLocationAccuracyBest
         
         locationManger.distanceFilter = 10
         
-        //updateViews
         
+        //updateViews
         UserController.shared.fetchCurrentUser { (success, _) in
             if success {
                 if ((UserController.shared.loggedInUser) != nil) || UserController.shared.loggedInUser?.ckRecordID != nil {
                     self.loggedInUserExist = true
-                   
-                    
                     
                     print("User was fetched successfully with CKRECORD: \(String(describing: self.user?.appleUserRef)) and \(String(describing: UserController.shared.loggedInUser?.sponsorName)) and loggedInUserExist is \(String(describing: self.loggedInUserExist))")
                 }
@@ -104,11 +97,13 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
                 print("No User CKR exists ")
                 self.loggedInUserExist = false
             }
-             UserDefaults.standard.set(self.loggedInUserExist, forKey: self.loggedInUserExistKey)
+            UserDefaults.standard.set(self.loggedInUserExist, forKey: self.loggedInUserExistKey)
         }
         
         loadLoggedUserDefaults()
+        
         print("\(String(describing: self.loggedInUserExist))")
+        
         //Text Fields
         hideTextFields()
         
@@ -174,23 +169,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             self.hideTextFields()
             self.contactButton.isHidden = true
             
-            
-            //            //Fetch the user
-            //            UserController.shared.fetchCurrentUser { (success, error) in
-            //                if success {
-            //                    DispatchQueue.main.async {
-            //                        // UI Stuff
-            //                    }
-            //
-            //                } else {
-            //
-            //                    DispatchQueue.main.async {
-            //                        //UI Stuff
-            //                    }
-            //                    print("\n🤯 Error fechign current user Data \n")
-            //                    return
-            //                }
-        //            }
         case 4:
             
             //Test print
@@ -198,12 +176,11 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             
             print("\(String(describing: self.loggedInUserExist)) and user defautls has it as \(UserDefaults.standard.bool(forKey: loggedInUserExistKey))")
             
-            if loggedInUserExist == false {
+            if loggedInUserExist == false || UserController.shared.loggedInUser == nil {
                 self.textFieldAlphaZero()
                 self.showTextFields()
-                
+
                 let tapGesture = UITapGestureRecognizer(target: self, action: #selector(WalkThroughContentVC.hideKeyboard))
-                
                 tapGesture.cancelsTouchesInView = true
                 self.view.addGestureRecognizer(tapGesture)
                 
@@ -236,7 +213,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         loggedInUserExist = UserDefaults.standard.bool(forKey: loggedInUserExistKey)
     }
     
-    
     @objc func hideKeyboard() {
         self.view.endEditing(true)
     }
@@ -253,7 +229,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             aaStepTextField.text = "\(loggedInUser.aaStep)"
         }
     }
-    
     
     func textFieldsDisappearAnimation() {
         UIView.animateKeyframes(withDuration: 0.9, delay: 0.1, options: [], animations: {
@@ -291,6 +266,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     
     func textFieldAppearAnimation() {
         print("🍁🍁🍁🍁🍁text field appear animation was called )")
+        
+        //If there is already a user update the views
+        // NOTE: - This feature can be updated
         self.updateViews()
         UIView.animateKeyframes(withDuration: 2.0, delay: 0.0, options: [], animations: {
             self.userNameTextField.alpha = 0.5
@@ -305,28 +283,24 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             self.sponsorsNameTextField.alpha = 0.5
         }) { (sucess) in
             self.sponsorsNameTextField.isUserInteractionEnabled = true
-            //            print("\ns🚢 Sponsor Name Text Field was successfuly shown to the User in index 6 \n")
         }
         
         UIView.animateKeyframes(withDuration: 2.0, delay: 0.4, options: [], animations: {
             self.sponsorsPhoneNumberTextField.alpha = 0.5
         }) { (success) in
             self.sponsorsPhoneNumberTextField.isUserInteractionEnabled = true
-            //            print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
         }
         
         UIView.animateKeyframes(withDuration: 2.0, delay: 0.6, options: [], animations: {
             self.sponsorsEmailAddressTextField.alpha = 0.5
         }) { (success) in
             self.sponsorsEmailAddressTextField.isUserInteractionEnabled = true
-            //            print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
         }
         
         UIView.animateKeyframes(withDuration: 2.0, delay: 0.8, options: [], animations: {
             self.aaStepTextField.alpha = 0.5
         }) { (success) in
             self.aaStepTextField.isUserInteractionEnabled = true
-            //            print("\ns🚢 Sponsor NameTextField was successfuly shown to the User in index 6 \n")
         }
     }
     
@@ -338,12 +312,13 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             if granted {
                 print("Permission for notification was granted by the user")
                 UNUserNotificationCenter.current().delegate = self
-                
             }
+            
             // Access granted
             if let error = error {
                 print("There was an error in \(#function) ; (error) ; \(error.localizedDescription)")
             }
+            
             // Access to use notification was denied
             if !granted {
                 print("Notification Access Denied")
@@ -352,7 +327,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             switch CLLocationManager.authorizationStatus() {
                 
             case .notDetermined:
-                //                self.locationManger.requestWhenInUseAuthorization()
+                //self.locationManger.requestWhenInUseAuthorization()
                 self.locationManger.requestAlwaysAuthorization()
                 
             default:
@@ -377,22 +352,14 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
                 
                 UserDefaults.standard.set(disableRestrictedAlertBool, forKey: restrictedBoolKey)
                 
-                //NSLocalizedString is preffered in this case, language does not switch on .localize
-                let restrictedAlertController = UIAlertController(title: NSString.localizedUserNotificationString(forKey: "locationServiceRestrictedAlertTitle", arguments: []), message: NSString.localizedUserNotificationString(forKey: "locationServiceRestrictedAlertMessage", arguments: []), preferredStyle: .alert)
-                //UIAlertController(title:
-                //                    NSLocalizedString("locationServiceRestrictedAlertTitle", comment: ""), message: NSLocalizedString("locationServiceRestrictedAlertMessage", comment: ""), preferredStyle: .alert)
-                //dismissTitle
-                let dismissAction = UIAlertAction(title: NSString.localizedUserNotificationString(forKey: "dismissLocationActionTitle", arguments: []), style: .cancel) { (alert) in
-                    //                    self.presentMainView()
+                
+                let restrictedAlertController = AlertController.presentAlertControllerWith(alertTitle: "Location Services Denied", alertMessage: "It seems your device does not support location services", dismissActionTitle: "OK")
+                
+                DispatchQueue.main.async {
+                    self.present(restrictedAlertController, animated: true)
                 }
-                
-                [dismissAction].forEach { restrictedAlertController.addAction($0)}
-                
-                present(restrictedAlertController, animated: true)
             }
-            //            else {
-            //                presentMainView()
-            //            }
+            
             print("\nUsers location is restricted")
             
         case .denied:
@@ -402,31 +369,22 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
                 
                 UserDefaults.standard.set(disableDeniedAlertBool, forKey: deniedBoolKey)
                 
-                let deniedAlertController = UIAlertController(title: NSString.localizedUserNotificationString(forKey: "locationServiceDeniedAlertTitle", arguments: []), message: NSString.localizedUserNotificationString(forKey: "locationServiceDeniedAlertMessage", arguments: []), preferredStyle: .alert)
+                let deniedAlertController = AlertController.presentAlertControllerWith(alertTitle: "To beter serve you allow location services", alertMessage: "Go to your device's settings and allow location service", dismissActionTitle: "OK")
                 
-                //                    UIAlertController(title: NSLocalizedString("locationServiceDeniedAlertTitle", comment: ""), message: NSLocalizedString("locationServiceDeniedAlertMessage", comment: ""), preferredStyle: .alert)
-                
-                let dismissAction = UIAlertAction(title: NSString.localizedUserNotificationString(forKey: "dismissLocationActionTitle", arguments: []), style: .cancel) { (alert) in
-                    //                    self.presentMainView()
+                DispatchQueue.main.async {
+                    
+                    self.present(deniedAlertController, animated: true)
                 }
-                
-                [dismissAction].forEach { deniedAlertController.addAction($0)}
-                
-                present(deniedAlertController, animated: true)
             }
-            //            else {
-            //                presentMainView()
-            //            }
+            
             print("\nUser denied access to use their location\n")
             
         case .authorizedWhenInUse:
             print("\nuser granted authorizedWhenInUse\n")
             
-            //            presentMainView()
-            
         case .authorizedAlways:
             print("\nuser selected authorizedAlways\n")
-        //            presentMainView()
+            
         default: break
         }
     }
@@ -465,7 +423,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         let textField = UITextField()
         //Test Purposes
         //textField.text = "🐠🐠🐠🐠"
-        
         textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
@@ -478,7 +435,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         let textField = UITextField()
         //Test Purposes
         //textField.text = "☔️☔️☔️☔️"
-        
         textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
@@ -492,7 +448,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         //Test Purposes
         //textField.text = "🍎🍎🍎🍎"
-        
         textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Email Address", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
@@ -504,7 +459,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         let textField = UITextField()
         //Test Purposes
-        //textField.text = "12"
+        //textField.text = "99"
         textField.backgroundColor = MyColor.offWhiteLowAlpha.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "If in treatment enter current Step", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
@@ -518,12 +473,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         NSLayoutConstraint.activate([
             contactButton.leadingAnchor.constraint(equalTo: headLineLabel.trailingAnchor, constant: -60),
-            
             contactButton.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: 0),
-            //
             contactButton.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 35),
-            //
-            //            contactButton.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: 0)
             
             ])
     }
@@ -596,23 +547,20 @@ extension WalkThroughContentVC {
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         //NOTE: - Uncomment in order for testing purposes
-        //print("🚀🚀🌎 didEnterRegion: User Entered location🌎🚀🚀")
-        
-        
-        
+        print("🚀🚀🌎 didEnterRegion: User Entered location🌎🚀🚀")
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         //NOTE: - Uncomment in order for testing purposes
-        //print("🌎 didStartMonitoringFor: The monitored regions are: \(manager.monitoredRegions)")
+        print("🌎 didStartMonitoringFor: The monitored regions are: \(manager.monitoredRegions)")
         
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         //NOTE: - Uncomment in order for testing purposes
-        //let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
         //uncomment in order for testing purposes
-        //print("🌎 didUpdateLocations: locations = \(locValue.latitude) \(locValue.longitude)")
+        print("🌎 didUpdateLocations: locations = \(locValue.latitude) \(locValue.longitude)")
     }
 }
 
@@ -622,7 +570,6 @@ extension WalkThroughContentVC : UITextFieldDelegate {
         
         if textField.text!.count + 1 >= 2 {
             delegate?.validUserNameEntered(username: string, isHidden: false)
-            //Note sure if this is needed, test
             return true
         }
         
@@ -750,58 +697,6 @@ extension WalkThroughContentVC: CNContactPickerDelegate {
     }
 }
 
-/*
- if let imageData = contact.imageData {
- let image = UIImage(data: imageData)
- 
- print("image: \(image)")
- }
- */
-
-extension WalkThroughContentVC {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        /*Test print*/
-        print("\nNotification item response tap: \(response.notification.request.identifier)")
-        
-        let sponsorName = user?.sponsorName ?? "Support Person"
-        let sponsorPhoneNumber = user?.sponsorTelephoneNumber ?? "18006624357"
-        let sponosrEmail = user?.sponsorEmail ?? ""
-        let sponsorText = user?.sponsorTelephoneNumber ?? "“741741" //include “Listen” in text message
-        
-        defer {
-            completionHandler()
-        }
-        //https://www.justthinktwice.gov/facts/what-addiction
-        switch response.actionIdentifier {
-            //The action that indicates the user explicitly dismissed the notification interface.
-        //This action is delivered only if the notification’s category object was configured with the customDismissAction option.
-        case UNNotificationDismissActionIdentifier:
-            print(" 'X' was tapped")
-            // Do something in order to record that the geo fence was crossed but the notification was dismissed
-            
-        //An action that indicates the user opened the app from the notification interface.
-        case UNNotificationDefaultActionIdentifier:
-            print("use")
-            
-        case LocationConstants.telephoneSponsorActionKey:
-            
-            print("call the sponsor: \(sponsorName), \(sponsorPhoneNumber) ")
-            
-        case LocationConstants.emailSponsorActionKey:
-            print("email \(sponosrEmail)")
-            showMailComposer()
-            
-        case LocationConstants.textMessageSponsorActionKey:
-            print("Text: \(sponsorName), \(sponsorText)")
-            
-            
-        default:
-            break
-        }
-        
-    }
-}
-
 extension WalkThroughContentVC {
     func saveInfoToCloudKit(completion: @escaping (Bool) -> Void) {
         if loggedInUserExist == true {return}
@@ -829,52 +724,20 @@ extension WalkThroughContentVC {
     }
 }
 
-extension WalkThroughContentVC: MFMailComposeViewControllerDelegate {
+
+extension WalkThroughContentVC {
     
-    
-    func showMailComposer() {
-        let loggedInUser = UserController.shared.loggedInUser
-        
-        let locationName = location?.locationTitle ?? "a place I shouldn't be at."
-        let sponsorName = loggedInUser?.sponsorName ?? "Friend"
-        
-        //check if device can send mail
-        guard MFMailComposeViewController.canSendMail() else {
-            
-            // DO some UI to show that an email cant be sent
-            let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing E-Mail", alertMessage: "Your device does not support this feature", dismissActionTitle: "OK")
-            present(notMailCompatable, animated: true, completion: nil)
-            return
+    func fetchCurrentuser() {
+        UserController.shared.fetchCurrentUser { (success, _) in
+            if success {
+                guard let loggedInUser = UserController.shared.loggedInUser
+                    else { return }
+                print(loggedInUser.userName)
+                print("\(loggedInUser.aaStep)")
+                
+            } else {
+                print("\nUnable to fetch current user\n")
+            }
         }
-        
-        let composer = MFMailComposeViewController()
-        //        composer.mailComposeDelegate = self
-        //        composer.setToRecipients([sponosrEmail])
-        composer.setSubject("Contact me when you get this message")
-        composer.setMessageBody("\(sponsorName), I wanted to let you know that I got close to \(locationName) \n\n Contact me when you get this right away", isHTML: false)
-        
-        present(composer, animated: true, completion: nil)
-        
-    }
-    
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        
-        if let _ = error {
-            controller.dismiss(animated: true, completion: nil)
-            return
-        }
-        
-        switch result {
-        case .cancelled:
-            print("🐦🐦🐦Cancled email")
-        case .failed:
-            print("🐦🐦🐦faled")
-        case .saved:
-            print("🐦🐦🐦mail savied")
-        case .sent:
-            print("🐦🐦🐦mail saved")
-        }
-        controller.dismiss(animated: true, completion: nil)
     }
 }
-

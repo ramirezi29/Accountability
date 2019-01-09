@@ -21,6 +21,11 @@
 		474651F721CA0EC700E23BA0 /* Notes.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 474651F621CA0EC700E23BA0 /* Notes.storyboard */; };
 		474651F921CA0FFB00E23BA0 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 474651F821CA0FFB00E23BA0 /* Home.storyboard */; };
 		475AD3F621E4398F00023B63 /* DateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475AD3F521E4398F00023B63 /* DateController.swift */; };
+		476A26FC21E5008200CB864A /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A26FB21E5008200CB864A /* Quote.swift */; };
+		476A26FE21E5198900CB864A /* ButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A26FD21E5198900CB864A /* ButtonController.swift */; };
+		476A270321E55E5F00CB864A /* SecondLaunchScreenV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A270221E55E5F00CB864A /* SecondLaunchScreenV.swift */; };
+		476A270621E5AEBE00CB864A /* SF Pro in Resources */ = {isa = PBXBuildFile; fileRef = 476A270521E5AEBE00CB864A /* SF Pro */; };
+		476A270821E5BDE100CB864A /* FontController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A270721E5BDE100CB864A /* FontController.swift */; };
 		477145E721C953960016FFAB /* ColorGradientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145E621C953960016FFAB /* ColorGradientExtension.swift */; };
 		477145EA21C956CB0016FFAB /* ColorCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145E921C956CB0016FFAB /* ColorCollection.swift */; };
 		477145EE21C961700016FFAB /* WalkThroughOnBoarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 477145EC21C961700016FFAB /* WalkThroughOnBoarding.storyboard */; };
@@ -28,7 +33,6 @@
 		477145F421C99FE00016FFAB /* NotesTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145F321C99FE00016FFAB /* NotesTVCell.swift */; };
 		477145F621C9A1FC0016FFAB /* NoteDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145F521C9A1FC0016FFAB /* NoteDetailVC.swift */; };
 		4771460021C9A8DC0016FFAB /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145FF21C9A8DC0016FFAB /* CalendarVC.swift */; };
-		4771460521C9A9390016FFAB /* CalendarDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4771460421C9A9390016FFAB /* CalendarDetailVC.swift */; };
 		4771460721C9AE160016FFAB /* Calendar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4771460621C9AE160016FFAB /* Calendar.storyboard */; };
 		4771460E21C9BB200016FFAB /* WalkThroughPVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4771460D21C9BB200016FFAB /* WalkThroughPVC.swift */; };
 		4771461021C9C4210016FFAB /* WalkThroughContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4771460F21C9C4210016FFAB /* WalkThroughContentVC.swift */; };
@@ -76,6 +80,11 @@
 		474651F621CA0EC700E23BA0 /* Notes.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Notes.storyboard; sourceTree = "<group>"; };
 		474651F821CA0FFB00E23BA0 /* Home.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		475AD3F521E4398F00023B63 /* DateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateController.swift; sourceTree = "<group>"; };
+		476A26FB21E5008200CB864A /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
+		476A26FD21E5198900CB864A /* ButtonController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonController.swift; sourceTree = "<group>"; };
+		476A270221E55E5F00CB864A /* SecondLaunchScreenV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondLaunchScreenV.swift; sourceTree = "<group>"; };
+		476A270521E5AEBE00CB864A /* SF Pro */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "SF Pro"; sourceTree = "<group>"; };
+		476A270721E5BDE100CB864A /* FontController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontController.swift; sourceTree = "<group>"; };
 		477145E621C953960016FFAB /* ColorGradientExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGradientExtension.swift; sourceTree = "<group>"; };
 		477145E921C956CB0016FFAB /* ColorCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollection.swift; sourceTree = "<group>"; };
 		477145ED21C961700016FFAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Triggers/UI/StoryBoards/Base.lproj/WalkThroughOnBoarding.storyboard; sourceTree = "<group>"; };
@@ -83,7 +92,6 @@
 		477145F321C99FE00016FFAB /* NotesTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotesTVCell.swift; path = Triggers/ViewControllers/NotesTVCell.swift; sourceTree = SOURCE_ROOT; };
 		477145F521C9A1FC0016FFAB /* NoteDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailVC.swift; sourceTree = "<group>"; };
 		477145FF21C9A8DC0016FFAB /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
-		4771460421C9A9390016FFAB /* CalendarDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDetailVC.swift; sourceTree = "<group>"; };
 		4771460621C9AE160016FFAB /* Calendar.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Calendar.storyboard; sourceTree = "<group>"; };
 		4771460D21C9BB200016FFAB /* WalkThroughPVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkThroughPVC.swift; sourceTree = "<group>"; };
 		4771460F21C9C4210016FFAB /* WalkThroughContentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkThroughContentVC.swift; sourceTree = "<group>"; };
@@ -157,6 +165,22 @@
 			path = MainVC;
 			sourceTree = "<group>";
 		};
+		476A270121E559DE00CB864A /* SecondLaunchScreen */ = {
+			isa = PBXGroup;
+			children = (
+				476A270221E55E5F00CB864A /* SecondLaunchScreenV.swift */,
+			);
+			path = SecondLaunchScreen;
+			sourceTree = "<group>";
+		};
+		476A270421E5AE5F00CB864A /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				476A270521E5AEBE00CB864A /* SF Pro */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		477145E821C9566E0016FFAB /* HelperFiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,6 +190,8 @@
 				477C945421DA76D6006F7E80 /* NotificationController.swift */,
 				47FE313121DEE3AC000A92FD /* PageViewExtension.swift */,
 				475AD3F521E4398F00023B63 /* DateController.swift */,
+				476A26FD21E5198900CB864A /* ButtonController.swift */,
+				476A270721E5BDE100CB864A /* FontController.swift */,
 			);
 			path = HelperFiles;
 			sourceTree = "<group>";
@@ -212,7 +238,6 @@
 			isa = PBXGroup;
 			children = (
 				477145FF21C9A8DC0016FFAB /* CalendarVC.swift */,
-				4771460421C9A9390016FFAB /* CalendarDetailVC.swift */,
 				47F5CDF621DC102100E0BE55 /* MonthView.swift */,
 				47F5CDF821DC12B700E0BE55 /* WeekdaysView.swift */,
 				47F5CDFA21DC12D300E0BE55 /* CalendarView.swift */,
@@ -255,6 +280,7 @@
 		47E29E2C21C8292500FA44EE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				476A270421E5AE5F00CB864A /* Font */,
 				470408F421CD7DAA00884CFA /* ArtCredit */,
 				477145E821C9566E0016FFAB /* HelperFiles */,
 				47E29E1A21C80B0200FA44EE /* AppDelegate.swift */,
@@ -281,6 +307,7 @@
 				472EA53321CC05740022EE0A /* Location.swift */,
 				47296FF421CB38D5007B9B1B /* Note.swift */,
 				47A602FC21D82C2700699EDF /* Folder.swift */,
+				476A26FB21E5008200CB864A /* Quote.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -299,6 +326,7 @@
 		47E29E3021C8295600FA44EE /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				476A270121E559DE00CB864A /* SecondLaunchScreen */,
 				4705CB1C21DC557B005AA127 /* MainVC */,
 				4771460121C9A8EB0016FFAB /* HomeVCs */,
 				4771460221C9A8F60016FFAB /* CalendarVCs */,
@@ -445,6 +473,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				476A270621E5AEBE00CB864A /* SF Pro in Resources */,
 				477145EE21C961700016FFAB /* WalkThroughOnBoarding.storyboard in Resources */,
 				474651F721CA0EC700E23BA0 /* Notes.storyboard in Resources */,
 				47E29E4821C8524A00FA44EE /* Localizable.strings in Resources */,
@@ -475,12 +504,16 @@
 				477FA78521DC18F300EB6670 /* CloudKitManager.swift in Sources */,
 				4771460E21C9BB200016FFAB /* WalkThroughPVC.swift in Sources */,
 				47F5CDFB21DC12D300E0BE55 /* CalendarView.swift in Sources */,
+				476A270321E55E5F00CB864A /* SecondLaunchScreenV.swift in Sources */,
 				47E29E5F21C8B1E300FA44EE /* NetworkingError.swift in Sources */,
 				471665E021D441E6000DC53B /* textFieldExtension.swift in Sources */,
+				476A26FE21E5198900CB864A /* ButtonController.swift in Sources */,
 				47FE313221DEE3AC000A92FD /* PageViewExtension.swift in Sources */,
 				470408F621CD7DC200884CFA /* CreditNameSource.swift in Sources */,
 				4771461021C9C4210016FFAB /* WalkThroughContentVC.swift in Sources */,
 				4771460021C9A8DC0016FFAB /* CalendarVC.swift in Sources */,
+				476A270821E5BDE100CB864A /* FontController.swift in Sources */,
+				476A26FC21E5008200CB864A /* Quote.swift in Sources */,
 				47E29E4F21C852DC00FA44EE /* LocationDetailVC.swift in Sources */,
 				472EA53421CC05740022EE0A /* Location.swift in Sources */,
 				47A602FD21D82C2700699EDF /* Folder.swift in Sources */,
@@ -502,7 +535,6 @@
 				477145E721C953960016FFAB /* ColorGradientExtension.swift in Sources */,
 				47E29E5721C8653B00FA44EE /* UserDetailConstants.swift in Sources */,
 				477145F621C9A1FC0016FFAB /* NoteDetailVC.swift in Sources */,
-				4771460521C9A9390016FFAB /* CalendarDetailVC.swift in Sources */,
 				47C3099521DEA16900F578A1 /* StoryboardConstants.swift in Sources */,
 				47E29E5321C8645E00FA44EE /* User.swift in Sources */,
 				4771461221C9CFB00016FFAB /* WalkThroughVC.swift in Sources */,
