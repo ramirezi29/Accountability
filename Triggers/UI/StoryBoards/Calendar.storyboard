@@ -24,7 +24,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="5c0-Ra-FFm">
-                                <rect key="frame" x="91.666666666666671" y="102.00000000000001" width="191.66666666666663" height="54.666666666666671"/>
+                                <rect key="frame" x="91.666666666666671" y="135" width="191.66666666666663" height="54.666666666666657"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="UZ4-fD-VtH">
                                         <rect key="frame" x="0.0" y="0.0" width="191.66666666666666" height="54.666666666666664"/>
@@ -77,8 +77,8 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="UZ4-fD-VtH" firstAttribute="centerX" secondItem="wq1-sx-1mS" secondAttribute="centerX" id="5q7-mp-10j"/>
-                            <constraint firstItem="wq1-sx-1mS" firstAttribute="bottom" secondItem="UZ4-fD-VtH" secondAttribute="bottom" constant="572.33333333333326" id="PRV-GR-OfU"/>
+                            <constraint firstItem="5c0-Ra-FFm" firstAttribute="centerX" secondItem="tEc-JG-yM8" secondAttribute="centerX" id="Q79-Z2-AhD"/>
+                            <constraint firstItem="5c0-Ra-FFm" firstAttribute="centerY" secondItem="tEc-JG-yM8" secondAttribute="centerY" multiplier="0.4" id="QsT-X5-FIE"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="wq1-sx-1mS"/>
                     </view>
@@ -103,7 +103,11 @@
                                 </view>
                             </barButtonItem>
                         </leftBarButtonItems>
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="edit" id="9uy-hn-MV1"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="edit" id="9uy-hn-MV1">
+                            <connections>
+                                <action selector="editButtonTapped:" destination="JYi-HP-gyc" id="PLW-iM-85W"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
