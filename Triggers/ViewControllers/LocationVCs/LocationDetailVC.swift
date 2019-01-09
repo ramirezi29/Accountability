@@ -62,8 +62,7 @@ class LocationDetailVC: UIViewController {
         
         //Background UI
         view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
-        
-        //
+
         loadViewIfNeeded()
         updateViews()
         
@@ -71,8 +70,6 @@ class LocationDetailVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        
     }
     
     func updateViews() {
@@ -139,22 +136,13 @@ class LocationDetailVC: UIViewController {
     
     print("\n Save button Taped")
         //Create a location based notification
-        
-        
-        //        guard let location = location else {
-        //            print("\n location was nil: in the save button tapped func: -> guard let location = location else\n")
-        //            return}
-        
         guard let locationTitle = locationTitleTextField.text, !locationTitle.isEmpty, let addressLocation = addressTextField.text, !addressLocation.isEmpty else {return}
         
         
         
         let lat = coordinate?.latitude ?? devMntLat
         let long = coordinate?.longitude ?? devMntLon
-        
-        // NOTE: - Note sure if this logged In User is needed in this func
-        //        if let loggedInUser = UserController.shared.loggedInUser {
-        
+
         // MARK: - Update
         if let location = location {
             LocationController.shared.updateTargetLocation(location: location, geoCodeAddressString: addressLocation, addressTitle: locationTitle, latitude: lat, longitude: long) { (success) in
@@ -182,7 +170,7 @@ class LocationDetailVC: UIViewController {
                     // call create
                     
                     // NOTE: - Sponosrs Name is not being passed in 
-                    NotificationController.createLocalNotifciationWith(contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Contact your accountability partner \(self.user?.sponsorName ?? "")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: UUID().uuidString), notifIdentifier: locationTitle)
+                    NotificationController.createLocalNotifciationWith(contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Contact your accountability partner \(UserController.shared.loggedInUser?.sponsorName ?? "")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: UUID().uuidString), notifIdentifier: locationTitle)
                     
                     print("\n🙏🏽Successfully created/saved location🙏🏽")
                     DispatchQueue.main.async {

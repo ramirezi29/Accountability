@@ -21,8 +21,18 @@ class AlertController {
         
         return alertController
     }
+
+
+static func presentActionSheetAlertControllerWith(alertTitle: String?, alertMessage: String?, dismissActionTitle: String) -> UIAlertController {
     
-    //    static func
+    let alertController = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .actionSheet)
+    
+    let dismissAction = UIAlertAction(title: dismissActionTitle, style: .cancel, handler: nil)
+    
+    alertController.addAction(dismissAction)
+    
+    return alertController
+}
 }
 
 extension AlertController {

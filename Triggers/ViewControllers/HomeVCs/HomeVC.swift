@@ -18,6 +18,8 @@ class HomeVC: UIViewController {
     @IBOutlet weak var aaPickerView: UIPickerView!
     
     
+    
+    
     //TextFields
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var sponsorsNameTextField: UITextField!

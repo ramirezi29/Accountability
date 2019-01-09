@@ -33,5 +33,39 @@ extension UIView {
         gradient.endPoint = CGPoint(x: 0, y: 1)
         self.layer.insertSublayer(gradient, at: 0)
     }
+
+    
+    func setGradientToTableView(tableView: UITableView, _ topColor:UIColor, _ bottomColor:UIColor) {
+        
+        let gradientBackgroundColors = [topColor.cgColor, bottomColor.cgColor]
+        
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradientBackgroundColors
+        gradientLayer.locations = [0.0,1.0]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0, y: 1)
+        gradientLayer.frame = tableView.bounds
+        let backgroundView = UIView(frame: tableView.bounds)
+        backgroundView.layer.insertSublayer(gradientLayer, at: 0)
+        tableView.backgroundView = backgroundView
+    }
 }
 
+
+
+//func setGradientToTableView(tableView: UITableView, _ topColor:UIColor, _ bottomColor:UIColor) {
+//
+//    let gradientBackgroundColors = [topColor.CGColor, bottomColor.CGColor]
+//    let gradientLocations = [0.0,1.0]
+//
+//    let gradientLayer = CAGradientLayer()
+//    gradientLayer.colors = gradientBackgroundColors
+//    gradientLayer.locations = gradientLocations
+//
+//    gradientLayer.frame = tableView.bounds
+//    let backgroundView = UIView(frame: tableView.bounds)
+//    backgroundView.layer.insertSublayer(gradientLayer, atIndex: 0)
+//    tableView.backgroundView = backgroundView
+//}
+//}

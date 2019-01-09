@@ -16,6 +16,7 @@ class User {
     var sponsorEmail: String?
     var aaStep: Int
     var ckRecordID: CKRecord.ID?
+    var date: Date?
 //    let userRecord: CKRecord
     var appleUserRef: CKRecord.Reference
     
@@ -27,13 +28,9 @@ class User {
     
 //    let customZoneID = CKRecordZone.ID(zoneName: UserConstants.zoneName, ownerName: CKCurrentUserDefaultName)
     
-    
 //    let share = CKShare(rootRecord: <#T##CKRecord#>)
-  
     
     init(userName: String = "Your Name", sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), appleUserRef: CKRecord.Reference) {
-        
-        
         
         self.userName = userName
         self.sponsorName = sponsorName
@@ -79,8 +76,6 @@ extension CKRecord {
         self.setValue(user.sponsorEmail, forKey: UserConstants.sponsorEmailKey)
         self.setValue(user.aaStep, forKey: UserConstants.aaStepKey)
         self.setValue(user.appleUserRef, forKey: UserConstants.appleUserRefKey)
-        
-        
         
         // NOTE: - In order to not save a brand new record
         user.ckRecordID = recordID
