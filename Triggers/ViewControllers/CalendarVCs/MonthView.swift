@@ -21,6 +21,7 @@ class MonthView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         self.backgroundColor=UIColor.clear
         
         currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
@@ -29,11 +30,11 @@ class MonthView: UIView {
         
         setupViews()
         
-        btnLeft.isEnabled = true
+        leftButon.isEnabled = true
     }
     
     @objc func btnLeftRightAction(sender: UIButton) {
-        if sender == btnRight {
+        if sender == rightButton {
             currentMonthIndex += 1
             if currentMonthIndex > 11 {
                 currentMonthIndex = 0
@@ -46,60 +47,63 @@ class MonthView: UIView {
                 currentYear -= 1
             }
         }
-        lblName.text="\(monthsArr[currentMonthIndex]) \(currentYear)"
+        nameLabel.text="\(monthsArr[currentMonthIndex]) \(currentYear)"
         delegate?.didChangeMonth(monthIndex: currentMonthIndex, year: currentYear)
     }
     
     func setupViews() {
-        self.addSubview(lblName)
-        lblName.topAnchor.constraint(equalTo: topAnchor).isActive=true
-        lblName.centerXAnchor.constraint(equalTo: centerXAnchor).isActive=true
-        lblName.widthAnchor.constraint(equalToConstant: 150).isActive=true
-        lblName.heightAnchor.constraint(equalTo: heightAnchor).isActive=true
-        lblName.text="\(monthsArr[currentMonthIndex]) \(currentYear)"
+        self.addSubview(nameLabel)
+        nameLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        nameLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        nameLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        nameLabel.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        nameLabel.text = "\(monthsArr[currentMonthIndex]) \(currentYear)"
         
-        self.addSubview(btnRight)
-        btnRight.topAnchor.constraint(equalTo: topAnchor).isActive=true
-        btnRight.rightAnchor.constraint(equalTo: rightAnchor).isActive=true
-        btnRight.widthAnchor.constraint(equalToConstant: 50).isActive=true
-        btnRight.heightAnchor.constraint(equalTo: heightAnchor).isActive=true
+        self.addSubview(rightButton)
+        rightButton.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        rightButton.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        rightButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        rightButton.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         
-        self.addSubview(btnLeft)
-        btnLeft.topAnchor.constraint(equalTo: topAnchor).isActive=true
-        btnLeft.leftAnchor.constraint(equalTo: leftAnchor).isActive=true
-        btnLeft.widthAnchor.constraint(equalToConstant: 50).isActive=true
-        btnLeft.heightAnchor.constraint(equalTo: heightAnchor).isActive=true
+        self.addSubview(leftButon)
+        leftButon.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        leftButon.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        leftButon.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        leftButon.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
     }
     
-    let lblName: UILabel = {
-        let lbl=UILabel()
-        lbl.text="Default Month Year text"
-        lbl.textColor = Style.monthViewLblColor
-        lbl.textAlignment = .center
-//        lbl.font=UIFont.boldSystemFont(ofSize: 16)
-        lbl.translatesAutoresizingMaskIntoConstraints=false
-        return lbl
+    let nameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Default Month Year text"
+        label.textColor = MyColor.offWhite.value
+        label.textAlignment = .center
+        label.font = MyFont.SFDisMed.withSize(size: 20)
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
     }()
     
-    let btnRight: UIButton = {
-        let btn=UIButton()
-        btn.setTitle(">", for: .normal)
-        btn.setTitleColor(Style.monthViewBtnRightColor, for: .normal)
-        btn.translatesAutoresizingMaskIntoConstraints=false
-        btn.addTarget(self, action: #selector(btnLeftRightAction(sender:)), for: .touchUpInside)
-        return btn
+    let rightButton: UIButton = {
+        let button=UIButton()
+        button.setTitle(">", for: .normal)
+        button.setTitleColor(MyColor.offWhite.value, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(btnLeftRightAction(sender:)), for: .touchUpInside)
+        return button
     }()
     
-    let btnLeft: UIButton = {
-        let btn=UIButton()
-        btn.setTitle("<", for: .normal)
-        btn.setTitleColor(Style.monthViewBtnLeftColor, for: .normal)
-        btn.translatesAutoresizingMaskIntoConstraints=false
-        btn.addTarget(self, action: #selector(btnLeftRightAction(sender:)), for: .touchUpInside)
-        btn.setTitleColor(UIColor.lightGray, for: .disabled)
-        return btn
+    let leftButon: UIButton = {
+        let button = UIButton()
+        button.setTitle("<", for: .normal)
+        button.setTitleColor(MyColor.offWhite.value, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(btnLeftRightAction(sender:)), for: .touchUpInside)
+        button.setTitleColor(UIColor.lightGray, for: .disabled)
+        return button
     }()
     
+    //Test
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -8,9 +8,16 @@
 
 import UIKit
 
-struct FontController {
-    static let SFReg17 = UIFont(name: "SFProText-Regular", size: 17)
-    static let SFMed17 = UIFont(name: "SFProText-Medium", size: 17)
-    static let SFDisMed17 = UIFont(name: "SFProDisplay-Medium", size: 17)
-    static let SFDisMed43 = UIFont(name: "SFProDisplay-Medium", size: 43)
+enum MyFont: String {
+    case SFReg = "SFProText-Regular"
+    case SFMed = "SFProText-Medium"
+    case SFBold = "SFProText-Bold"
+    case SFDisReg = "SFProDisplay-Regular"
+    case SFDisMed = "SFProDisplay-Medium"
+ 
+    
+    func withSize(size: CGFloat) -> UIFont {
+        return UIFont(name: self.rawValue, size: size)!
+    }
 }
+

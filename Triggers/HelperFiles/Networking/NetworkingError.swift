@@ -14,3 +14,4 @@ enum NetworkingError: Error {
     case forwardedError(Error)
     case invalidData(String)
 }
+

@@ -10,8 +10,8 @@ import UIKit
 
 class LocationTVC: UITableViewController {
     
-    @IBOutlet weak var activityViewOutlet: UIView!
-    @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicatorView: UIView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     //landing pad
     var location: Location?
@@ -38,15 +38,12 @@ class LocationTVC: UITableViewController {
 //          tableView.addVerticalGradientLayer(topColor: , bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
 //
         //
-        
-        
-        activityViewOutlet.isHidden = true
+
+        activityIndicatorView.backgroundColor = .clear
         
         //Activity Spinner
-        DispatchQueue.main.async {
-            self.activityIndicatorOutlet.startAnimating()
-        }
-        
+        self.activityIndicator.startAnimating()
+
         //Fetch from CK
         LocationController.shared.fetchItemsFor { (location, _) in
         
@@ -54,18 +51,16 @@ class LocationTVC: UITableViewController {
 
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
-                    self.activityIndicatorOutlet.stopAnimating()
-//                    self.activityViewOutlet.isHidden = true
+                    self.hideStopActivityIndicator()
+                    self.navigationController?.title = "Folders"
                 }
                 print("\nLocation Fetch was successful")
             } else {
-                DispatchQueue.main.async {
-
-//                    self.activityIndicatorOutlet.stopAnimating()
-//                    self.activityViewOutlet.isHidden = true
-                    // Present UI ALert
-                }
+                
+                    self.navigationController?.title = "No Folders Found"
+                
                 print("\n💀 Error fetcing location records from CK 💀")
+                
                 return
             }
         }
@@ -82,13 +77,12 @@ class LocationTVC: UITableViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.activityIndicatorOutlet.stopAnimating()
+        self.activityIndicator.stopAnimating()
     }
     
     // MARK: - Table view data source
    override  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        
         return LocationController.shared.locations.count
     }
     
@@ -122,7 +116,7 @@ class LocationTVC: UITableViewController {
                 if error != nil {
                     
                     DispatchQueue.main.async {
-                        //Preent UI Activity Spinner
+                        self.showStartActivityIndicator()
                     }
                     
                 } else {
@@ -152,6 +146,16 @@ class LocationTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
+    }
+    
+    func hideStopActivityIndicator() {
+        self.activityIndicator.isHidden =  true
+        self.activityIndicator.stopAnimating()
+    }
+    
+    func showStartActivityIndicator() {
+        self.activityIndicator.startAnimating()
+        self.activityIndicator.isHidden = false
     }
     
     

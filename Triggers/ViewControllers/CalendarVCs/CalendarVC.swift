@@ -41,6 +41,19 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Test print to verify the custom San Francisco fonts are include in this projects build
+//        for family: String in UIFont.familyNames
+//        {
+//            print(family)
+//            for names: String in UIFont.fontNames(forFamilyName: family)
+//            {
+//                print("== \(names)")
+//            }
+//        }
+        
+        
+        updateViewsFonts()
+        
         view.addSubview(calenderView)
         
         self.activityIndicatorView.isHidden = true
@@ -57,7 +70,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         
         updateLabelUI()
         
-        calenderView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
+        calenderView.topAnchor.constraint(equalTo: view.topAnchor, constant: 250).isActive = true
         calenderView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12).isActive = true
         calenderView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 12).isActive = true
         calenderView.heightAnchor.constraint(equalToConstant: 365).isActive = true
@@ -103,6 +116,13 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         
     }
     
+    
+   func updateViewsFonts() {
+    soberSinceLabel.font = MyFont.SFDisMed.withSize(size: 24)
+    soberSinceDateValueLabel.font = MyFont.SFDisMed.withSize(size: 24)
+    numberOfDaysSoberLabel.font = MyFont.SFDisMed.withSize(size: 24)
+    numberOfDaysSoberValueLabel.font = MyFont.SFDisMed.withSize(size: 24)
+    }
     // MARK: - Actions
     @IBAction func sobrietySaveButtonTapped(_ sender: IRButton) {
         //TestPrint
