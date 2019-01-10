@@ -14,9 +14,9 @@ class HomeVC: UIViewController {
     
     // MARK: - Properties
     @IBOutlet weak var currentAAStepValueLabel: UILabel!
-    @IBOutlet weak var currentAANameLabel: UILabel!
     @IBOutlet weak var aaPickerView: UIPickerView!
     @IBOutlet weak var logoContactButton: UIButton!
+    @IBOutlet weak var aaStepImageView: UIImageView!
     
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
@@ -43,12 +43,17 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         
         self.logoContactButton.isUserInteractionEnabled = false
-        self.navigationController?.view.backgroundColor = .clear
+//        self.navigationController?.view.backgroundColor = .clear
         
         //activity indicator
-        self.activityIndicatorView.isHidden = true
+        self.activityIndicatorView.backgroundColor = .clear
+ 
+        self.activityIndicator.startAnimating()
+        
+        
         self.cancelButton.isEnabled = false
         self.cancelButton.tintColor = .clear
+        
         //Update AA Labels
         updateCurrentAAStep()
         
@@ -97,8 +102,6 @@ class HomeVC: UIViewController {
         self.sponsorsPhoneNumberTextField.autocorrectionType = .no
         self.sponsorsEmailTextField.autocorrectionType = .no
         
-        self.activityIndicator.startAnimating()
-        
         // Picker View
         self.aaPickerView.isHidden = true
         self.aaPickerView.dataSource = self
@@ -110,6 +113,7 @@ class HomeVC: UIViewController {
         //Textfields
         textFieldsInactive()
         textFieldsInvisable()
+        updateCurrentAAStep()
         
         UserController.shared.fetchCurrentUser { (success, error) in
             if success {
@@ -120,15 +124,7 @@ class HomeVC: UIViewController {
                 }
                 
             } else {
-                
-                DispatchQueue.main.async {
-                    self.activityIndicator.stopAnimating()
-                    
-                    AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                    // prseent UI Alert expalining error
-                    self.present(self.fetchErrorNotif, animated: true, completion: nil)
-                    //present UI Alert that there was an error loading
-                }
+                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                 print("\n🤯 Error fechign Data \n")
                 return
             }
@@ -139,15 +135,15 @@ class HomeVC: UIViewController {
         super.viewWillDisappear(true)
         print("viewWillDisappear")
         // There's a glitch with this app
-//        editBool = false
-//        textFieldsInvisable()
-//        textFieldsInactive()
-//        self.cancelButton.isEnabled = false
-//        self.cancelButton.tintColor = .clear
-//        self.aaPickerView.alpha = 0.0
-//        self.aaPickerView.isHidden = true
-//        textFieldsTextOffWhiteColor()
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped(_:)))
+        //        editBool = false
+        //        textFieldsInvisable()
+        //        textFieldsInactive()
+        //        self.cancelButton.isEnabled = false
+        //        self.cancelButton.tintColor = .clear
+        //        self.aaPickerView.alpha = 0.0
+        //        self.aaPickerView.isHidden = true
+        //        textFieldsTextOffWhiteColor()
+        //        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped(_:)))
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -270,7 +266,7 @@ class HomeVC: UIViewController {
     @IBAction func editButtonTapped(_ sender: Any) {
         switch editBool {
         case false:
-            
+
             // Edit Button
             self.logoToPhoneBook()
             
@@ -295,7 +291,6 @@ class HomeVC: UIViewController {
             }) { (succes) in
                 if succes {
                     self.aaPickerView.tintColor = .black
-                    
                     //Test Print
                     print("\nCase False animation compeleted\n")
                 }
@@ -307,8 +302,11 @@ class HomeVC: UIViewController {
             // Edit Button Bool
             editBool = true
         case true:
-            //Textfield
             
+            //activity indicator
+            showStartActivityIndicator()
+            
+            //image anamation
             self.phoneBookToLogo()
             
             self.cancelButton.isEnabled = false
@@ -331,7 +329,8 @@ class HomeVC: UIViewController {
                     if success {
                         print("🙏🏽Success Updating Entry")
                         DispatchQueue.main.async {
-                            // do any UI Stuff as a rsult of a successfully update
+                            self.updateCurrentAAStep()
+                            self.hideStopActivityIndicator()
                         }
                     } else {
                         AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
@@ -349,12 +348,14 @@ class HomeVC: UIViewController {
                     if success {
                         print("\n🙏🏽 Creating new userDetails to CK successful\n")
                         DispatchQueue.main.async {
-                            
+                    self.hideStopActivityIndicator()
                         }
                     } else {
                         AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                         // prseent UI Alert expalining error
-                        self.present(self.networkErrorNotif, animated: true, completion: nil)
+                        DispatchQueue.main.async {
+                            self.present(self.networkErrorNotif, animated: true, completion: nil)
+                        }
                         print("💀error with the upating the data")
                         return
                     }
@@ -373,11 +374,12 @@ class HomeVC: UIViewController {
                 if succes {
                     self.aaPickerView.isHidden = true
                     print("\nCase True animation compeleted\n")
+                    DispatchQueue.main.async {
+                        self.updateCurrentAAStep()
+                    }
                 }
             }
-            
             print("\nEdit Button Tapped")
-            
             // Edit Button Bool
             editBool = false
         }
@@ -385,14 +387,12 @@ class HomeVC: UIViewController {
     
     
     func updateCurrentAAStep() {
-        if let curentAAStepvalue = currentAAStepValueLabel.text {
-            if Int(curentAAStepvalue) == 0 {
-                currentAAStepValueLabel.isHidden = true
-                currentAANameLabel.text = "Currently Not in AA"
-            }
+        if currentAAStepValueLabel.text == "0" {
+            currentAAStepValueLabel.isHidden = true
+            aaStepImageView.isHidden = true
         } else {
             currentAAStepValueLabel.isHidden = false
-            currentAANameLabel.text = "Current AA Step"
+            aaStepImageView.isHidden = false
         }
     }
     
@@ -427,6 +427,16 @@ extension HomeVC: UIPickerViewDelegate, UIPickerViewDataSource {
         default:
             return "\(row)"
         }
+    }
+    
+    func hideStopActivityIndicator() {
+        self.activityIndicator.isHidden =  true
+        self.activityIndicator.stopAnimating()
+    }
+    
+    func showStartActivityIndicator() {
+        self.activityIndicator.startAnimating()
+        self.activityIndicator.isHidden = false
     }
 }
 

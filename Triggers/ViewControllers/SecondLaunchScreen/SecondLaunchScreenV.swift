@@ -31,9 +31,7 @@ class SecondLaunchScreenV: UIViewController, CLLocationManagerDelegate, UNUserNo
     override func viewDidLoad() {
         super.viewDidLoad()
       
-        titleLabel.font = FontController.SFDisMed43
-
-        subTitleLabel.font = FontController.SFDisMed17
+       
         
         // MARK: - Loaction Elments
         locationManger.delegate = self

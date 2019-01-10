@@ -9,14 +9,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Triggers/ViewControllers/Onboarding/WalkThroughContentVC.swift"
-            timestampString = "568764461.360837"
+            filePath = "Triggers/ViewControllers/LocationVCs/LocationTVC.swift"
+            timestampString = "568790774.777465"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "666"
-            endingLineNumber = "666"
-            landmarkName = "WalkThroughContentVC"
-            landmarkType = "21">
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

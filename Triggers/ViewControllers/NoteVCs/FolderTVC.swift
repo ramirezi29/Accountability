@@ -23,17 +23,14 @@ class FolderTVC: UITableViewController {
         super.viewDidLoad()
         
         view.setGradientToTableView(tableView: tableView, UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
-        activityView.isHidden = true
+        activityView.backgroundColor = .clear
         
-        DispatchQueue.main.async {
-    self.activityIndicator.startAnimating()
-        }
-        
+        self.activityIndicator.startAnimating()
+
         tableView.delegate = self
         tableView.dataSource = self
-        
-        
-        
+  
+        //Fetch Folders from CK
         FolderController.shared.fetchItemsFor { (folder, error) in
             
             //show Spinner and Spin
@@ -47,16 +44,12 @@ class FolderTVC: UITableViewController {
                             folder.notes = note!
                             DispatchQueue.main.async {
                                 self.tableView.reloadData()
-                                
-                                // stop animating spinner
-                                // spinner view is hidding true
+                                self.hideStopActivityIndicator()
                             }
                             print("\n⛱ Successfully fetched folders from CK \n")
                         } else {
+                            let networkError = AlertController.presentAlertControllerWith(alertTitle: "Unable to Load Your Notes", alertMessage: "Check your internet connection", dismissActionTitle: "OK")
                             DispatchQueue.main.async {
-                                // stop animating spinner
-                                // spinner view is hidding true
-                                let networkError = AlertController.presentAlertControllerWith(alertTitle: "Unable to Load Your Notes", alertMessage: "Check your internet connection", dismissActionTitle: "OK")
                                 self.present(networkError, animated: true, completion: nil)
                             }
                             print("\n💀 Error fetching forders from CK\n")
@@ -66,16 +59,15 @@ class FolderTVC: UITableViewController {
                 })
                 
                 DispatchQueue.main.async {
-//                    self.tableView.reloadData()
+                    //                    self.tableView.reloadData()
                     
                     self.navigationController?.title = "Folders"
                     
-                    self.activityIndicator.isHidden = true
-                    self.activityIndicator.stopAnimating()
+                    self.hideStopActivityIndicator()
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.navigationController?.title = "No Folders Found"
+                    //                    self.navigationController?.title = "No Folders Found"
                 }
                 print("\n🤫 Error Fetching Folders from CK\n")
                 return
@@ -83,25 +75,26 @@ class FolderTVC: UITableViewController {
         }
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-      tableView.reloadData()
-
+        tableView.reloadData()
+        
         print("View will appear just came up and the number of folders are: \( self.folder.count)")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
-          tableView.isEditing = false
+        tableView.isEditing = false
         DispatchQueue.main.async {
             self.activityIndicator.stopAnimating()
         }
     }
     
     // MARK: - Table view data source
-
-     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return FolderController.shared.folders.count
     }
@@ -131,8 +124,6 @@ class FolderTVC: UITableViewController {
             
             let folderRecord = FolderController.shared.folders[indexPath.row]
             
-            
-
             FolderController.shared.privateDB.delete(withRecordID: folderRecord.ckRecordID) { (ckRecordID, _) in
                 if (ckRecordID != nil) {
                     
@@ -140,18 +131,20 @@ class FolderTVC: UITableViewController {
                     DispatchQueue.main.async {
                         self.tableView.deleteRows(at: [indexPath], with: .fade)
                         
-                         self.tableView.reloadData()
+                        self.tableView.reloadData()
                     }
-                
+                    
                 } else {
                     print("\nError Editing the Folder Record\n")
-                    let editingFolderError = AlertController.presentAlertControllerWith(alertTitle: "Error Updating Folder", alertMessage: "Check Your Internet Connection", dismissActionTitle: "OK")
-                    self.present(editingFolderError, animated: true, completion: nil)
+                    let editingFolderError = AlertController.presentAlertControllerWith(alertTitle: "Error Updating Folder", alertMessage: "Check Your Internet Connection and ensure you are signed into your iCloud account on your device", dismissActionTitle: "OK")
+                    DispatchQueue.main.async {
+                        self.present(editingFolderError, animated: true, completion: nil)
+                    }
                 }
+            }
         }
     }
-    }
-        
+    
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         let folder = FolderController.shared.folders[sourceIndexPath.row]
@@ -165,26 +158,37 @@ class FolderTVC: UITableViewController {
     }
     
     
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-     return true
-     }
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
     
-     // MARK: - Navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     
+    //activity spinner funcs
+    func hideStopActivityIndicator() {
+        self.activityIndicator.isHidden =  true
+        self.activityIndicator.stopAnimating()
+    }
+    
+    func showStartActivityIndicator() {
+        self.activityIndicator.startAnimating()
+        self.activityIndicator.isHidden = false
+    }
+    
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         if segue.identifier == NoteConstants.folderSegueID {
             
-          guard let destinationVC = segue.destination as? NotesTVC,
-            let indexPath = tableView.indexPathForSelectedRow else {return}
+            guard let destinationVC = segue.destination as? NotesTVC,
+                let indexPath = tableView.indexPathForSelectedRow else {return}
             
             print("\n\n🚀 the prepare for segue func is being called and this is the folder indexPath.row: \(FolderController.shared.folders[indexPath.row])\n\n")
             
             // ASK - It Breaks here at times
-             let folder = FolderController.shared.folders[indexPath.row]
+            let folder = FolderController.shared.folders[indexPath.row]
             
             destinationVC.folder = folder
         }
-     }
+    }
     
     @IBAction func editButtonTapped(_ sender: Any) {
         print("Edit Tapped")
@@ -195,13 +199,14 @@ class FolderTVC: UITableViewController {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(editButtonTapped(_:)))
         }
     }
-
+    
     
     @IBAction func newFolderButtonTapped(_ sender: Any) {
         
         addFolderAlert()
     }
 }
+
 extension FolderTVC {
     
     func addFolderAlert() {
@@ -216,10 +221,10 @@ extension FolderTVC {
             //Special Font?
         }
         
-       
+        
         let saveFolderName = UIAlertAction(title: "Save", style: .default) { (_) in
             
-//            guard let folderNameTextField = myCustomerAlert.textFields?.first?.text, !folderNameTextField.isEmpty else {return}
+            //            guard let folderNameTextField = myCustomerAlert.textFields?.first?.text, !folderNameTextField.isEmpty else {return}
             guard let name = folderNameTextField?.text, !name.isEmpty else {return}
             
             // MARK: - Create New Folder
@@ -227,28 +232,28 @@ extension FolderTVC {
                 if success {
                     
                     // MARK: - Fetch Folder Items
-//                    FolderController.shared.fetchItemsFor(completion: { (folder, error) in
+                    //                    FolderController.shared.fetchItemsFor(completion: { (folder, error) in
                     
-//                        FolderController.shared.fetchItemsFor(completion: { (folders, _) in
-//                        })
+                    //                        FolderController.shared.fetchItemsFor(completion: { (folders, _) in
+                    //                        })
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
-//                        if folder != nil {
+                    //                        if folder != nil {
                     
-                
-//                            }
-//                            print("\nSuccessfuly fetched folders\n")
-//                        } else {
-//                            print("\nThere was an error saving the folder's name with the UIAlert")
-//                            let folderErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error Updating the Folders", alertMessage: "Please Try Again, Check your network connection", dismissActionTitle: "OK")
-//                            DispatchQueue.main.async {
-//                                self.present(folderErrorNotif, animated: true, completion: nil)
-//                            }
-//                            return
-//                        }
-//                    })
-          
+                    
+                    //                            }
+                    //                            print("\nSuccessfuly fetched folders\n")
+                    //                        } else {
+                    //                            print("\nThere was an error saving the folder's name with the UIAlert")
+                    //                            let folderErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error Updating the Folders", alertMessage: "Please Try Again, Check your network connection", dismissActionTitle: "OK")
+                    //                            DispatchQueue.main.async {
+                    //                                self.present(folderErrorNotif, animated: true, completion: nil)
+                    //                            }
+                    //                            return
+                    //                        }
+                    //                    })
+                    
                 } else {
                     print("There was an error creating the new folder record")
                     DispatchQueue.main.async {
@@ -259,7 +264,7 @@ extension FolderTVC {
                 }
             }
         }
-
+        
         myCustomerAlert.addAction(saveFolderName)
         
         self.present(myCustomerAlert, animated: true, completion: nil)
@@ -268,7 +273,7 @@ extension FolderTVC {
 
 extension FolderTVC {
     
-     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = .clear
     }
@@ -277,7 +282,7 @@ extension FolderTVC {
 extension FolderTVC {
     
     func loadViewBackGround() {
-          view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
     }
 }
 

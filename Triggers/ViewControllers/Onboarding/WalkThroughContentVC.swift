@@ -55,7 +55,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     var imageFile = ""
     var user: User?
     var location: Location?
-    var loggedInUserExist: Bool?
+    var loggedInUserExist: Bool? 
     
     
     // Bools and Keys to for UIAlert
