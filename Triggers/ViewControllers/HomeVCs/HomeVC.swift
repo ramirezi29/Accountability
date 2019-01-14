@@ -15,11 +15,21 @@ class HomeVC: UIViewController {
     // MARK: - Properties
     @IBOutlet weak var currentAAStepValueLabel: UILabel!
     @IBOutlet weak var aaPickerView: UIPickerView!
-    @IBOutlet weak var logoContactButton: UIButton!
-    @IBOutlet weak var aaStepImageView: UIImageView!
+    @IBOutlet weak var phoneBookButton: UIButton!
     
+    //Images
+    @IBOutlet weak var aaStepImageView: UIImageView!
+    @IBOutlet weak var supportPersonImageView: UIImageView!
+    @IBOutlet weak var phoneImageView: UIImageView!
+    @IBOutlet weak var emailImageView: UIImageView!
+    
+    //View
+    @IBOutlet weak var buttomView: UIView!
+    
+    //Navigation Bar BUttons
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
+    
     //TextFields
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var sponsorsNameTextField: UITextField!
@@ -42,20 +52,27 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.logoContactButton.isUserInteractionEnabled = false
-//        self.navigationController?.view.backgroundColor = .clear
+        
+        self.phoneBookButton.isUserInteractionEnabled = false
+        self.phoneBookButton.alpha = 0
+//        self.phoneBookButton.contentMode.
         
         //activity indicator
         self.activityIndicatorView.backgroundColor = .clear
- 
         self.activityIndicator.startAnimating()
         
-        
+        //Bar Button
         self.cancelButton.isEnabled = false
         self.cancelButton.tintColor = .clear
         
         //Update AA Labels
         updateCurrentAAStep()
+        
+        //Images
+        supportPersonImageView.image = UIImage(named: "friendshipMaleIcon")
+        phoneImageView.image = UIImage(named: "smartphone")
+        emailImageView.image = UIImage(named: "paperPlaneIcon")
+        aaStepImageView.image = UIImage(named: "stepIcon")
         
         //Tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(HomeVC.hideKeyboard))
@@ -108,7 +125,12 @@ class HomeVC: UIViewController {
         self.aaPickerView.delegate = self
         
         //Background UI
+        //Top view
         view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        //Custom one based on mock up
+        //Buttom view
+        
+        
         
         //Textfields
         textFieldsInactive()
@@ -182,14 +204,14 @@ class HomeVC: UIViewController {
     }
     
     @IBAction func cancelButtonTapped(_ sender: Any) {
-        self.logoContactButton.isUserInteractionEnabled = false
+        self.phoneBookButton.isUserInteractionEnabled = false
         textFieldsInvisable()
         textFieldsInactive()
         self.cancelButton.isEnabled = false
         self.cancelButton.tintColor = .clear
         UIView.animate(withDuration: 0.6, delay: 0.0, options: .curveEaseIn, animations: {
             self.aaPickerView.alpha = 0.0
-            self.logoContactButton.alpha = 0
+            self.phoneBookButton.alpha = 0
             
         }) { (succes) in
             if succes {
@@ -266,9 +288,9 @@ class HomeVC: UIViewController {
     @IBAction func editButtonTapped(_ sender: Any) {
         switch editBool {
         case false:
-
+            
             // Edit Button
-            self.logoToPhoneBook()
+            self.phoneBookDisappearAnimation()
             
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(editButtonTapped(_:)))
             
@@ -307,7 +329,7 @@ class HomeVC: UIViewController {
             showStartActivityIndicator()
             
             //image anamation
-            self.phoneBookToLogo()
+            self.phoneBookAppearAnimation()
             
             self.cancelButton.isEnabled = false
             self.cancelButton.tintColor = .clear
@@ -348,7 +370,7 @@ class HomeVC: UIViewController {
                     if success {
                         print("\n🙏🏽 Creating new userDetails to CK successful\n")
                         DispatchQueue.main.async {
-                    self.hideStopActivityIndicator()
+                            self.hideStopActivityIndicator()
                         }
                     } else {
                         AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
@@ -479,37 +501,32 @@ extension HomeVC: UITextFieldDelegate {
 
 extension HomeVC {
     
-    func logoToPhoneBook() {
-        UIView.animateKeyframes(withDuration: 1.5, delay: 0.0, options: [], animations: {
-            //Transition Logo to Contact book icon
-            
-            self.logoContactButton.alpha = 0
-            
+    func phoneBookDisappearAnimation() {
+        UIView.animate(withDuration: 1.0, animations: {
+            DispatchQueue.main.async {
+                
+                self.phoneBookButton.alpha = 0
+            }
         }) { (success) in
-            UIView.animate(withDuration: 1.5, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 2, options: [.curveEaseIn], animations: {
-                
-                self.logoContactButton.alpha = 1
-                self.logoContactButton.setImage(self.phoneBookImage, for: .normal)
-                
-            }, completion: { (success) in
-                self.logoContactButton.isUserInteractionEnabled = true
-            })
+            if !success {
+                self.phoneBookButton.isHidden = true
+            }
         }
     }
     
-    func phoneBookToLogo() {
-        self.logoContactButton.isUserInteractionEnabled = false
-        UIView.animateKeyframes(withDuration: 1, delay: 0.0, options: [], animations: {
-            //Transition Logo to Contact book icon
-            self.logoContactButton.alpha = 0
-            
+    func phoneBookAppearAnimation() {
+        
+        UIView.animate(withDuration: 1.2, delay: 0.0, usingSpringWithDamping: 3, initialSpringVelocity: 2, options: [.curveEaseIn], animations: {
+             DispatchQueue.main.async {
+            self.phoneBookButton.setImage(self.phoneBookImage, for: .normal)
+            self.phoneBookButton.alpha = 1
+            }
         }) { (success) in
-            UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 2, options: [.curveEaseIn], animations: {
-                self.logoContactButton.alpha = 1
-                self.logoContactButton.setImage(self.locationLogoImage, for: .normal)
-                
-            }, completion: { (success) in
-            })
+            if success {
+                self.phoneBookButton.isUserInteractionEnabled = true
+            } else {
+                self.phoneBookButton.isHidden = true 
+            }
         }
     }
 }

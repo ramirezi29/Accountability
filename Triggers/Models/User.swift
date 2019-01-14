@@ -26,6 +26,12 @@ class User {
     
     var notes: [Note] = []
     
+    ///4 classes
+    //8 user
+    //7 location
+    //4 folder
+    //5 notes
+    
 //    let customZoneID = CKRecordZone.ID(zoneName: UserConstants.zoneName, ownerName: CKCurrentUserDefaultName)
     
 //    let share = CKShare(rootRecord: <#T##CKRecord#>)

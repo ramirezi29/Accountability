@@ -684,10 +684,8 @@ extension WalkThroughContentVC: CNContactPickerDelegate {
         
         let sponsorsName = contact.givenName
         let sponsorsFamilyName = contact.familyName
-        
-        
+    
         sponsorsNameTextField.text = "\(sponsorsName) \(sponsorsFamilyName)"
-        
         
         let email = contact.emailAddresses.first
         

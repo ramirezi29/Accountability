@@ -28,8 +28,8 @@ class NoteDetailVC: UIViewController {
 //         self.tabBarController?.tabBar.isHidden = true 
         
         updateViews()
-        //UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
-        view.addVerticalGradientLayer(topColor: UIColor(red: 6/255, green: 37/255, blue: 0/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        
+    self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NoteDetailVC.hideKeyboard))
         
@@ -119,7 +119,8 @@ class NoteDetailVC: UIViewController {
 extension NoteDetailVC: UITextViewDelegate, UITextFieldDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
-        placeholderLabel.isHidden = !textView.text.isEmpty
+
+        placeholderLabel.isHidden = !textBodyView.text.isEmpty
     }
 }
 

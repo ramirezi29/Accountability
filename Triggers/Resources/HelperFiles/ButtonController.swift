@@ -22,7 +22,7 @@ class IRButton: UIButton {
     
     private func setupButton() {
         setTitleColor(MyColor.offWhite.value, for: .normal)
-        backgroundColor = MyColor.hardBlue.value
+        backgroundColor = MyColor.annotationOrange.value
         titleLabel?.font = .boldSystemFont(ofSize: 17)
         layer.cornerRadius = frame.size.height / 4
     }

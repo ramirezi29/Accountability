@@ -18,15 +18,22 @@ enum MyTheme {
 class CalendarVC: UIViewController, UINavigationBarDelegate {
     
     // MARK: - IBoutlets
+    @IBOutlet weak var triggersLabel: UILabel!
+    @IBOutlet weak var rightView: UIView!
+    @IBOutlet weak var leftView: UIView!
     @IBOutlet weak var activityIndicatorView: UIView!
     @IBOutlet weak var sobrietySaveButton: UIButton!
     @IBOutlet var sobrietyDateView: UIView!
+    @IBOutlet weak var soberSinceWeekDayLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var soberSinceLabel: UILabel!
+    @IBOutlet weak var soberSinceYearValueLabel: UILabel!
     @IBOutlet weak var soberSinceDateValueLabel: UILabel!
     @IBOutlet weak var sobrietyDatePicker: UIDatePicker!
     @IBOutlet weak var numberOfDaysSoberLabel: UILabel!
     @IBOutlet weak var numberOfDaysSoberValueLabel: UILabel!
+    @IBOutlet weak var triggersLogoView: UIImageView!
+    @IBOutlet weak var checkInBottomButton: UIButton!
     
     var theme = MyTheme.dark
     var user: User?
@@ -41,16 +48,16 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Test print to verify the custom San Francisco fonts are include in this projects build
-//        for family: String in UIFont.familyNames
-//        {
-//            print(family)
-//            for names: String in UIFont.fontNames(forFamilyName: family)
-//            {
-//                print("== \(names)")
-//            }
-//        }
+        triggersLogoView.image = UIImage(named: "triggersLogoIcon")
+        checkInBottomButton.isUserInteractionEnabled = true
+        rightView.backgroundColor = .clear
+        rightView.layer.borderWidth = 0.5
+        rightView.layer.borderColor = MyColor.offWhite.value.cgColor
         
+        leftView.backgroundColor = .clear
+        leftView.layer.borderWidth = 0.5
+        leftView.layer.borderColor = UIColor.black.cgColor
+        leftView.layer.borderColor = MyColor.offWhite.value.cgColor
         
         updateViewsFonts()
         
@@ -58,22 +65,29 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         
         self.activityIndicatorView.isHidden = true
         updateViewsRelatedToSobrietyItems()
-        
+        updateDayofWeekLabel()
         sobrietyDateView.layer.cornerRadius = 15
         soberSinceDateValueLabel.numberOfLines = 0
         modifiyDatePicker()
         
         self.activityIndicator.isHidden = true
         
-        
+        //UI
         self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
         updateLabelUI()
         
-        calenderView.topAnchor.constraint(equalTo: view.topAnchor, constant: 250).isActive = true
+        //Check in button
+        checkInBottomButton.setTitle("Check-In", for: .normal)
+        checkInBottomButton.setTitleColor(MyColor.blackGrey.value, for: .normal)
+        checkInBottomButton.backgroundColor = MyColor.offWhite.value
+        
+        
+        calenderView.topAnchor.constraint(equalTo: view.topAnchor, constant: 235).isActive = true
         calenderView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12).isActive = true
         calenderView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 12).isActive = true
-        calenderView.heightAnchor.constraint(equalToConstant: 365).isActive = true
+        calenderView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,66 +110,128 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     
     func updateViewsRelatedToSobrietyItems() {
         
-        guard let sobrietyDate = sobrietyDate else { return }
+        guard let usersSobrietyDate = sobrietyDate else { return }
         
         let userCalendar = Calendar.current
         
-        let dateComponents = userCalendar.dateComponents([.day], from: sobrietyDate, to: Date())
+        let dateComponents = userCalendar.dateComponents([.day], from: usersSobrietyDate, to: Date())
         
         guard let numberOfDaysSober = dateComponents.day else { return }
         
         numberOfDaysSoberValueLabel.text = "\(numberOfDaysSober)"
         
         let dateFormater = DateFormatter()
-        dateFormater.locale = Locale(identifier: localeUSA)
+        
+        let usaLocal = Locale(identifier: localeUSA)
+        dateFormater.locale = usaLocal
+        
         dateFormater.timeStyle = .none
-        dateFormater.dateStyle = .medium
-        let formattedSobrietyDate = dateFormater.string(from: sobrietyDate)
+        dateFormater.dateStyle = .short
         
-        soberSinceDateValueLabel.text = formattedSobrietyDate
+        //custom formats
+        let monthDayType = "MMMMdd"
+        
+        let monthDayFormat = DateFormatter.dateFormat(fromTemplate: monthDayType, options: 0, locale: usaLocal)
+        
+        dateFormater.dateFormat = monthDayFormat
+        
+        let sobrietyMonthDayValue = dateFormater.string(from: usersSobrietyDate)
+        
+        //Year only format
+        let yearofSobrietyComponent = userCalendar.dateComponents([.year, .weekday], from: usersSobrietyDate)
+        
+        let yearOfSobreity = yearofSobrietyComponent.year
+        
+        soberSinceDateValueLabel.text = sobrietyMonthDayValue
+        soberSinceYearValueLabel.text = "\(yearOfSobreity ?? 0)"
         
     }
     
     
-   func updateViewsFonts() {
-    soberSinceLabel.font = MyFont.SFDisMed.withSize(size: 24)
-    soberSinceDateValueLabel.font = MyFont.SFDisMed.withSize(size: 24)
-    numberOfDaysSoberLabel.font = MyFont.SFDisMed.withSize(size: 24)
-    numberOfDaysSoberValueLabel.font = MyFont.SFDisMed.withSize(size: 24)
+    func updateDayofWeekLabel() {
+        guard let usersSobrietyDate = sobrietyDate else { return }
+        
+        let dayOfWeekType = "EEEE"
+        let dateFormater = DateFormatter()
+        let usaLocal = Locale(identifier: localeUSA)
+        let dayNameFormat = DateFormatter.dateFormat(fromTemplate: dayOfWeekType, options: 0, locale: usaLocal)
+        
+        dateFormater.dateFormat = dayNameFormat
+        let dayNameValue = dateFormater.string(from: usersSobrietyDate)
+        soberSinceWeekDayLabel.text = "\(dayNameValue)"
     }
+    
+    func updateViewsFonts() {
+        
+        //Future version include 'kern' to text style
+        //        let kernAttribute = [NSAttributedString.Key.kern: 10]
+        
+        //Left side date related to Sober Since
+        soberSinceLabel.font = MyFont.SFDisMed.withSize(size: 17)
+        soberSinceYearValueLabel.font = MyFont.SFBold.withSize(size: 24)
+        soberSinceDateValueLabel.font = MyFont.SFDisMed.withSize(size: 17)
+        soberSinceWeekDayLabel.font = MyFont.SFReg.withSize(size: 12)
+        
+        //Right side date related to Counter of days sober
+        numberOfDaysSoberLabel.font = MyFont.SFDisMed.withSize(size: 17)
+        numberOfDaysSoberValueLabel.font = MyFont.SFBold.withSize(size: 24)
+        
+        soberSinceLabel.textColor = MyColor.offWhite.value
+        soberSinceYearValueLabel.textColor = MyColor.offWhite.value
+        soberSinceDateValueLabel.textColor = MyColor.offWhite.value
+        soberSinceWeekDayLabel.textColor = MyColor.offWhite.value
+        
+        //Right side date related to Counter of days sober
+        numberOfDaysSoberLabel.textColor = MyColor.offWhite.value
+        numberOfDaysSoberValueLabel.textColor = MyColor.offWhite.value
+    }
+    
+    
     // MARK: - Actions
     @IBAction func sobrietySaveButtonTapped(_ sender: IRButton) {
         //TestPrint
         print("\nSave Button Tapped")
         
+        //Turn the button to a cancel button
+       
+        
         UserDefaults.standard.setValue(sobrietyDatePicker.date, forKey: sobrietyUserDefaultKey)
         
         updateViewsRelatedToSobrietyItems()
-        
+        updateDayofWeekLabel()
         animateOutOfSobrietyView()
-        
     }
-    
     
     @IBAction func editButtonTapped(_ sender: Any) {
         print("Edit buton tapped")
         DispatchQueue.main.async {
+             self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.animateOutOfSobrietyView))
             self.animateInSobrietyView()
         }
     }
     
-    @IBAction func checkInButtonTapped(_ sender: Any) {
+    
+    @objc func cancelSobrietyDateSelection() {
+        
+    }
+    
+    @IBAction func checkInButtonTapped(_ sender: IRButton) {
+        
+        //Test print
+        print("checkInBottomButtonTapped tapped")
         let checkInAlertController = AlertController.presentActionSheetAlertControllerWith(alertTitle: nil, alertMessage: nil, dismissActionTitle: "Cancel")
         
-        let composeEmailAction = UIAlertAction(title: "Email \(user?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
+        let supportPerson = UserController.shared.loggedInUser
+        
+        let composeEmailAction = UIAlertAction(title: "Email \(supportPerson?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
             self.composeEmail()
         }
         
-        let composeTextAction = UIAlertAction(title: "Text \(user?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
+        let composeTextAction = UIAlertAction(title: "Text \(supportPerson?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
             self.composeTextMessage()
         }
         
-        let phoneCallAction = UIAlertAction(title: "Call \(user?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
+        let phoneCallAction = UIAlertAction(title: "Call \(supportPerson?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
             self.telephoneSponsor()
         }
         
@@ -189,9 +265,7 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
                 self.present(notMailCompatable, animated: true)
                 self.activityIndicator.isHidden = true
                 self.activityIndicator.stopAnimating()
-                
             }
-            
             return
         }
         
@@ -244,7 +318,6 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
 // MARK: - Text Message
 extension CalendarVC: MFMessageComposeViewControllerDelegate {
     
-    
     func composeTextMessage() {
         
         DispatchQueue.main.async {
@@ -290,7 +363,6 @@ extension CalendarVC: MFMessageComposeViewControllerDelegate {
             break
         }
     }
-    
 }
 
 // MARK: - Telephone
@@ -335,13 +407,16 @@ extension CalendarVC {
 }
 
 extension CalendarVC {
-    func animateOutOfSobrietyView() {
+    @objc func animateOutOfSobrietyView() {
         UIView.animate(withDuration: 0.3, animations: {
             self.sobrietyDateView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
             self.sobrietyDateView.alpha = 0
             //            self.visualBlurrrView.effect = nil
         }) { (success: Bool) in
             self.sobrietyDateView.removeFromSuperview()
+            DispatchQueue.main.async {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editButtonTapped(_:)))
+            }
         }
     }
     
@@ -393,3 +468,13 @@ extension CalendarVC {
  //    }
  
  */
+
+//Test print to verify the custom San Francisco fonts are include in this projects build
+//        for family: String in UIFont.familyNames
+//        {
+//            print(family)
+//            for names: String in UIFont.fontNames(forFamilyName: family)
+//            {
+//                print("== \(names)")
+//            }
+//        }
