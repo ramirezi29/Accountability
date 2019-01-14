@@ -94,8 +94,8 @@ class CalenderView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         if currentMonthIndex == 2 && currentYear % 4 == 0 {
             numOfDaysInMonth[currentMonthIndex-1] = 29
         }
-        //end
         
+        //end
         presentMonthIndex = currentMonthIndex
         presentYear = currentYear
         
@@ -111,7 +111,7 @@ class CalenderView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell=collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! dateCVCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! dateCVCell
         cell.backgroundColor = UIColor.clear
         if indexPath.item <= firstWeekDayOfMonth - 2 {
             cell.isHidden = true
@@ -259,7 +259,7 @@ class dateCVCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "00"
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 29)
+        label.font = UIFont.systemFont(ofSize: 17)
         label.textColor = MyColor.softGreen.value
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

@@ -17,6 +17,7 @@ enum MyColor {
     case offWhiteLowAlpha
     case softGreen
     case blackGrey
+    case annotationOrange
 }
 
 extension MyColor {
@@ -37,6 +38,8 @@ extension MyColor {
                 return UIColor(red: 0.9569, green: 0.9647, blue: 0.9686, alpha: 5.0)
             case .blackGrey:
                 return UIColor(red: 22/255, green: 21/255, blue: 20/255, alpha: 1.0)
+            case .annotationOrange:
+                return UIColor(red: 255/255, green: 73/255, blue: 42/255, alpha: 1.0)
             }
         }
     }

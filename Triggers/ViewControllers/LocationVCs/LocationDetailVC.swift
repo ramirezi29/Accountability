@@ -13,7 +13,7 @@ import AVFoundation
 import CloudKit
 import CoreLocation
 
-class LocationDetailVC: UIViewController {
+class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -37,10 +37,11 @@ class LocationDetailVC: UIViewController {
     var user: User?
     
     private let geocoder = CLGeocoder()
-    private let locationManger = CLLocationManager()
+    private let locationManager = CLLocationManager()
     private let metersPerMile = 1609.344
     private var coordinate: CLLocationCoordinate2D?
     private var annotation: MKPointAnnotation?
+    private var authorizationStatus = CLLocationManager.authorizationStatus()
     private let desiredRadius = 60.96
     private let devMntLat = 40.761806
     private let devMntLon = -111.890534
@@ -48,22 +49,38 @@ class LocationDetailVC: UIViewController {
     let badAddressNotif = AlertController.presentAlertControllerWith(alertTitle: "Address Not Found", alertMessage: "Sorry, Couldnt not find the specified address", dismissActionTitle: "OK")
     let networkErroNoif = AlertController.presentAlertControllerWith(alertTitle: "Network Error", alertMessage: "Error with your internet connection unable to save", dismissActionTitle: "OK")
     
+    
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapViewOutlet.showsUserLocation = true
         
-         let usersLocation = mapViewOutlet.userLocation
+        
+        
+        //Tap guesture for map taps
+//        let mapTapGesture = UITapGestureRecognizer(target: self, action:#selector(LocationDetailVC.handleTap(_:)))
+        
+        let longPressMapTap = UILongPressGestureRecognizer(target: self, action: #selector(LocationDetailVC.handleTap(_:)))
+        
+        longPressMapTap.delegate = self
+        
+        longPressMapTap.minimumPressDuration = 0.5
+
+        //Map
+        mapViewOutlet.showsUserLocation = true
+        let usersLocation = mapViewOutlet.userLocation
+        
+         
+        
+        mapViewOutlet.addGestureRecognizer(longPressMapTap)
+        
         
         let region = MKCoordinateRegion(center: mapViewOutlet.userLocation.coordinate, latitudinalMeters: 1609.344, longitudinalMeters: 1609.344)
-    
-        mapViewOutlet.setRegion(region, animated: true)
-            
-
         
-        locationManger.delegate = self as? CLLocationManagerDelegate
+        mapViewOutlet.setRegion(region, animated: true)
+        
+        locationManager.delegate = self
         print(mapViewOutlet.isUserLocationVisible)
-        locationManger.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         actiivtyViewoutlet.backgroundColor = UIColor.clear
         activityIndicatorOutlet.isHidden = true
@@ -79,6 +96,10 @@ class LocationDetailVC: UIViewController {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     func addAnnotation() {
         guard let location = location,
             let latitude = CLLocationDegrees(exactly: location.latitude),
@@ -89,15 +110,13 @@ class LocationDetailVC: UIViewController {
         pointAnnotation.coordinate = coordinate
         mapViewOutlet.addAnnotation(pointAnnotation)
         
-         let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: self.metersPerMile, longitudinalMeters: self.metersPerMile)
+        let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: self.metersPerMile, longitudinalMeters: self.metersPerMile)
         print(mapViewOutlet.isUserLocationVisible)
         self.mapViewOutlet.setRegion(viewRegion, animated: true)
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
+  
     
     func updateViews() {
         
@@ -107,11 +126,10 @@ class LocationDetailVC: UIViewController {
         addressTextField.text = location.geoCodeAddressString
     }
     
-    
     private func showAddressOnMap(address: String) {
         geocoder.geocodeAddressString(address) { [weak self] (placemarks, error) in
             guard let `self` = self else { return }
-            //      placemarks?.first?.location?.coordinate.la
+            
             guard error == nil else {
                 
                 return
@@ -165,12 +183,23 @@ class LocationDetailVC: UIViewController {
         //Create a location based notification
         guard let locationTitle = locationTitleTextField.text, !locationTitle.isEmpty, let addressLocation = addressTextField.text, !addressLocation.isEmpty else {return}
         
-        let lat = coordinate?.latitude ?? devMntLat
-        let long = coordinate?.longitude ?? devMntLon
+        
+        guard let coordianteLatitude = coordinate?.latitude,
+            let coordinateLongitude = coordinate?.longitude else {
+                
+                let coordinateError = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Location", alertMessage: "Ensure that the address is correctly entered", dismissActionTitle: "OK")
+                DispatchQueue.main.async {
+                    self.present(coordinateError, animated: true, completion: nil)
+                }
+                return
+        }
+        
+        let latitude = coordianteLatitude
+        let longitude = coordinateLongitude
         
         // MARK: - Update
         if let location = location {
-            LocationController.shared.updateTargetLocation(location: location, geoCodeAddressString: addressLocation, addressTitle: locationTitle, latitude: lat, longitude: long) { (success) in
+            LocationController.shared.updateTargetLocation(location: location, geoCodeAddressString: addressLocation, addressTitle: locationTitle, latitude: latitude, longitude: longitude) { (success) in
                 if success {
                     print("🙏🏽 Success updating Location")
                     DispatchQueue.main.async {
@@ -190,7 +219,7 @@ class LocationDetailVC: UIViewController {
             }
         } else {
             
-            LocationController.shared.createNewLocation(geoCodeAddressString: addressLocation, addressTitle: locationTitle, longitude: long, latitude: lat) { (success) in
+            LocationController.shared.createNewLocation(geoCodeAddressString: addressLocation, addressTitle: locationTitle, longitude: longitude, latitude: latitude) { (success) in
                 if success {
                     
                     NotificationController.createLocalNotifciationWith(contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Contact your accountability partner \(UserController.shared.loggedInUser?.sponsorName ?? "")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: UUID().uuidString), notifIdentifier: locationTitle)
@@ -243,9 +272,84 @@ class LocationDetailVC: UIViewController {
 extension LocationDetailVC {
     
     func searchButtonUI() {
-        searchButton.backgroundColor = MyColor.hardBlue.value
-        searchButton.layer.cornerRadius = 5.0
-        searchButton.setTitleColor(.white, for: .normal)
+        
         searchButton.setTitle("Search", for: .normal)
+    }
+}
+
+
+extension LocationDetailVC: CLLocationManagerDelegate {
+    
+    
+    @objc func handleTap(_ sender: UIGestureRecognizer)
+    {
+        if sender.state == UIGestureRecognizer.State.ended {
+            
+            let touchPoint = sender.location(in: mapViewOutlet)
+            
+            //touchCoordinate is a CLLocationCoordinate2D
+            let touchCoordinate = mapViewOutlet.convert(touchPoint, toCoordinateFrom: mapViewOutlet)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = touchCoordinate
+            annotation.title = "My Trigger"
+          
+            
+            // what you annotatded Long and Lat
+            let longPressedLongitude = annotation.coordinate.longitude
+            let longPressedLatitude = annotation.coordinate.latitude
+            
+            print("\(touchCoordinate)")
+            mapViewOutlet.removeAnnotations(mapViewOutlet.annotations)
+            mapViewOutlet.addAnnotation(annotation) //drops the pin
+            
+            let geoCoder = CLGeocoder()
+            geoCoder.reverseGeocodeLocation(CLLocation(latitude: longPressedLatitude, longitude: longPressedLongitude)) { (placemarks, error) in
+                guard let placemarks = placemarks, let placemark = placemarks.first else { return }
+                //                placemark.locality the city
+                // this location address has the address
+                
+                
+                
+                guard let addressComponents = placemark.postalAddress  else {return}
+                
+                let street = addressComponents.street
+                let city = addressComponents.city
+                let state = addressComponents.state
+                let postalCode = addressComponents.postalCode
+                
+                let cnPostalAddressFormatter = CNPostalAddressFormatter()
+                
+                let cnPostalFormatString = cnPostalAddressFormatter.attributedString(from: addressComponents, withDefaultAttributes: [:])
+                
+                  annotation.subtitle = "\(street) \(city), \(state) \(postalCode)"
+                
+                print("\(cnPostalFormatString)")
+                print("\(street) \(city), \(state) \(postalCode)")
+                
+                self.addressTextField.text = ("\(street) \(city), \(state) \(postalCode)")
+            }
+        }
+    }
+}
+
+
+extension LocationDetailVC: MKMapViewDelegate {
+    
+    func centerMapOnUserLocation() {
+        guard let coordinate = locationManager.location?.coordinate else {return}
+        let coordinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: metersPerMile, longitudinalMeters: metersPerMile)
+        mapViewOutlet.setRegion(coordinateRegion, animated: true)
+    }
+    
+    func configureLocationServices() {
+        if authorizationStatus == .notDetermined {
+            locationManager.requestAlwaysAuthorization()
+        } else {
+            return
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        centerMapOnUserLocation()
     }
 }
