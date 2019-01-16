@@ -26,7 +26,7 @@ class User {
     
     var notes: [Note] = []
     
-    ///4 classes
+    //4 classes
     //8 user
     //7 location
     //4 folder

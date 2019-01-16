@@ -84,6 +84,11 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         locationManger.distanceFilter = 10
         
+        //Listening for certain events related to the keyboard
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
         
         //updateViews
         UserController.shared.fetchCurrentUser { (success, _) in
@@ -161,20 +166,20 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         switch index {
             
-        case 2:
-            self.textFieldsDisappearAnimation()
         case 3:
+            self.textFieldsDisappearAnimation()
+        case 4:
             print("\n🔷 DOnt feel isolated view🌎\n")
             
             self.hideTextFields()
             self.contactButton.isHidden = true
             
-        case 4:
+        case 5:
             
             //Test print
             loadLoggedUserDefaults()
             
-            print("\(String(describing: self.loggedInUserExist)) and user defautls has it as \(UserDefaults.standard.bool(forKey: loggedInUserExistKey))")
+            print("🍔🍔🍔🍔\(String(describing: self.loggedInUserExist)) and user defautls has it as \(UserDefaults.standard.bool(forKey: loggedInUserExistKey))")
             
             if loggedInUserExist == false || UserController.shared.loggedInUser == nil {
                 self.textFieldAlphaZero()
@@ -195,17 +200,43 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
                 }
             }
             
-        case 5:
+        case 6:
             
             self.contactButton.isHidden = true
             hideTextFields()
             
-        case 6:
+        case 7:
             
             self.inquirePermissions()
             
         default:
             break
+        }
+    }
+    
+    // MARK: - KEYBOARD
+    
+    //Stop listening for certain events reltated to the keybaord such as hide/show
+    deinit {
+        
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    // MARK: - KEYBOARD ACTIONS
+    
+    @objc func keyboardWillShow(notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= 150
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
         }
     }
     
@@ -409,10 +440,10 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         let textField = UITextField()
         //Test Purposes
         //        textField.text = "Jan 07 User Name Exaample"
-        
-        textField.backgroundColor = MyColor.offWhiteLowAlpha.value
+        textField.layer.cornerRadius = 7
+        textField.backgroundColor = MyColor.offWhite.value
         textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter Name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Your Name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
         return textField
     }()
@@ -421,9 +452,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     lazy var sponsorsNameTextField: UITextField = {
         
         let textField = UITextField()
-        //Test Purposes
+        textField.layer.cornerRadius = 7
         //textField.text = "🐠🐠🐠🐠"
-        textField.backgroundColor = MyColor.offWhiteLowAlpha.value
+        textField.backgroundColor = MyColor.offWhite.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
@@ -433,9 +464,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     lazy var sponsorsPhoneNumberTextField: UITextField = {
         
         let textField = UITextField()
-        //Test Purposes
+         textField.layer.cornerRadius = 7
         //textField.text = "☔️☔️☔️☔️"
-        textField.backgroundColor = MyColor.offWhiteLowAlpha.value
+        textField.backgroundColor = MyColor.offWhite.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
@@ -445,10 +476,10 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     lazy var sponsorsEmailAddressTextField: UITextField = {
         
         let textField = UITextField()
-        
+         textField.layer.cornerRadius = 7
         //Test Purposes
         //textField.text = "🍎🍎🍎🍎"
-        textField.backgroundColor = MyColor.offWhiteLowAlpha.value
+        textField.backgroundColor = MyColor.offWhite.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Email Address", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
@@ -458,11 +489,12 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     lazy var aaStepTextField: UITextField = {
         
         let textField = UITextField()
+         textField.layer.cornerRadius = 7
         //Test Purposes
         //textField.text = "99"
-        textField.backgroundColor = MyColor.offWhiteLowAlpha.value
+        textField.backgroundColor = MyColor.offWhite.value
         textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "If in treatment enter current Step", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
+        textField.attributedPlaceholder = NSAttributedString(string: "If in AA, enter current step", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
         return textField
     }()
@@ -483,66 +515,55 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     func userNameConstraints() {
         userNameTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        userNameTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
-        
-        userNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
-        
-        userNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 100).isActive = true
-        
-        userNameTextField.layer.cornerRadius = 9
+        NSLayoutConstraint.activate([
+            userNameTextField.topAnchor.constraint(equalTo: contentImageView.bottomAnchor, constant: 15),
+            userNameTextField.leadingAnchor.constraint(equalTo: contentImageView.leadingAnchor, constant: 0)
+            ])
     }
     
     //Sponsors Name Constraint
     func sponsorsNameContraints() {
+        
         sponsorsNameTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        
-        sponsorsNameTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 150).isActive = true
-        
-        sponsorsNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
-        
-        sponsorsNameTextField.layer.cornerRadius = 9
+        NSLayoutConstraint.activate([
+            sponsorsNameTextField.topAnchor.constraint(equalTo: userNameTextField.bottomAnchor, constant: 15),
+            sponsorsNameTextField.leadingAnchor.constraint(equalTo: userNameTextField.leadingAnchor, constant: 0)
+            ])
     }
     
     //Sponsor Telephone Constraints
     func sponorsPhoneNumberConstraints() {
         sponsorsPhoneNumberTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        
-        sponsorsPhoneNumberTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
-        
-        sponsorsPhoneNumberTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
-        
-        sponsorsPhoneNumberTextField.layer.cornerRadius = 9
+        NSLayoutConstraint.activate([
+            sponsorsPhoneNumberTextField.topAnchor.constraint(equalTo: sponsorsNameTextField.bottomAnchor, constant: 15),
+            sponsorsPhoneNumberTextField.leadingAnchor.constraint(equalTo: sponsorsNameTextField.leadingAnchor, constant: 0)
+            ])
     }
     
     func sponorsEmailConstraints() {
         sponsorsEmailAddressTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        
-        sponsorsEmailAddressTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 250).isActive = true
-        
-        sponsorsEmailAddressTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
-        
-        sponsorsEmailAddressTextField.layer.cornerRadius = 9
+        NSLayoutConstraint.activate([
+            sponsorsEmailAddressTextField.topAnchor.constraint(equalTo: sponsorsPhoneNumberTextField.bottomAnchor, constant: 15),
+            sponsorsEmailAddressTextField.leadingAnchor.constraint(equalTo: sponsorsPhoneNumberTextField.leadingAnchor, constant: 0)
+            ])
+
     }
     
     func aaStepConstraint() {
         aaStepTextField.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        aaStepTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 300).isActive = true
-        
-        aaStepTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
-        
-        aaStepTextField.trailingAnchor.constraint(equalToSystemSpacingAfter: view.trailingAnchor, multiplier: 1).isActive = true
-        
-        
-        aaStepTextField.layer.cornerRadius = 9
+
+        NSLayoutConstraint.activate([
+            aaStepTextField.topAnchor.constraint(equalTo: sponsorsEmailAddressTextField.bottomAnchor, constant: 15),
+            aaStepTextField.leadingAnchor.constraint(equalTo: sponsorsEmailAddressTextField.leadingAnchor, constant: 0)
+            ])
     }
     
 }
 
+//Location Delegates
 extension WalkThroughContentVC {
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
@@ -553,7 +574,6 @@ extension WalkThroughContentVC {
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         //NOTE: - Uncomment in order for testing purposes
         print("🌎 didStartMonitoringFor: The monitored regions are: \(manager.monitoredRegions)")
-        
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -576,7 +596,6 @@ extension WalkThroughContentVC : UITextFieldDelegate {
         if textField.text!.count - 1 < 2 {
             delegate?.validUserNameEntered(username: "", isHidden: true)
         }
-        
         return true
     }
     
@@ -591,7 +610,9 @@ extension WalkThroughContentVC : UITextFieldDelegate {
             sponsorsPhoneNumberTextField.returnKeyType = .next
         case sponsorsEmailAddressTextField:
             sponsorsEmailAddressTextField.keyboardType = .emailAddress
-            sponsorsEmailAddressTextField.returnKeyType = .done
+            sponsorsEmailAddressTextField.returnKeyType = .next
+        case aaStepTextField:
+            aaStepTextField.keyboardType = .numberPad
             
         default: break
         }
@@ -614,7 +635,6 @@ extension WalkThroughContentVC : UITextFieldDelegate {
         }
         return false
     }
-    
 }
 
 extension WalkThroughContentVC {

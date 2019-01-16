@@ -20,7 +20,9 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
     
     var currentVC: WalkThroughContentVC?
 
-    var pageHeadings = ["Triggers",
+    var pageHeadings = ["My Triggers",
+                        
+                        "Information is saved to your iCloud",
                         
                         "Addiction recovery is difficult",
                         
@@ -40,22 +42,24 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
     // R. (2011). New findings on biological factors predicting addiction relapse vulnerability. Current Psychiatry Reports, 13(5), 398–405."
     var pageSubHeadings = ["One Step Closer To Eliminating Your Triggers",
                            
+                           "Ensure that you are signed into your iCloud Account",
+                           
                            "Research reflects that 85% of individuals relapse and return to drug use within the year following treatment \n\nSinha, R. (2011). Current Psychiatry Reports.",
                            
-                           "\n\nAs your companion, we can assist you stay away from locations that may cause a trigger to relapse",
+                           "\n\nAs your companion, we can assist you to stay away from locations that may cause a trigger to relapse",
                            
                            "Provide Triggers with the contact information of your accountability partner or sponsor",
                            
-                           "Enter at least one field",
+                           "",
                            
-                           "We are with you ever Step of the way of your journey. \nAllow location services in order to better serve you",
+                           "We are with you, every step of the way of your journey. \n\nAllow location services in order to better serve you",
                            
                            "Add another layer of accountability and support to your addiction recovery journey",
                            
                            ""]
 
     
-    var pageImages = ["LocationLogo", "ambulance", "handshake", "friendship", "paperplane", "map", "gps", "landscape"] 
+    var pageImages = ["LocationLogo", "icloud", "ambulance", "handshake", "friendship", "paperplane", "map", "gps", "landscape"]
     
     
     var currentIndex = 0

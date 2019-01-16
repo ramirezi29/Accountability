@@ -207,7 +207,7 @@
                             </date>
                         </datePicker>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="teH-2K-i9f" customClass="IRButton" customModule="Triggers" customModuleProvider="target">
-                            <rect key="frame" x="113" y="194" width="75" height="42"/>
+                            <rect key="frame" x="113" y="194" width="95" height="42"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Save"/>
                             <connections>

@@ -170,6 +170,34 @@
                                     <action selector="searchButtonTapped:" destination="M04-W1-BLT" eventType="touchUpInside" id="awi-cV-Ha3"/>
                                 </connections>
                             </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="MOi-Uc-o3t">
+                                <rect key="frame" x="277" y="242" width="50" height="77"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7aK-Ai-XEg" userLabel="toolView">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="77"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HHW-GC-maH">
+                                                <rect key="frame" x="9" y="3" width="30" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button" image="information"/>
+                                                <connections>
+                                                    <action selector="mapTypeButtonTapped:" destination="M04-W1-BLT" eventType="touchUpInside" id="sou-tf-JcX"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WX2-y2-Kjb">
+                                                <rect key="frame" x="9" y="43" width="30" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button" image="navigation"/>
+                                                <connections>
+                                                    <action selector="userLocationButtonTapped:" destination="M04-W1-BLT" eventType="touchUpInside" id="bYh-92-1MD"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -225,9 +253,12 @@
                         <outlet property="enterAddressLabel" destination="w5D-OT-i1j" id="gAZ-gL-2l4"/>
                         <outlet property="enterTitleLabel" destination="scw-Hs-Zon" id="c2J-Ty-bAw"/>
                         <outlet property="locationTitleTextField" destination="2b0-xx-coH" id="u0b-xw-xdI"/>
+                        <outlet property="mapTypeButton" destination="HHW-GC-maH" id="fjl-b4-6FB"/>
                         <outlet property="mapViewOutlet" destination="44K-Xf-6fO" id="QEm-wA-lOo"/>
                         <outlet property="saveButton" destination="h5e-mP-LDX" id="Qgs-DP-Hpb"/>
                         <outlet property="searchButton" destination="EhH-35-12m" id="adw-Mh-uij"/>
+                        <outlet property="toolView" destination="7aK-Ai-XEg" id="jdW-zY-glb"/>
+                        <outlet property="userLoactionButton" destination="WX2-y2-Kjb" id="kN3-Gr-frj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Imx-Ku-HAu" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -237,7 +268,9 @@
     </scenes>
     <resources>
         <image name="cloud" width="432" height="272"/>
+        <image name="information" width="90" height="90"/>
         <image name="locationIcon" width="34.5" height="34.5"/>
+        <image name="navigation" width="192" height="192"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Uv7-Yh-Pfb"/>

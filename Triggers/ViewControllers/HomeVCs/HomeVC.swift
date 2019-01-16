@@ -15,19 +15,26 @@ class HomeVC: UIViewController {
     // MARK: - Properties
     @IBOutlet weak var currentAAStepValueLabel: UILabel!
     @IBOutlet weak var aaPickerView: UIPickerView!
-    @IBOutlet weak var phoneBookButton: UIButton!
+    @IBOutlet weak var aaExplinationLabel: UILabel!
     
     //Images
-    @IBOutlet weak var aaStepImageView: UIImageView!
     @IBOutlet weak var supportPersonImageView: UIImageView!
     @IBOutlet weak var phoneImageView: UIImageView!
     @IBOutlet weak var emailImageView: UIImageView!
     
     //View
-    @IBOutlet weak var buttomView: UIView!
+    @IBOutlet var aaStepInfoView: UIView!
+    
+    //Buttons
+    
+    @IBOutlet weak var phoneBookButton: UIButton!
+    @IBOutlet weak var aaIconButton: UIButton!
+    @IBOutlet weak var aaDismissButton: IRButton!
+    
     
     //Navigation Bar BUttons
     @IBOutlet weak var editButton: UIBarButtonItem!
+    
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     
     //TextFields
@@ -42,6 +49,7 @@ class HomeVC: UIViewController {
     
     var editBool = false
     var isContactBookVisable = false
+    let aaStepImage = UIImage(named: "stepIcon")
     let phoneBookImage = UIImage(named: "phoneBook")
     let locationLogoImage = UIImage(named: "LocationLogo")
     
@@ -53,9 +61,18 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         
         
+        //view
+        aaStepInfoView.layer.cornerRadius = 15
+        
+        
+        //Button
         self.phoneBookButton.isUserInteractionEnabled = false
         self.phoneBookButton.alpha = 0
-//        self.phoneBookButton.contentMode.
+        self.phoneBookButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFit
+        self.aaIconButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFill
+        
+        //Label
+        self.currentAAStepValueLabel.contentMode = UIView.ContentMode.scaleAspectFill
         
         //activity indicator
         self.activityIndicatorView.backgroundColor = .clear
@@ -72,7 +89,8 @@ class HomeVC: UIViewController {
         supportPersonImageView.image = UIImage(named: "friendshipMaleIcon")
         phoneImageView.image = UIImage(named: "smartphone")
         emailImageView.image = UIImage(named: "paperPlaneIcon")
-        aaStepImageView.image = UIImage(named: "stepIcon")
+        
+        
         
         //Tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(HomeVC.hideKeyboard))
@@ -92,15 +110,15 @@ class HomeVC: UIViewController {
         self.sponsorsPhoneNumberTextField.returnKeyType = .next
         self.sponsorsEmailTextField.returnKeyType = .done
         
-        self.userNameTextField.layer.cornerRadius = 4
-        self.sponsorsNameTextField.layer.cornerRadius = 4
-        self.sponsorsPhoneNumberTextField.layer.cornerRadius = 4
-        self.sponsorsEmailTextField.layer.cornerRadius = 4
+        self.userNameTextField.layer.cornerRadius = 7
+        self.sponsorsNameTextField.layer.cornerRadius = 7
+        self.sponsorsPhoneNumberTextField.layer.cornerRadius = 7
+        self.sponsorsEmailTextField.layer.cornerRadius = 7
         
         
-        self.sponsorsNameTextField.layer.cornerRadius = 4
-        self.sponsorsPhoneNumberTextField.layer.cornerRadius = 4
-        self.sponsorsEmailTextField.layer.cornerRadius = 4
+        self.sponsorsNameTextField.layer.cornerRadius = 7
+        self.sponsorsPhoneNumberTextField.layer.cornerRadius = 7
+        self.sponsorsEmailTextField.layer.cornerRadius = 7
         
         textFieldsTextOffWhiteColor()
         
@@ -112,7 +130,7 @@ class HomeVC: UIViewController {
         sponsorsPhoneNumberTextField.attributedPlaceholder = NSAttributedString(string: "Support Person's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
         
-        sponsorsEmailTextField.attributedPlaceholder = NSAttributedString(string: "Support  Peronn's name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
+        sponsorsEmailTextField.attributedPlaceholder = NSAttributedString(string: "Support  Person's Email", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
         
         self.userNameTextField.autocorrectionType = .no
         self.sponsorsNameTextField.autocorrectionType = .no
@@ -130,8 +148,6 @@ class HomeVC: UIViewController {
         //Custom one based on mock up
         //Buttom view
         
-        
-        
         //Textfields
         textFieldsInactive()
         textFieldsInvisable()
@@ -140,7 +156,7 @@ class HomeVC: UIViewController {
         UserController.shared.fetchCurrentUser { (success, error) in
             if success {
                 DispatchQueue.main.async {
-                    self.activityIndicator.stopAnimating()
+                    self.hideStopActivityIndicator()
                     self.updateCurrentAAStep()
                     self.updateViews()
                 }
@@ -198,7 +214,30 @@ class HomeVC: UIViewController {
         currentAAStepValueLabel.text = "\(loggedInUser.aaStep)"
     }
     
+    
+    
     // MARK: - Actions
+    @IBAction func dismissAAInfoButtonTapped(_ sender: IRButton) {
+        //Dismiss view
+    enableBarButtons()
+        
+        animateOutAAInfoView()
+    }
+    
+    @IBAction func aaStepIconTapped(_ sender:Any) {
+
+        disableBarButtons()
+        self.cancelButton.isEnabled = false
+        
+        self.aaDismissButton.setTitle("Dismiss", for: .normal)
+        
+        
+            self.aaExplinationLabel.text = "If you are currently in an Alchol Anonymous or 12 Step program you can track your progress by selcting your current step"
+        
+        animateInAAInfoView()
+        
+    }
+    
     @IBAction func contactButtonTapped(_ sender: Any) {
         showContcts()
     }
@@ -226,6 +265,18 @@ class HomeVC: UIViewController {
         editBool = false
         textFieldsTextOffWhiteColor()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped(_:)))
+    }
+    
+    func enableBarButtons() {
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        
+        navigationItem.leftBarButtonItem?.isEnabled = true
+    }
+    
+    func disableBarButtons() {
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        
+        navigationItem.leftBarButtonItem?.isEnabled = false
     }
     
     func textFieldsInactive() {
@@ -290,7 +341,7 @@ class HomeVC: UIViewController {
         case false:
             
             // Edit Button
-            self.phoneBookDisappearAnimation()
+            self.phoneBookAppearAnimation()
             
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(editButtonTapped(_:)))
             
@@ -308,15 +359,7 @@ class HomeVC: UIViewController {
             textfildsVisable()
             
             // Picker View
-            UIView.animate(withDuration: 0.6, delay: 0.1, options: .curveEaseIn, animations: {
-                self.aaPickerView.alpha = 1.0
-            }) { (succes) in
-                if succes {
-                    self.aaPickerView.tintColor = .black
-                    //Test Print
-                    print("\nCase False animation compeleted\n")
-                }
-            }
+            aaPickerAppearAnimation()
             
             // Test Print
             print("\nEdit Button Tapped")
@@ -329,7 +372,7 @@ class HomeVC: UIViewController {
             showStartActivityIndicator()
             
             //image anamation
-            self.phoneBookAppearAnimation()
+            self.phoneBookDisappearAnimation()
             
             self.cancelButton.isEnabled = false
             self.cancelButton.tintColor = .clear
@@ -390,17 +433,7 @@ class HomeVC: UIViewController {
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped(_:)))
             
             // Picker View
-            UIView.animate(withDuration: 0.6, delay: 0.0, options: .curveEaseIn, animations: {
-                self.aaPickerView.alpha = 0.0
-            }) { (succes) in
-                if succes {
-                    self.aaPickerView.isHidden = true
-                    print("\nCase True animation compeleted\n")
-                    DispatchQueue.main.async {
-                        self.updateCurrentAAStep()
-                    }
-                }
-            }
+            aaPickerDissaperAnimation()
             print("\nEdit Button Tapped")
             // Edit Button Bool
             editBool = false
@@ -410,11 +443,11 @@ class HomeVC: UIViewController {
     
     func updateCurrentAAStep() {
         if currentAAStepValueLabel.text == "0" {
-            currentAAStepValueLabel.isHidden = true
-            aaStepImageView.isHidden = true
+//            currentAAStepValueLabel.isHidden = true
+            
         } else {
-            currentAAStepValueLabel.isHidden = false
-            aaStepImageView.isHidden = false
+//            currentAAStepValueLabel.isHidden = false
+            
         }
     }
     
@@ -445,11 +478,14 @@ extension HomeVC: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch component {
         case 0:
-            return "Step"
+            return "AA Step"
         default:
             return "\(row)"
         }
     }
+}
+
+extension HomeVC {
     
     func hideStopActivityIndicator() {
         self.activityIndicator.isHidden =  true
@@ -499,35 +535,57 @@ extension HomeVC: UITextFieldDelegate {
     }
 }
 
+// MARK: - Animations
 extension HomeVC {
     
-    func phoneBookDisappearAnimation() {
-        UIView.animate(withDuration: 1.0, animations: {
-            DispatchQueue.main.async {
+    func aaPickerAppearAnimation() {
+        UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseIn, animations: {
+            self.aaPickerView.center.y -= self.view.bounds.width / 3
+            self.aaPickerView.alpha = 1.0
+        }) { (succes) in
+            if succes {
                 
-                self.phoneBookButton.alpha = 0
+                //Test Print
+                print("\nCase False animation compeleted\n")
             }
-        }) { (success) in
-            if !success {
-                self.phoneBookButton.isHidden = true
+        }
+    }
+    
+    func aaPickerDissaperAnimation() {
+        UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseIn, animations: {
+            self.aaPickerView.alpha = 0.0
+        }) { (succes) in
+            if succes {
+                self.aaPickerView.isHidden = true
+                print("\nCase True animation compeleted\n")
+                DispatchQueue.main.async {
+                    self.updateCurrentAAStep()
+                }
             }
+        }
+    }
+    
+    func phoneBookDisappearAnimation() {
+        UIView.animate(withDuration: 1) {
+            self.phoneBookButton.isUserInteractionEnabled = false
+            self.phoneBookButton.alpha = 0
         }
     }
     
     func phoneBookAppearAnimation() {
         
-        UIView.animate(withDuration: 1.2, delay: 0.0, usingSpringWithDamping: 3, initialSpringVelocity: 2, options: [.curveEaseIn], animations: {
-             DispatchQueue.main.async {
-            self.phoneBookButton.setImage(self.phoneBookImage, for: .normal)
+        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 7, initialSpringVelocity: 2, options: [.curveEaseInOut], animations: {
+            
             self.phoneBookButton.alpha = 1
-            }
+            self.phoneBookButton.setImage(self.phoneBookImage, for: .normal)
+            self.phoneBookButton.center.x += self.view.bounds.width
         }) { (success) in
             if success {
                 self.phoneBookButton.isUserInteractionEnabled = true
-            } else {
-                self.phoneBookButton.isHidden = true 
             }
         }
+        
+        print("phone book appear animation ran")
     }
 }
 
@@ -563,3 +621,30 @@ extension HomeVC: CNContactPickerDelegate {
     }
 }
 
+//AA Step Information View
+extension HomeVC {
+    func animateInAAInfoView() {
+        self.view.addSubview(self.aaStepInfoView)
+        self.aaStepInfoView.center = self.view.center
+        
+        self.aaStepInfoView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        self.aaStepInfoView.alpha = 0
+        
+        UIView.animate(withDuration: 0.4) {
+            self.aaStepInfoView.alpha = 1
+            self.aaStepInfoView.transform = CGAffineTransform.identity
+        }
+    }
+    
+    
+    func animateOutAAInfoView() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.aaStepInfoView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.aaStepInfoView.alpha = 0
+            //            self.visualBlurrrView.effect = nil
+        }) { (success: Bool) in
+            self.aaStepInfoView.removeFromSuperview()
+            
+        }
+}
+}
