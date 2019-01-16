@@ -24,8 +24,7 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         didSet {
             nextButton.layer.cornerRadius = 10.0
             nextButton.layer.masksToBounds = true
-            nextButton.setTitle("Next", for: .normal)
-            nextButton.backgroundColor = MyColor.hardBlue.value
+            nextButton.backgroundColor = MyColor.annotationOrange.value
             nextButton.setTitleColor(MyColor.offWhite.value, for: .normal)
         }
     }
@@ -45,8 +44,14 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // user defualts
+        
+        //Button
+        nextButton.alpha = 0
+        
+        //Get the users info in order to check if an account already exists
         loadUserDefaults()
         
+        //In order to not present the onboarding screen
         if disableOnBardingBool == true  {
             presentMainView()
             
@@ -69,7 +74,7 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         pageControl.currentPageIndicatorTintColor = MyColor.hardBlue.value
         pageControl.pageIndicatorTintColor = UIColor.gray
         pageControl.backgroundColor = UIColor.clear
-        pageControl.numberOfPages = 8
+        pageControl.numberOfPages = 9
         
     }
     
@@ -91,45 +96,60 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
             print("\(String(describing: walkThroughPVC?.currentIndex))")
             
             switch index {
-            case 3:
-                nextButton.setTitle("Next", for: .normal)
-   
             case 4:
+                print("case 4 was called")
+//                nextButton.setTitle("Next", for: .normal)
+                self.nextButton.alpha = 0
+   
+            case 5:
                 
                 if UserController.shared.loggedInUser == nil {
                     self.nextButton.setTitle("Save", for: .normal)
+                    UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseOut], animations: {
+                        
+                        self.nextButton.alpha = 1.0
+                    }, completion: nil)
                 } else {
-                    self.nextButton.setTitle("Next", for: .normal)
+//                    self.nextButton.setTitle("Next", for: .normal)
+                    self.nextButton.alpha = 0
                 }
                 
-            case 5:
-                nextButton.setTitle("I Understand", for: .normal)
-                print("Case 5")
-                
             case 6:
-                UIView.animate(withDuration: 0.9, delay: 0.1, options: [.curveEaseOut], animations: {
-                    self.nextButton.backgroundColor =  MyColor.hardBlue.value
+                nextButton.setTitle("I Understand", for: .normal)
+                UIView.animate(withDuration: 1.0, delay: 0.4, options: [.curveEaseOut], animations: {
                     
-                }, completion: nil)
-                
-                nextButton.setTitle("Next", for: .normal)
-                
-                UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations: {
                     self.nextButton.alpha = 1.0
                 }, completion: nil)
-
+                
+                print("Case 5")
+                
             case 7:
-                self.nextButton.alpha = 0.3
+                self.nextButton.alpha = 0
+//                UIView.animate(withDuration: 0.9, delay: 0.1, options: [.curveEaseOut], animations: {
+//                    self.nextButton.backgroundColor =  MyColor.hardBlue.value
+//
+//                }, completion: nil)
+//
+//                nextButton.setTitle("Next", for: .normal)
+//
+//                UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations: {
+//                    self.nextButton.alpha = 1.0
+//                }, completion: nil)
+                print("case 7")
+
+            case 8:
+                nextButton.setTitle("GET STARTED", for: .normal)
+                
                 print("the Walk Through PVC hit the last case which is 6 and the index is \(index)")
                 nextButton.isEnabled = true
                 nextButton.isHidden = false
                 
                 UIView.animate(withDuration: 1.0, delay: 0.4, options: [.curveEaseOut], animations: {
-                    self.nextButton.backgroundColor =  MyColor.softGreen.value
+                    
                     self.nextButton.alpha = 1.0
                 }, completion: nil)
                 
-                nextButton.setTitle("GET STARTED", for: .normal)
+                
             default: break
                 
             }
@@ -140,6 +160,8 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     func presentMainView() {
         let calendarStoryboard = UIStoryboard(name: StoryboardConstants.mainStoryboard, bundle: nil).instantiateInitialViewController()!
         
+//        self.navigationController?.popViewController(animated: false)
+
         present(calendarStoryboard, animated: true, completion: nil)
         
     }
@@ -168,10 +190,10 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         if let index = walkThroughPVC?.currentIndex {
             
             switch index {
-            case 0...3:
+            case 0...4:
                 walkThroughPVC?.forwardPage()
                 
-            case 4:
+            case 5:
                 walkThroughPVC?.currentVC?.saveInfoToCloudKit(completion: { (success) in
                     if success {
                         DispatchQueue.main.async {
@@ -184,20 +206,30 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                 print("case 4")
                 
                 
-            case 5:
+            case 6:
                 
                 walkThroughPVC?.forwardPage()
                 print("case 5")
                 
                 
-            case 6:
+            case 7:
                 walkThroughPVC?.forwardPage()
                 
-            case 7:
-                
+            case 8:
+                if UserController.shared.loggedInUser == nil {
+                    walkThroughPVC?.currentVC?.saveInfoToCloudKit(completion: { (success) in
+                        if success {
+                            DispatchQueue.main.async {
+                                
+                            }
+                        }
+                    })
+                }
+                    
                 UserDefaults.standard.set(true, forKey: UserDefaultConstants.isOnboardedKey)
                 
                 presentMainView()
+                
                 
             default: break
                 

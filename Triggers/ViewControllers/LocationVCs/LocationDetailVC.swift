@@ -27,6 +27,13 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var actiivtyViewoutlet: UIView!
     @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
     
+    //View
+    @IBOutlet weak var toolView: UIView!
+    
+    //Tools
+    @IBOutlet weak var mapTypeButton: UIButton!
+    @IBOutlet weak var userLoactionButton: UIButton!
+    
     //Mark: - Landing Pad
     var location: Location? {
         didSet {
@@ -38,7 +45,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     
     private let geocoder = CLGeocoder()
     private let locationManager = CLLocationManager()
-    private let metersPerMile = 1609.344
+    private let metersPerHalfMile = 804.672
     private var coordinate: CLLocationCoordinate2D?
     private var annotation: MKPointAnnotation?
     private var authorizationStatus = CLLocationManager.authorizationStatus()
@@ -53,8 +60,10 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        toolView.backgroundColor = MyColor.offWhite.value
         
-        
+        toolView.layer.cornerRadius = 10
         
         //Tap guesture for map taps
 //        let mapTapGesture = UITapGestureRecognizer(target: self, action:#selector(LocationDetailVC.handleTap(_:)))
@@ -65,23 +74,34 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         
         longPressMapTap.minimumPressDuration = 0.5
 
-        //Map
-        mapViewOutlet.showsUserLocation = true
-        let usersLocation = mapViewOutlet.userLocation
+        //Location and Map Delegate
+         locationManager.delegate = self
+        mapViewOutlet.delegate = self
         
-         
+        //Map
+        mapViewOutlet.mapType = MKMapType.satellite
+        mapViewOutlet.showsUserLocation = true
+        mapViewOutlet.userTrackingMode = .follow
+        mapViewOutlet.showsCompass = true
+        locationManager.startUpdatingLocation()
+        
+        
+//        let usersLocation = mapViewOutlet.userLocation
+        
+        
         
         mapViewOutlet.addGestureRecognizer(longPressMapTap)
         
         
-        let region = MKCoordinateRegion(center: mapViewOutlet.userLocation.coordinate, latitudinalMeters: 1609.344, longitudinalMeters: 1609.344)
+//        let region = MKCoordinateRegion(center: mapViewOutlet.userLocation.coordinate, latitudinalMeters: , longitudinalMeters: 1609.344)
+//
+//        mapViewOutlet.setRegion(region, animated: true)
         
-        mapViewOutlet.setRegion(region, animated: true)
         
-        locationManager.delegate = self
         print(mapViewOutlet.isUserLocationVisible)
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
+        //Activity Indicator
         actiivtyViewoutlet.backgroundColor = UIColor.clear
         activityIndicatorOutlet.isHidden = true
         
@@ -110,14 +130,12 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         pointAnnotation.coordinate = coordinate
         mapViewOutlet.addAnnotation(pointAnnotation)
         
-        let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: self.metersPerMile, longitudinalMeters: self.metersPerMile)
-        print(mapViewOutlet.isUserLocationVisible)
+        let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: self.metersPerHalfMile, longitudinalMeters: self.metersPerHalfMile)
+        print("Is user location visable \(mapViewOutlet.isUserLocationVisible). Clled in the add annotation func")
         self.mapViewOutlet.setRegion(viewRegion, animated: true)
         
     }
-    
-  
-    
+
     func updateViews() {
         
         //Update the text fields
@@ -164,15 +182,22 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
             self.mapViewOutlet.addAnnotation(self.annotation!)
             
             // the region around the annotation
-            let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: self.metersPerMile, longitudinalMeters: self.metersPerMile)
+            let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: self.metersPerHalfMile, longitudinalMeters: self.metersPerHalfMile)
             
             self.mapViewOutlet.setRegion(viewRegion, animated: true)
         }
     }
     
+    @IBAction func mapTypeButtonTapped(_ sender: UIButton) {
+    }
+    
+    
+    @IBAction func userLocationButtonTapped(_ sender: UIButton) {
+    }
     
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+        
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -277,7 +302,7 @@ extension LocationDetailVC {
     }
 }
 
-
+// Long Press on Map
 extension LocationDetailVC: CLLocationManagerDelegate {
     
     
@@ -291,16 +316,16 @@ extension LocationDetailVC: CLLocationManagerDelegate {
             let touchCoordinate = mapViewOutlet.convert(touchPoint, toCoordinateFrom: mapViewOutlet)
             let annotation = MKPointAnnotation()
             annotation.coordinate = touchCoordinate
-            annotation.title = "My Trigger"
+//            annotation.title = "My Trigger"
           
             
             // what you annotatded Long and Lat
-            let longPressedLongitude = annotation.coordinate.longitude
             let longPressedLatitude = annotation.coordinate.latitude
+            let longPressedLongitude = annotation.coordinate.longitude
             
             print("\(touchCoordinate)")
             mapViewOutlet.removeAnnotations(mapViewOutlet.annotations)
-            mapViewOutlet.addAnnotation(annotation) //drops the pin
+//            mapViewOutlet.addAnnotation(annotation) //drops the pin
             
             let geoCoder = CLGeocoder()
             geoCoder.reverseGeocodeLocation(CLLocation(latitude: longPressedLatitude, longitude: longPressedLongitude)) { (placemarks, error) in
@@ -312,6 +337,14 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                 
                 guard let addressComponents = placemark.postalAddress  else {return}
                 
+                //Long and Lat
+                let longPressedLatAndLongString = "(\(longPressedLatitude)\(longPressedLongitude))"
+                
+                
+                print("This is the Lat and Long that was long pressed \(longPressedLatAndLongString)")
+                
+                
+                //Readable Components
                 let street = addressComponents.street
                 let city = addressComponents.city
                 let state = addressComponents.state
@@ -327,17 +360,44 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                 print("\(street) \(city), \(state) \(postalCode)")
                 
                 self.addressTextField.text = ("\(street) \(city), \(state) \(postalCode)")
+                
+                self.activityIndicatorOutlet.startAnimating()
+                self.activityIndicatorOutlet.isHidden = false
+                
+                guard let addressToSearchFor = self.addressTextField.toTrimmedString() else {
+                    
+                    DispatchQueue.main.async {
+                        self.activityIndicatorOutlet.stopAnimating()
+                        self.activityIndicatorOutlet.isHidden = true
+                        //present UI Alert Controller
+                        self.present(self.badAddressNotif, animated: true, completion: nil)
+                        
+                        print("Invalid Address enetered")
+                    }
+                    
+                    return
+                }
+                
+                
+                self.showAddressOnMap(address: addressToSearchFor)
+                
+                DispatchQueue.main.async {
+                    self.activityIndicatorOutlet.stopAnimating()
+                    self.activityIndicatorOutlet.isHidden = true
+                }
+                
+            }
             }
         }
     }
-}
+
 
 
 extension LocationDetailVC: MKMapViewDelegate {
     
     func centerMapOnUserLocation() {
         guard let coordinate = locationManager.location?.coordinate else {return}
-        let coordinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: metersPerMile, longitudinalMeters: metersPerMile)
+        let coordinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: metersPerHalfMile, longitudinalMeters: metersPerHalfMile)
         mapViewOutlet.setRegion(coordinateRegion, animated: true)
     }
     
@@ -350,6 +410,16 @@ extension LocationDetailVC: MKMapViewDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        centerMapOnUserLocation()
+//        centerMapOnUserLocation()
+    }
+}
+
+
+extension LocationDetailVC {
+    
+    func presentMapTypes() {
+        let mapTypesAlert = AlertController.presentActionSheetAlertControllerWith(alertTitle: "Map Type", alertMessage: nil, dismissActionTitle: "Cancel")
+        
+        
     }
 }
