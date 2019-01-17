@@ -18,9 +18,10 @@ class NotesTVCell: UITableViewCell {
             udpateViews()
         }
     }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-
+       
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -33,5 +34,8 @@ class NotesTVCell: UITableViewCell {
         guard let note = note else {return}
         noteTitleLabel.text = note.title
         timeStampLabel.text = "\(note.timeStamp)"
+        
+        noteTitleLabel.textColor = MyColor.offWhite.value
+        timeStampLabel.textColor = MyColor.offWhite.value
     }
 }

@@ -25,6 +25,7 @@ class HomeVC: UIViewController {
     //View
     @IBOutlet var aaStepInfoView: UIView!
     
+    @IBOutlet weak var seperatingLineView: UIView!
     //Buttons
     
     @IBOutlet weak var phoneBookButton: UIButton!
@@ -61,9 +62,12 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         
         
+        
+        //textField
+        userNameTextField.contentVerticalAlignment = .bottom
         //view
         aaStepInfoView.layer.cornerRadius = 15
-        
+        seperatingLineView.backgroundColor = MyColor.annotationOrange.value
         
         //Button
         self.phoneBookButton.isUserInteractionEnabled = false
@@ -198,6 +202,8 @@ class HomeVC: UIViewController {
         super.viewDidAppear(animated)
         print("viewDidAppear")
     }
+    
+ 
     
     @objc func hideKeyboard() {
         self.view.endEditing(true)
@@ -646,5 +652,30 @@ extension HomeVC {
             self.aaStepInfoView.removeFromSuperview()
             
         }
+}
+}
+
+
+extension HomeVC {
+    
+    @IBDesignable class BottomAlignedLabel: UILabel {
+        override func drawText(in rect: CGRect) {
+        if let stringText = text {
+            let stringTextAsNSString = stringText as NSString
+            let labelStringSize = stringTextAsNSString.boundingRect(with: CGSize(width: self.frame.width,height: CGFloat.greatestFiniteMagnitude),
+                                                                    options: NSStringDrawingOptions.usesLineFragmentOrigin,
+                                                                    attributes: [NSAttributedString.Key.font: font],
+                                                                    context: nil).size
+            super.drawText(in: CGRect(x:0,y: rect.size.height - labelStringSize.height, width: self.frame.width, height: ceil(labelStringSize.height)))
+        } else {
+            super.drawText(in: rect)
+        }
+    }
+    
+    override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.clear.cgColor
+    }
 }
 }

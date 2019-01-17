@@ -12,6 +12,9 @@ import UserNotifications
 import AVFoundation
 import CloudKit
 import CoreLocation
+import MessageUI
+import ContactsUI
+
 
 class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     
@@ -25,7 +28,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var mapViewOutlet: MKMapView!
     
     @IBOutlet weak var actiivtyViewoutlet: UIView!
-    @IBOutlet weak var activityIndicatorOutlet: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     //View
     @IBOutlet weak var toolView: UIView!
@@ -52,6 +55,8 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     private let desiredRadius = 60.96
     private let devMntLat = 40.761806
     private let devMntLon = -111.890534
+    private let bannerResouceName = "TriggersAttachmentImage"
+    private let resourceType = "png"
     
     let badAddressNotif = AlertController.presentAlertControllerWith(alertTitle: "Address Not Found", alertMessage: "Sorry, Couldnt not find the specified address", dismissActionTitle: "OK")
     let networkErroNoif = AlertController.presentAlertControllerWith(alertTitle: "Network Error", alertMessage: "Error with your internet connection unable to save", dismissActionTitle: "OK")
@@ -60,42 +65,44 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        toolView.backgroundColor = MyColor.offWhite.value
+        
+        UNUserNotificationCenter.current().delegate = self
+        
+        toolView.backgroundColor = MyColor.annotationOrange.value
         
         toolView.layer.cornerRadius = 10
         
         //Tap guesture for map taps
-//        let mapTapGesture = UITapGestureRecognizer(target: self, action:#selector(LocationDetailVC.handleTap(_:)))
+        //        let mapTapGesture = UITapGestureRecognizer(target: self, action:#selector(LocationDetailVC.handleTap(_:)))
         
         let longPressMapTap = UILongPressGestureRecognizer(target: self, action: #selector(LocationDetailVC.handleTap(_:)))
         
         longPressMapTap.delegate = self
         
         longPressMapTap.minimumPressDuration = 0.5
-
+        
         //Location and Map Delegate
-         locationManager.delegate = self
+        locationManager.delegate = self
         mapViewOutlet.delegate = self
         
         //Map
-        mapViewOutlet.mapType = MKMapType.satellite
+        
         mapViewOutlet.showsUserLocation = true
         mapViewOutlet.userTrackingMode = .follow
         mapViewOutlet.showsCompass = true
         locationManager.startUpdatingLocation()
         
         
-//        let usersLocation = mapViewOutlet.userLocation
+        //        let usersLocation = mapViewOutlet.userLocation
         
         
         
         mapViewOutlet.addGestureRecognizer(longPressMapTap)
         
         
-//        let region = MKCoordinateRegion(center: mapViewOutlet.userLocation.coordinate, latitudinalMeters: , longitudinalMeters: 1609.344)
-//
-//        mapViewOutlet.setRegion(region, animated: true)
+        //        let region = MKCoordinateRegion(center: mapViewOutlet.userLocation.coordinate, latitudinalMeters: , longitudinalMeters: 1609.344)
+        //
+        //        mapViewOutlet.setRegion(region, animated: true)
         
         
         print(mapViewOutlet.isUserLocationVisible)
@@ -103,7 +110,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         
         //Activity Indicator
         actiivtyViewoutlet.backgroundColor = UIColor.clear
-        activityIndicatorOutlet.isHidden = true
+        activityIndicator.isHidden = true
         
         //Button UI
         searchButtonUI()
@@ -135,7 +142,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         self.mapViewOutlet.setRegion(viewRegion, animated: true)
         
     }
-
+    
     func updateViews() {
         
         //Update the text fields
@@ -189,10 +196,12 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @IBAction func mapTypeButtonTapped(_ sender: UIButton) {
+        presentMapTypes()
     }
     
     
     @IBAction func userLocationButtonTapped(_ sender: UIButton) {
+        centerMapOnUserLocation()
     }
     
     @IBAction func backButtonTapped(_ sender: Any) {
@@ -204,9 +213,18 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     
     @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
         
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        
+        DispatchQueue.main.async {
+            self.startShowActivityIndicator()
+        }
+        
         print("\n Save button Taped")
         //Create a location based notification
-        guard let locationTitle = locationTitleTextField.text, !locationTitle.isEmpty, let addressLocation = addressTextField.text, !addressLocation.isEmpty else {return}
+        guard let locationTitle = locationTitleTextField.text, !locationTitle.isEmpty, let addressLocation = addressTextField.text, !addressLocation.isEmpty else {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+            return
+        }
         
         
         guard let coordianteLatitude = coordinate?.latitude,
@@ -214,8 +232,11 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                 
                 let coordinateError = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Location", alertMessage: "Ensure that the address is correctly entered", dismissActionTitle: "OK")
                 DispatchQueue.main.async {
+                    
+                    self.stopHideActivityIndicator()
                     self.present(coordinateError, animated: true, completion: nil)
                 }
+                navigationItem.rightBarButtonItem?.isEnabled = true
                 return
         }
         
@@ -228,7 +249,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                 if success {
                     print("🙏🏽 Success updating Location")
                     DispatchQueue.main.async {
-                        // Do any UI STuff here that would be triggered by a successful update
+                        self.stopHideActivityIndicator()
                         
                         self.navigationController?.popViewController(animated: true)
                     }
@@ -236,9 +257,12 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                     AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                     // prseent UI Alert expalining error
                     DispatchQueue.main.async {
+                        
+                        self.stopHideActivityIndicator()
                         self.present(self.networkErroNoif, animated: true, completion: nil)
                         print("\n💀 error with the upating the data 💀")
                     }
+                    self.navigationItem.rightBarButtonItem?.isEnabled = true
                     return
                 }
             }
@@ -247,7 +271,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
             LocationController.shared.createNewLocation(geoCodeAddressString: addressLocation, addressTitle: locationTitle, longitude: longitude, latitude: latitude) { (success) in
                 if success {
                     
-                    NotificationController.createLocalNotifciationWith(contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Contact your accountability partner \(UserController.shared.loggedInUser?.sponsorName ?? "")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: UUID().uuidString), notifIdentifier: locationTitle)
+                    NotificationController.createLocalNotifciationWith(telephoneActionTitle: "Telephone \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", textActionTitle: "Text \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Contact your accountability partner \(UserController.shared.loggedInUser?.sponsorName ?? "")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
                     
                     print("\n🙏🏽Successfully created/saved location🙏🏽")
                     DispatchQueue.main.async {
@@ -259,6 +283,8 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                     DispatchQueue.main.async {
                         self.present(self.networkErroNoif, animated: true, completion: nil)
                     }
+                    self.navigationItem.rightBarButtonItem?.isEnabled = true
+                    return
                 }
             }
         }
@@ -266,14 +292,14 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     
     @IBAction func searchButtonTapped(_ sender: UIButton) {
         print("Search Button Tapped")
-        self.activityIndicatorOutlet.startAnimating()
-        self.activityIndicatorOutlet.isHidden = false
+        self.startShowActivityIndicator()
+        self.activityIndicator.startAnimating()
+        self.activityIndicator.isHidden = false
         
         guard let addressToSearchFor = addressTextField.toTrimmedString() else {
             
             DispatchQueue.main.async {
-                self.activityIndicatorOutlet.stopAnimating()
-                self.activityIndicatorOutlet.isHidden = true
+                self.stopHideActivityIndicator()
                 //present UI Alert Controller
                 self.present(self.badAddressNotif, animated: true, completion: nil)
                 
@@ -287,8 +313,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         showAddressOnMap(address: addressToSearchFor)
         
         DispatchQueue.main.async {
-            self.activityIndicatorOutlet.stopAnimating()
-            self.activityIndicatorOutlet.isHidden = true
+            self.stopHideActivityIndicator()
         }
         
     }
@@ -316,8 +341,8 @@ extension LocationDetailVC: CLLocationManagerDelegate {
             let touchCoordinate = mapViewOutlet.convert(touchPoint, toCoordinateFrom: mapViewOutlet)
             let annotation = MKPointAnnotation()
             annotation.coordinate = touchCoordinate
-//            annotation.title = "My Trigger"
-          
+            //            annotation.title = "My Trigger"
+            
             
             // what you annotatded Long and Lat
             let longPressedLatitude = annotation.coordinate.latitude
@@ -325,15 +350,13 @@ extension LocationDetailVC: CLLocationManagerDelegate {
             
             print("\(touchCoordinate)")
             mapViewOutlet.removeAnnotations(mapViewOutlet.annotations)
-//            mapViewOutlet.addAnnotation(annotation) //drops the pin
+            //            mapViewOutlet.addAnnotation(annotation) //drops the pin
             
             let geoCoder = CLGeocoder()
             geoCoder.reverseGeocodeLocation(CLLocation(latitude: longPressedLatitude, longitude: longPressedLongitude)) { (placemarks, error) in
                 guard let placemarks = placemarks, let placemark = placemarks.first else { return }
                 //                placemark.locality the city
                 // this location address has the address
-                
-                
                 
                 guard let addressComponents = placemark.postalAddress  else {return}
                 
@@ -342,7 +365,6 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                 
                 
                 print("This is the Lat and Long that was long pressed \(longPressedLatAndLongString)")
-                
                 
                 //Readable Components
                 let street = addressComponents.street
@@ -354,21 +376,30 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                 
                 let cnPostalFormatString = cnPostalAddressFormatter.attributedString(from: addressComponents, withDefaultAttributes: [:])
                 
-                  annotation.subtitle = "\(street) \(city), \(state) \(postalCode)"
+                annotation.subtitle = "\(street) \(city), \(state) \(postalCode)"
                 
                 print("\(cnPostalFormatString)")
                 print("\(street) \(city), \(state) \(postalCode)")
                 
-                self.addressTextField.text = ("\(street) \(city), \(state) \(postalCode)")
+                if !street.isEmpty {
+                    
+                    self.addressTextField.text = ("\(street) \(city), \(state) \(postalCode)")
+                } else {
+                    let noStreetAddressFoundAlert = AlertController.presentAlertControllerWith(alertTitle: "No Street Address Found", alertMessage: "Latitude and Longitude were only obtained", dismissActionTitle: "OK")
+                    DispatchQueue.main.async {
+                        self.present(noStreetAddressFoundAlert, animated: true, completion: nil)
+                    }
+                    self.addressTextField.text = ("\(longPressedLatitude), \(longPressedLongitude)")
+                }
                 
-                self.activityIndicatorOutlet.startAnimating()
-                self.activityIndicatorOutlet.isHidden = false
+                self.activityIndicator.startAnimating()
+                self.activityIndicator.isHidden = false
                 
                 guard let addressToSearchFor = self.addressTextField.toTrimmedString() else {
                     
                     DispatchQueue.main.async {
-                        self.activityIndicatorOutlet.stopAnimating()
-                        self.activityIndicatorOutlet.isHidden = true
+                        self.activityIndicator.stopAnimating()
+                        self.activityIndicator.isHidden = true
                         //present UI Alert Controller
                         self.present(self.badAddressNotif, animated: true, completion: nil)
                         
@@ -382,14 +413,14 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                 self.showAddressOnMap(address: addressToSearchFor)
                 
                 DispatchQueue.main.async {
-                    self.activityIndicatorOutlet.stopAnimating()
-                    self.activityIndicatorOutlet.isHidden = true
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicator.isHidden = true
                 }
                 
             }
-            }
         }
     }
+}
 
 
 
@@ -410,7 +441,7 @@ extension LocationDetailVC: MKMapViewDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        centerMapOnUserLocation()
+        //        centerMapOnUserLocation()
     }
 }
 
@@ -418,8 +449,155 @@ extension LocationDetailVC: MKMapViewDelegate {
 extension LocationDetailVC {
     
     func presentMapTypes() {
-        let mapTypesAlert = AlertController.presentActionSheetAlertControllerWith(alertTitle: "Map Type", alertMessage: nil, dismissActionTitle: "Cancel")
+        let mapTypesAlertController = AlertController.presentActionSheetAlertControllerWith(alertTitle: nil, alertMessage: nil, dismissActionTitle: "Cancel")
         
+        let normalMapSelection = UIAlertAction(title: "Normal", style: .default) { (_) in
+            self.mapViewOutlet.mapType = MKMapType.standard
+        }
+        let satelliteMapSelection = UIAlertAction(title: "Satellite", style: .default) { (_) in
+            self.mapViewOutlet.mapType = MKMapType.satellite
+        }
+        let hybridMapSelection = UIAlertAction(title: "Hybrid", style: .default) { (_) in
+            self.mapViewOutlet.mapType = MKMapType.hybrid
+        }
         
+        [normalMapSelection, satelliteMapSelection, hybridMapSelection].forEach { mapTypesAlertController.addAction($0)}
+        
+        DispatchQueue.main.async {
+            mapTypesAlertController.popoverPresentationController?.sourceView = self.view
+            mapTypesAlertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
+            mapTypesAlertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            self.present(mapTypesAlertController, animated: true, completion: nil)
+        }
     }
 }
+
+
+extension LocationDetailVC {
+    
+    func startShowActivityIndicator() {
+        self.activityIndicator.startAnimating()
+        self.activityIndicator.isHidden = false
+    }
+    
+    func stopHideActivityIndicator() {
+        self.activityIndicator.stopAnimating()
+        self.activityIndicator.isHidden = true
+    }
+}
+
+//Notification didReceive Delegate
+extension LocationDetailVC: UNUserNotificationCenterDelegate {
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        //This is the option that was selected
+        print("Test: \(response.notification.request.identifier)")
+        
+        defer {
+            completionHandler()
+        }
+        switch response.actionIdentifier {
+            //The action that indicates the user explicitly dismissed the notification interface.
+        //This action is delivered only if the notification’s category object was configured with the customDismissAction option.
+        case UNNotificationDismissActionIdentifier:
+            print( "User tapped dismissed the notification")
+        //An action that indicates the user opened the app from the notification interface.
+        case UNNotificationDefaultActionIdentifier:
+            print("user segued into the app")
+            
+        case LocationConstants.telephoneSponsorActionKey:
+            telephoneSponsor()
+            
+        case LocationConstants.textSponsorActionKey:
+            composeTextMessage()
+        default:
+            break
+        }
+    }
+}
+
+
+// MARK: - Text Message
+extension LocationDetailVC: MFMessageComposeViewControllerDelegate {
+    
+    func composeTextMessage() {
+        
+        guard MFMessageComposeViewController.canSendText() else {
+            // DO some UI to show that an email cant be sent
+            let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing Text Message", alertMessage: "At this time, your device does not support this feature", dismissActionTitle: "OK")
+            DispatchQueue.main.async {
+                self.present(notMailCompatable, animated: true, completion: nil)
+            }
+            return
+        }
+        
+        fetchCurrentuser()
+        
+        let composeText = MFMessageComposeViewController()
+        composeText.messageComposeDelegate = self
+        
+        composeText.recipients = ["\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "")"]
+        composeText.body = "Hi \(UserController.shared.loggedInUser?.sponsorName ?? "Friend"),\n\njust wanted to check in and give you an update."
+        
+        
+        DispatchQueue.main.async {
+            self.present(composeText, animated: true) {
+            }
+        }
+    }
+    
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        
+        switch result {
+        case .cancelled:
+            controller.dismiss(animated: true, completion: nil)
+        case .failed:
+            controller.dismiss(animated: true, completion: nil)
+        case .sent:
+            controller.dismiss(animated: true, completion: nil)
+        default:
+            break
+        }
+    }
+}
+
+
+// MARK: - Telephone
+extension LocationDetailVC {
+    
+    func telephoneSponsor() {
+        
+        fetchCurrentuser()
+        guard let phoneCallURL = URL(string: "telprompt://\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "7142510446")") else {
+            let phoneCallError = AlertController.presentAlertControllerWith(alertTitle: "Error Making Phone Call", alertMessage: "Unexpected error please try again later", dismissActionTitle: "OK")
+            DispatchQueue.main.async {
+                self.present(phoneCallError, animated: true, completion: nil)
+            }
+            return
+        }
+        DispatchQueue.main.async {
+            UIApplication.shared.open(phoneCallURL)
+        }
+    }
+}
+
+extension LocationDetailVC {
+    
+    func fetchCurrentuser() {
+        UserController.shared.fetchCurrentUser { (success, _) in
+            if success {
+                guard let loggedInUser = UserController.shared.loggedInUser
+                    else { return }
+                print(loggedInUser.userName)
+                print("\(loggedInUser.aaStep)")
+                
+            } else {
+                print("\nUnable to fetch current user\n")
+            }
+        }
+    }
+}
+
+
+

@@ -143,14 +143,10 @@ extension SecondLaunchScreenV {
             print("call the sponsor: \(sponsorName), \(sponsorPhoneNumber) ")
             telephoneSponsor()
             
-        case LocationConstants.emailSponsorActionKey:
+        case LocationConstants.textSponsorActionKey:
             print("email \(sponosrEmail)")
-            composeEmail()
-            
-        case LocationConstants.textMessageSponsorActionKey:
-            print("Text: \(sponsorName), \(sponsorText)")
             composeTextMessage()
-            
+
         default:
             break
         }

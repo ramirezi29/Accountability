@@ -108,6 +108,9 @@ class FolderTVC: UITableViewController {
         
         cell.textLabel?.text = folder.folderTitle
         cell.detailTextLabel?.text = "\(folder.notes.count)"
+        
+        cell.textLabel?.textColor = MyColor.offWhite.value
+        cell.detailTextLabel?.textColor = MyColor.offWhite.value
         return cell
         
     }
