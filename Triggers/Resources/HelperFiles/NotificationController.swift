@@ -16,16 +16,16 @@ class NotificationController {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
     }
     
-    static func createLocalNotifciationWith(contentTitle: String, contentBody: String, circularRegion: CLCircularRegion, notifIdentifier: String){
+    static func createLocalNotifciationWith(telephoneActionTitle: String, textActionTitle: String, resourceName: String, extenstionType: String, contentTitle: String, contentBody: String, circularRegion: CLCircularRegion, notifIdentifier: String){
         
         // Action
         let dismissAction = UNNotificationAction(identifier: LocationConstants.dismissActionKey, title: "Dismiss", options: [])
         
-        let telephoneAction = UNNotificationAction(identifier: LocationConstants.telephoneSponsorActionKey, title: "Call Sponsor", options: [.authenticationRequired])
+        let telephoneAction = UNNotificationAction(identifier: LocationConstants.telephoneSponsorActionKey, title: telephoneActionTitle, options: [.authenticationRequired])
         
-        let emailAction = UNNotificationAction(identifier: LocationConstants.emailSponsorActionKey, title: "Email Sponsor", options: [.authenticationRequired])
+        let emailAction = UNNotificationAction(identifier: LocationConstants.textSponsorActionKey, title: textActionTitle, options: [.authenticationRequired])
         
-        let category = UNNotificationCategory(identifier: LocationConstants.notifCatergoryKey, actions: [dismissAction, telephoneAction, emailAction], intentIdentifiers: [LocationConstants.dismissActionKey, LocationConstants.telephoneSponsorActionKey, LocationConstants.emailSponsorActionKey], options: .customDismissAction)
+        let category = UNNotificationCategory(identifier: LocationConstants.notifCatergoryKey, actions: [dismissAction, telephoneAction, emailAction], intentIdentifiers: [], options: .customDismissAction)
         
         UNUserNotificationCenter.current().setNotificationCategories([category])
         
@@ -36,6 +36,19 @@ class NotificationController {
         content.badge = 1
         content.categoryIdentifier = LocationConstants.notifCatergoryKey
         
+        //
+        
+        guard let url = Bundle.main.url(forResource: resourceName, withExtension: extenstionType) else {return}
+        do {
+            let attachments =  try UNNotificationAttachment(identifier: LocationConstants.notifCatergoryKey, url: url, options: [:])
+            
+            content.attachments = [attachments]
+        } catch {
+            print("\n\nThere was an error with the attachment in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription)\n\n")
+        }
+        
+        //
+        
         let region = circularRegion
         
         region.notifyOnEntry = true
@@ -43,6 +56,7 @@ class NotificationController {
         let trigger = UNLocationNotificationTrigger(region: region, repeats: true)
         
         let request = UNNotificationRequest(identifier: notifIdentifier, content: content, trigger: trigger)
+        
         
         UNUserNotificationCenter.current().add(request) { (error) in
             if let error = error {

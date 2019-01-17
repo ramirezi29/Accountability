@@ -160,8 +160,6 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     func presentMainView() {
         let calendarStoryboard = UIStoryboard(name: StoryboardConstants.mainStoryboard, bundle: nil).instantiateInitialViewController()!
         
-//        self.navigationController?.popViewController(animated: false)
-
         present(calendarStoryboard, animated: true, completion: nil)
         
     }

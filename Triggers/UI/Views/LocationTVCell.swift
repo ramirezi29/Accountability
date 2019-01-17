@@ -15,7 +15,7 @@ class LocationTVCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+       
     }
     
     var location: Location? {
@@ -33,6 +33,7 @@ class LocationTVCell: UITableViewCell {
         
         guard let location = location else {return}
         locationTitleLabel.text = location.locationTitle
-        locationImageView.image = UIImage(named: "triggersLogoIcon") 
+        locationImageView.image = UIImage(named: "triggersLogoIcon")
+         locationTitleLabel.textColor = MyColor.offWhite.value
     }
 }

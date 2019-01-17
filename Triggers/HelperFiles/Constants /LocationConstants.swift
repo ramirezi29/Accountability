@@ -20,9 +20,8 @@ struct LocationConstants  {
     static let locationSegueID = "toDetailVC"
     static let locationCellID = "locationCell"
     static let dismissActionKey = "locationDismiss"
-    static let telephoneSponsorActionKey = "sponsorTelephone"
-    static let emailSponsorActionKey = "sponsorEmail"
-    static let textMessageSponsorActionKey = "textSponsor"
+    static let telephoneSponsorActionKey = "telephoneSponsor"
+    static let textSponsorActionKey = "textSponsor"
     static let notifCatergoryKey = "locationCrossedCategory"
     
 }

@@ -48,6 +48,8 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        triggersLabel.textColor = MyColor.offWhite.value
+        triggersLabel.text = "My Triggers"
         triggersLogoView.image = UIImage(named: "triggersLogoIcon")
         checkInBottomButton.isUserInteractionEnabled = true
         rightView.backgroundColor = .clear
@@ -79,8 +81,8 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         
         //Check in button
         checkInBottomButton.setTitle("Check-In", for: .normal)
-        checkInBottomButton.setTitleColor(MyColor.blackGrey.value, for: .normal)
-        checkInBottomButton.backgroundColor = MyColor.offWhite.value
+//        checkInBottomButton.setTitleColor(MyColor.blackGrey.value, for: .normal)
+//        checkInBottomButton.backgroundColor = MyColor.offWhite.value
         
         
         calenderView.topAnchor.constraint(equalTo: view.topAnchor, constant: 235).isActive = true
