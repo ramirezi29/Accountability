@@ -25,10 +25,12 @@ class NotesTVC: UITableViewController {
 
         
         // MARK: - Fetch
-        guard let folder = folder else {
+        guard let folder = folder else  {
             print("\n'folder' in NotesTVC was Nil or something and the fetch func failed")
+            
             return
         }
+        print("The folder that was selected was 🐠\(folder.folderTitle) and it has \(folder.notes.count) note(s) inside of it, according to iCloud")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,7 +40,7 @@ class NotesTVC: UITableViewController {
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return NoteController.shared.notes.count
+        return folder?.notes.count ?? 0
     }
     
     
@@ -46,10 +48,17 @@ class NotesTVC: UITableViewController {
         
          let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.noteCellID, for: indexPath) 
         
-        let note = NoteController.shared.notes[indexPath.row]
+        //Notes
+//        let note = NoteController.shared.notes[indexPath.row]
         
-        cell.textLabel?.text = note.title
-        cell.detailTextLabel?.text = note.timeStampAsString
+        guard let songInFolder = folder?.notes[indexPath.row] else {return UITableViewCell()}
+        
+        
+        //Folders, just to see if this is the correct one that will get rid of the random bug
+//        let note = folder?.notes[indexPath.row]
+        
+        cell.textLabel?.text = songInFolder.title
+        cell.detailTextLabel?.text = songInFolder.timeStampAsString
         
         return cell
     }
