@@ -20,16 +20,15 @@ class NoteDetailVC: UIViewController {
     //Landing Pad
     var note: Note?
     var folder: Folder?
-    var placeholderLabel : UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//         self.tabBarController?.tabBar.isHidden = true 
+        textBodyView.backgroundColor = MyColor.annotationOrange.value
         
         updateViews()
         
-    self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NoteDetailVC.hideKeyboard))
         
@@ -37,27 +36,13 @@ class NoteDetailVC: UIViewController {
         self.view.addGestureRecognizer(tapGesture)
         
         //Text View
-        textBodyView.delegate = self
     }
     
     func updateViews() {
         
-        if let note = note {
-            titelTextField.text = note.title
-            textBodyView.text = note.textBody
-            
-        } else {
-            
-            //Placeholder
-            placeholderLabel = UILabel()
-            placeholderLabel.text = "Whats on your mind...."
-            placeholderLabel.font = UIFont.italicSystemFont(ofSize: (textBodyView.font?.pointSize)!)
-            placeholderLabel.sizeToFit()
-            textBodyView.addSubview(placeholderLabel)
-            placeholderLabel.frame.origin = CGPoint(x: 5, y: (textBodyView.font?.pointSize)! / 2)
-            placeholderLabel.textColor = UIColor.black
-            placeholderLabel.isHidden = !textBodyView.text.isEmpty
-        }
+        guard let note = note else {return}
+        titelTextField.text = note.title
+        textBodyView.text = note.textBody
     }
     
     @objc func hideKeyboard() {
@@ -79,8 +64,8 @@ class NoteDetailVC: UIViewController {
                     DispatchQueue.main.async {
                         
                         //ANY UI STUFF
-                        self.navigationController?.popViewController(animated: true)
                     }
+                    self.navigationController?.popViewController(animated: true)
                 } else {
                     AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                     DispatchQueue.main.async {
@@ -113,14 +98,6 @@ class NoteDetailVC: UIViewController {
                 print("\n😭 THere is no Folder for the Note\n")
             }
         }
-    }
-}
-
-extension NoteDetailVC: UITextViewDelegate, UITextFieldDelegate {
-    
-    func textViewDidChange(_ textView: UITextView) {
-
-        placeholderLabel.isHidden = !textBodyView.text.isEmpty
     }
 }
 

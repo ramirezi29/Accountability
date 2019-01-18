@@ -23,30 +23,29 @@ class NotificationController {
         
         let telephoneAction = UNNotificationAction(identifier: LocationConstants.telephoneSponsorActionKey, title: telephoneActionTitle, options: [.authenticationRequired])
         
-        let emailAction = UNNotificationAction(identifier: LocationConstants.textSponsorActionKey, title: textActionTitle, options: [.authenticationRequired])
+        let textMessageAction = UNNotificationAction(identifier: LocationConstants.textSponsorActionKey, title: textActionTitle, options: [.authenticationRequired])
         
-        let category = UNNotificationCategory(identifier: LocationConstants.notifCatergoryKey, actions: [dismissAction, telephoneAction, emailAction], intentIdentifiers: [], options: .customDismissAction)
+        let locationCategory = UNNotificationCategory(identifier: LocationConstants.notifLocationCatergoryKey, actions: [dismissAction, telephoneAction, textMessageAction], intentIdentifiers: [], options: .customDismissAction)
         
-        UNUserNotificationCenter.current().setNotificationCategories([category])
+        UNUserNotificationCenter.current().setNotificationCategories([locationCategory])
         
         // Content of the message
         let content = UNMutableNotificationContent()
         content.title = contentTitle
         content.body = contentBody
         content.badge = 1
-        content.categoryIdentifier = LocationConstants.notifCatergoryKey
+        content.sound = UNNotificationSound.default
+        content.categoryIdentifier = LocationConstants.notifLocationCatergoryKey
         
-        //
-        
+        // Image
         guard let url = Bundle.main.url(forResource: resourceName, withExtension: extenstionType) else {return}
         do {
-            let attachments =  try UNNotificationAttachment(identifier: LocationConstants.notifCatergoryKey, url: url, options: [:])
+            let attachments =  try UNNotificationAttachment(identifier: LocationConstants.resourceKey, url: url, options: [:])
             
             content.attachments = [attachments]
         } catch {
             print("\n\nThere was an error with the attachment in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription)\n\n")
         }
-        
         //
         
         let region = circularRegion

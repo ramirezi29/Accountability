@@ -22,6 +22,7 @@ struct LocationConstants  {
     static let dismissActionKey = "locationDismiss"
     static let telephoneSponsorActionKey = "telephoneSponsor"
     static let textSponsorActionKey = "textSponsor"
-    static let notifCatergoryKey = "locationCrossedCategory"
+    static let notifLocationCatergoryKey = "locationCrossedCategory"
+    static let resourceKey = "resourceKey"
     
 }

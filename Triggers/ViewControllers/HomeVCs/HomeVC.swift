@@ -60,7 +60,7 @@ class HomeVC: UIViewController {
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("Location Detail ViewDidLoad")
         
         
         //textField
@@ -175,7 +175,7 @@ class HomeVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
-        print("viewWillDisappear")
+        print("Location Detail viewWillDisappear")
         // There's a glitch with this app
         //        editBool = false
         //        textFieldsInvisable()
@@ -190,17 +190,17 @@ class HomeVC: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        print("viewDidDisappear")
+        print("Location Detail viewDidDisappear")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("viewWillAppear")
+        print("Location Detail viewWillAppear")
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("viewDidAppear")
+        print("Location Detail viewDidAppear")
     }
     
  

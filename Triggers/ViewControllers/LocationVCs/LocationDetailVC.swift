@@ -72,6 +72,11 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         
         toolView.layer.cornerRadius = 10
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(LocationDetailVC.hideKeyboard))
+        
+        tapGesture.cancelsTouchesInView = true
+        self.view.addGestureRecognizer(tapGesture)
+        
         //Tap guesture for map taps
         //        let mapTapGesture = UITapGestureRecognizer(target: self, action:#selector(LocationDetailVC.handleTap(_:)))
         
@@ -125,6 +130,10 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+    
+    @objc func hideKeyboard() {
+        self.view.endEditing(true)
     }
     
     func addAnnotation() {
@@ -213,6 +222,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     
     @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
         
+        // In order to prevent duplicate creations due to delay in pop over
         navigationItem.rightBarButtonItem?.isEnabled = false
         
         DispatchQueue.main.async {
@@ -221,16 +231,28 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         
         print("\n Save button Taped")
         //Create a location based notification
+        
+        //Guard against either textfield being empty
         guard let locationTitle = locationTitleTextField.text, !locationTitle.isEmpty, let addressLocation = addressTextField.text, !addressLocation.isEmpty else {
+            
             navigationItem.rightBarButtonItem?.isEnabled = true
+            
+            let textFieldError = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Location", alertMessage: "You must enter a location address and title before saving", dismissActionTitle: "OK")
+            
+            DispatchQueue.main.async {
+                
+                self.stopHideActivityIndicator()
+                self.present(textFieldError, animated: true, completion: nil)
+            }
             return
         }
         
-        
+        //Guard against the latitude or longitude being nil
         guard let coordianteLatitude = coordinate?.latitude,
             let coordinateLongitude = coordinate?.longitude else {
                 
                 let coordinateError = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Location", alertMessage: "Ensure that the address is correctly entered", dismissActionTitle: "OK")
+                
                 DispatchQueue.main.async {
                     
                     self.stopHideActivityIndicator()
@@ -243,11 +265,20 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         let latitude = coordianteLatitude
         let longitude = coordinateLongitude
         
-        // MARK: - Update
+        // MARK: - Update current location
         if let location = location {
             LocationController.shared.updateTargetLocation(location: location, geoCodeAddressString: addressLocation, addressTitle: locationTitle, latitude: latitude, longitude: longitude) { (success) in
                 if success {
+                    
+                    //Cancel notification based on the original location title
+                    NotificationController.cancelLocalNotificationWith(identifier: location.locationTitle)
+                    
+                    //Create new notification with identifier as the new location title
+                    NotificationController.createLocalNotifciationWith(telephoneActionTitle: "Telephone \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", textActionTitle: "Text \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Contact your accountability partner \(UserController.shared.loggedInUser?.sponsorName ?? "")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
+                    
+                    //Test Print
                     print("🙏🏽 Success updating Location")
+                    
                     DispatchQueue.main.async {
                         self.stopHideActivityIndicator()
                         
@@ -268,9 +299,11 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
             }
         } else {
             
+            //Creating New Location
             LocationController.shared.createNewLocation(geoCodeAddressString: addressLocation, addressTitle: locationTitle, longitude: longitude, latitude: latitude) { (success) in
                 if success {
                     
+                    //New Location
                     NotificationController.createLocalNotifciationWith(telephoneActionTitle: "Telephone \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", textActionTitle: "Text \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Contact your accountability partner \(UserController.shared.loggedInUser?.sponsorName ?? "")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
                     
                     print("\n🙏🏽Successfully created/saved location🙏🏽")
@@ -445,7 +478,7 @@ extension LocationDetailVC: MKMapViewDelegate {
     }
 }
 
-
+// MARK: - Map Action Sheet func
 extension LocationDetailVC {
     
     func presentMapTypes() {
@@ -491,6 +524,12 @@ extension LocationDetailVC: UNUserNotificationCenterDelegate {
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
+        
+        //Not sure if this is needed
+        let userInfo = response.notification.request.content.userInfo
+        let textMessageAction = userInfo[LocationConstants.textSponsorActionKey]
+        let telephoneAction = userInfo[LocationConstants.telephoneSponsorActionKey]
+        
         //This is the option that was selected
         print("Test: \(response.notification.request.identifier)")
         
@@ -502,6 +541,7 @@ extension LocationDetailVC: UNUserNotificationCenterDelegate {
         //This action is delivered only if the notification’s category object was configured with the customDismissAction option.
         case UNNotificationDismissActionIdentifier:
             print( "User tapped dismissed the notification")
+            telephoneSponsor()
         //An action that indicates the user opened the app from the notification interface.
         case UNNotificationDefaultActionIdentifier:
             print("user segued into the app")
