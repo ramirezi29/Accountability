@@ -35,6 +35,9 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     @IBOutlet weak var triggersLogoView: UIImageView!
     @IBOutlet weak var checkInBottomButton: UIButton!
     
+    //Stalk View
+    @IBOutlet weak var soberietyUserInfoLRStack: UIStackView!
+    
     var theme = MyTheme.dark
     var user: User?
     private let localeUSA = "en_US"
@@ -85,7 +88,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
 //        checkInBottomButton.backgroundColor = MyColor.offWhite.value
         
         
-        calenderView.topAnchor.constraint(equalTo: view.topAnchor, constant: 235).isActive = true
+        calenderView.topAnchor.constraint(equalTo: self.soberietyUserInfoLRStack.bottomAnchor, constant: 18).isActive = true
         calenderView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12).isActive = true
         calenderView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 12).isActive = true
         calenderView.heightAnchor.constraint(equalToConstant: 300).isActive = true
@@ -97,10 +100,18 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        checkInBottomButton.isEnabled = true
+        animateOutOfSobrietyView()
+    }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         calenderView.myCollectionView.collectionViewLayout.invalidateLayout()
     }
+    
+    
     
     
     let calenderView: CalenderView = {
@@ -206,6 +217,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     
     @IBAction func editButtonTapped(_ sender: Any) {
         print("Edit buton tapped")
+        checkInBottomButton.isEnabled = false
         DispatchQueue.main.async {
              self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.animateOutOfSobrietyView))
             self.animateInSobrietyView()
@@ -409,7 +421,8 @@ extension CalendarVC {
 }
 
 extension CalendarVC {
-    @objc func animateOutOfSobrietyView() {
+    @objc func
+        animateOutOfSobrietyView() {
         UIView.animate(withDuration: 0.3, animations: {
             self.sobrietyDateView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
             self.sobrietyDateView.alpha = 0
@@ -419,6 +432,7 @@ extension CalendarVC {
             DispatchQueue.main.async {
                 self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editButtonTapped(_:)))
             }
+            self.checkInBottomButton.isEnabled = true
         }
     }
     

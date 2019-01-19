@@ -39,6 +39,7 @@
 		477B494321E010BE00167A81 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 477B494221E010BE00167A81 /* CloudKit.framework */; };
 		477C945521DA76D6006F7E80 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477C945421DA76D6006F7E80 /* NotificationController.swift */; };
 		477FA78521DC18F300EB6670 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477FA78421DC18F300EB6670 /* CloudKitManager.swift */; };
+		47844DEB21F2F1E800ECBCA3 /* myTriggersBannerFinalLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 47844DEA21F2F1E800ECBCA3 /* myTriggersBannerFinalLogo.png */; };
 		478707BE21E6EE0B008D442D /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 478707B921E6EDB1008D442D /* SF-Pro-Text-Regular.otf */; };
 		478707BF21E6EE0B008D442D /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 478707BA21E6EDBB008D442D /* SF-Pro-Text-Medium.otf */; };
 		478707C021E6EE0B008D442D /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 478707BB21E6EDC2008D442D /* SF-Pro-Text-Bold.otf */; };
@@ -103,6 +104,7 @@
 		477B494221E010BE00167A81 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		477C945421DA76D6006F7E80 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
 		477FA78421DC18F300EB6670 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		47844DEA21F2F1E800ECBCA3 /* myTriggersBannerFinalLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myTriggersBannerFinalLogo.png; sourceTree = "<group>"; };
 		478707B921E6EDB1008D442D /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
 		478707BA21E6EDBB008D442D /* SF-Pro-Text-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Medium.otf"; sourceTree = "<group>"; };
 		478707BB21E6EDC2008D442D /* SF-Pro-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Bold.otf"; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 				47E29E1A21C80B0200FA44EE /* AppDelegate.swift */,
 				47E29E2121C80B0400FA44EE /* Assets.xcassets */,
 				47E29E2621C80B0400FA44EE /* Info.plist */,
+				47844DEA21F2F1E800ECBCA3 /* myTriggersBannerFinalLogo.png */,
 				47BA148721F071AE00E2714A /* TriggersAttachmentImage.png */,
 			);
 			path = Resources;
@@ -502,6 +505,7 @@
 				47E29E2221C80B0400FA44EE /* Assets.xcassets in Resources */,
 				47E29E2021C80B0200FA44EE /* Main.storyboard in Resources */,
 				4771460721C9AE160016FFAB /* Calendar.storyboard in Resources */,
+				47844DEB21F2F1E800ECBCA3 /* myTriggersBannerFinalLogo.png in Resources */,
 				474651F921CA0FFB00E23BA0 /* Home.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

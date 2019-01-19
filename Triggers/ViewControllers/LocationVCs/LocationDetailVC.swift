@@ -55,7 +55,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     private let desiredRadius = 60.96
     private let devMntLat = 40.761806
     private let devMntLon = -111.890534
-    private let bannerResouceName = "TriggersAttachmentImage"
+    private let bannerResouceName = "myTriggersBannerFinalLogo"
     private let resourceType = "png"
     
     let badAddressNotif = AlertController.presentAlertControllerWith(alertTitle: "Address Not Found", alertMessage: "Sorry, Couldnt not find the specified address", dismissActionTitle: "OK")
@@ -66,9 +66,11 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        
         UNUserNotificationCenter.current().delegate = self
         
-        toolView.backgroundColor = MyColor.annotationOrange.value
+        toolView.backgroundColor = MyColor.offWhite.value
         
         toolView.layer.cornerRadius = 10
         
@@ -274,7 +276,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                     NotificationController.cancelLocalNotificationWith(identifier: location.locationTitle)
                     
                     //Create new notification with identifier as the new location title
-                    NotificationController.createLocalNotifciationWith(telephoneActionTitle: "Telephone \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", textActionTitle: "Text \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Contact your accountability partner \(UserController.shared.loggedInUser?.sponsorName ?? "")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
+                   NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
                     
                     //Test Print
                     print("🙏🏽 Success updating Location")
@@ -303,8 +305,11 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
             LocationController.shared.createNewLocation(geoCodeAddressString: addressLocation, addressTitle: locationTitle, longitude: longitude, latitude: latitude) { (success) in
                 if success {
                     
-                    //New Location
-                    NotificationController.createLocalNotifciationWith(telephoneActionTitle: "Telephone \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", textActionTitle: "Text \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Contact your accountability partner \(UserController.shared.loggedInUser?.sponsorName ?? "")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
+                    // Updated Location Notification with Dismiss Only
+                    
+                    NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
+                    
+ 
                     
                     print("\n🙏🏽Successfully created/saved location🙏🏽")
                     DispatchQueue.main.async {
@@ -521,18 +526,18 @@ extension LocationDetailVC {
 
 //Notification didReceive Delegate
 extension LocationDetailVC: UNUserNotificationCenterDelegate {
-    
+
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
-        
+
+
         //Not sure if this is needed
-        let userInfo = response.notification.request.content.userInfo
-        let textMessageAction = userInfo[LocationConstants.textSponsorActionKey]
-        let telephoneAction = userInfo[LocationConstants.telephoneSponsorActionKey]
-        
+//        let userInfo = response.notification.request.content.userInfo
+//        let textMessageAction = userInfo[LocationConstants.textSponsorActionKey]
+//        let telephoneAction = userInfo[LocationConstants.telephoneSponsorActionKey]
+
         //This is the option that was selected
         print("Test: \(response.notification.request.identifier)")
-        
+
         defer {
             completionHandler()
         }
@@ -541,16 +546,16 @@ extension LocationDetailVC: UNUserNotificationCenterDelegate {
         //This action is delivered only if the notification’s category object was configured with the customDismissAction option.
         case UNNotificationDismissActionIdentifier:
             print( "User tapped dismissed the notification")
-            telephoneSponsor()
+            
         //An action that indicates the user opened the app from the notification interface.
         case UNNotificationDefaultActionIdentifier:
             print("user segued into the app")
-            
-        case LocationConstants.telephoneSponsorActionKey:
-            telephoneSponsor()
-            
-        case LocationConstants.textSponsorActionKey:
-            composeTextMessage()
+//
+//        case LocationConstants.telephoneSponsorActionKey:
+//            telephoneSponsor()
+//
+//        case LocationConstants.textSponsorActionKey:
+//            composeTextMessage()
         default:
             break
         }
@@ -558,69 +563,69 @@ extension LocationDetailVC: UNUserNotificationCenterDelegate {
 }
 
 
-// MARK: - Text Message
-extension LocationDetailVC: MFMessageComposeViewControllerDelegate {
-    
-    func composeTextMessage() {
-        
-        guard MFMessageComposeViewController.canSendText() else {
-            // DO some UI to show that an email cant be sent
-            let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing Text Message", alertMessage: "At this time, your device does not support this feature", dismissActionTitle: "OK")
-            DispatchQueue.main.async {
-                self.present(notMailCompatable, animated: true, completion: nil)
-            }
-            return
-        }
-        
-        fetchCurrentuser()
-        
-        let composeText = MFMessageComposeViewController()
-        composeText.messageComposeDelegate = self
-        
-        composeText.recipients = ["\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "")"]
-        composeText.body = "Hi \(UserController.shared.loggedInUser?.sponsorName ?? "Friend"),\n\njust wanted to check in and give you an update."
-        
-        
-        DispatchQueue.main.async {
-            self.present(composeText, animated: true) {
-            }
-        }
-    }
-    
-    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-        
-        switch result {
-        case .cancelled:
-            controller.dismiss(animated: true, completion: nil)
-        case .failed:
-            controller.dismiss(animated: true, completion: nil)
-        case .sent:
-            controller.dismiss(animated: true, completion: nil)
-        default:
-            break
-        }
-    }
-}
-
-
-// MARK: - Telephone
-extension LocationDetailVC {
-    
-    func telephoneSponsor() {
-        
-        fetchCurrentuser()
-        guard let phoneCallURL = URL(string: "telprompt://\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "7142510446")") else {
-            let phoneCallError = AlertController.presentAlertControllerWith(alertTitle: "Error Making Phone Call", alertMessage: "Unexpected error please try again later", dismissActionTitle: "OK")
-            DispatchQueue.main.async {
-                self.present(phoneCallError, animated: true, completion: nil)
-            }
-            return
-        }
-        DispatchQueue.main.async {
-            UIApplication.shared.open(phoneCallURL)
-        }
-    }
-}
+//// MARK: - Text Message
+//extension LocationDetailVC: MFMessageComposeViewControllerDelegate {
+//
+//    func composeTextMessage() {
+//
+//        guard MFMessageComposeViewController.canSendText() else {
+//            // DO some UI to show that an email cant be sent
+//            let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing Text Message", alertMessage: "At this time, your device does not support this feature", dismissActionTitle: "OK")
+//            DispatchQueue.main.async {
+//                self.present(notMailCompatable, animated: true, completion: nil)
+//            }
+//            return
+//        }
+//
+//        fetchCurrentuser()
+//
+//        let composeText = MFMessageComposeViewController()
+//        composeText.messageComposeDelegate = self
+//
+//        composeText.recipients = ["\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "")"]
+//        composeText.body = "Hi \(UserController.shared.loggedInUser?.sponsorName ?? "Friend"),\n\njust wanted to check in and give you an update."
+//
+//
+//        DispatchQueue.main.async {
+//            self.present(composeText, animated: true) {
+//            }
+//        }
+//    }
+//
+//    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+//
+//        switch result {
+//        case .cancelled:
+//            controller.dismiss(animated: true, completion: nil)
+//        case .failed:
+//            controller.dismiss(animated: true, completion: nil)
+//        case .sent:
+//            controller.dismiss(animated: true, completion: nil)
+//        default:
+//            break
+//        }
+//    }
+//}
+//
+//
+//// MARK: - Telephone
+//extension LocationDetailVC {
+//
+//    func telephoneSponsor() {
+//
+//        fetchCurrentuser()
+//        guard let phoneCallURL = URL(string: "telprompt://\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "7142510446")") else {
+//            let phoneCallError = AlertController.presentAlertControllerWith(alertTitle: "Error Making Phone Call", alertMessage: "Unexpected error please try again later", dismissActionTitle: "OK")
+//            DispatchQueue.main.async {
+//                self.present(phoneCallError, animated: true, completion: nil)
+//            }
+//            return
+//        }
+//        DispatchQueue.main.async {
+//            UIApplication.shared.open(phoneCallURL)
+//        }
+//    }
+//}
 
 extension LocationDetailVC {
     

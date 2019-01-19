@@ -159,26 +159,19 @@
                     <tabBarItem key="tabBarItem" title="Notes" image="noteBook" id="DmT-Aa-AH0"/>
                     <navigationItem key="navigationItem" title="Folders" largeTitleDisplayMode="always" id="9wm-3H-vOj">
                         <barButtonItem key="backBarButtonItem" title="Back" id="5if-iy-sge"/>
-                        <leftBarButtonItems>
-                            <barButtonItem style="plain" systemItem="edit" id="Nxj-OY-gWh">
-                                <connections>
-                                    <action selector="editButtonTapped:" destination="x7b-QY-UVy" id="Bwn-sF-8pr"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem style="plain" id="q5G-Xy-4j3">
-                                <view key="customView" contentMode="scaleToFill" id="rXg-gn-UFi">
-                                    <rect key="frame" x="56.5" y="5.5" width="83" height="33"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <subviews>
-                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="8L0-LQ-xlh">
-                                            <rect key="frame" x="32" y="7" width="20" height="20"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        </activityIndicatorView>
-                                    </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </view>
-                            </barButtonItem>
-                        </leftBarButtonItems>
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="q5G-Xy-4j3">
+                            <view key="customView" contentMode="scaleToFill" id="rXg-gn-UFi">
+                                <rect key="frame" x="16" y="5.5" width="83" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="8L0-LQ-xlh">
+                                        <rect key="frame" x="32" y="7" width="20" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="New Folder" id="9nN-pu-cWn">
                             <connections>
                                 <action selector="newFolderButtonTapped:" destination="x7b-QY-UVy" id="HrZ-7T-cG2"/>

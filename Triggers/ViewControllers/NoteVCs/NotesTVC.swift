@@ -60,6 +60,8 @@ class NotesTVC: UITableViewController {
         cell.textLabel?.text = songInFolder.title
         cell.detailTextLabel?.text = songInFolder.timeStampAsString
         
+        cell.textLabel?.textColor = MyColor.offWhite.value
+        cell.detailTextLabel?.textColor = MyColor.offWhite.value
         return cell
     }
     
@@ -72,14 +74,18 @@ class NotesTVC: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            let noteRecord = NoteController.shared.notes[indexPath.row]
-            NoteController.shared.privateDB.delete(withRecordID: noteRecord.ckRecordID) { (_, error) in
+           guard let folder = folder else {return}
+            
+//            let noteRecord = NoteController.shared.notes[indexPath.row]
+            let noteRecordInFolder = folder.notes[indexPath.row]
+            NoteController.shared.privateDB.delete(withRecordID: noteRecordInFolder.ckRecordID) { (_, error) in
                 if error != nil {
                     DispatchQueue.main.async {
                         //UI STUFF
                     }
                 } else {
-                    NoteController.shared.notes.remove(at: indexPath.row)
+                    self.folder?.notes.remove(at: indexPath.row)
+//                    NoteController.shared.notes.remove(at: indexPath.row)
                     DispatchQueue.main.async {
                         self.tableView.deleteRows(at: [indexPath], with: .fade)
                     }
@@ -116,8 +122,9 @@ class NotesTVC: UITableViewController {
         if segue.identifier == NoteConstants.noteSegueID {
             
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
-            let note = NoteController.shared.notes[indexPath.row]
-            destinationVC.note = note
+//            let note = NoteController.shared.notes[indexPath.row]
+            let noteInFolder = folder?.notes[indexPath.row]
+            destinationVC.note = noteInFolder
         }
     }
 
