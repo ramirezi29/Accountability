@@ -24,7 +24,14 @@ class NoteDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        textBodyView.backgroundColor = MyColor.annotationOrange.value
+        textBodyView.delegate = self
+        textBodyView.backgroundColor = MyColor.offWhite.value
+        
+//        //notification listening
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTextView(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+
+        //Hide
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTextView(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         updateViews()
         
@@ -36,6 +43,12 @@ class NoteDetailVC: UIViewController {
         self.view.addGestureRecognizer(tapGesture)
         
         //Text View
+    }
+    
+    deinit {
+
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func updateViews() {
@@ -59,18 +72,20 @@ class NoteDetailVC: UIViewController {
             
             NoteController.shared.updateNote(note: note, title: noteTitle, textBody: textBody) { (success) in
                 if success {
+
                     //Test print
                     print("🙏🏽 Successfully updated Note")
                     DispatchQueue.main.async {
                         
-                        //ANY UI STUFF
+                        self.navigationController?.popViewController(animated: true)
                     }
-                    self.navigationController?.popViewController(animated: true)
+                    
                 } else {
                     AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+                    print("\n💀 Error updating NOte to CK\n")
+                    let errorUpdatingNote = AlertController.presentAlertControllerWith(alertTitle: "Error Updating Note", alertMessage: "Check your internet connection and ensure you are signed into you iCloud account", dismissActionTitle: "OK")
                     DispatchQueue.main.async {
-                        //UI ALERT WITH ERRROR
-                        print("\n💀 Error updating NOte to CK\n")
+                        self.present(errorUpdatingNote, animated: true, completion: nil)
                     }
                     return
                 }
@@ -81,15 +96,16 @@ class NoteDetailVC: UIViewController {
                 print("\nWhen the Save Note Func was called this is the folder tha that got called:\(folder.folderTitle), \(folder.ckRecordID)\n")
                 NoteController.shared.createNewNoteWith(title: noteTitle, textBody: textBody, folder: folder) { (success) in
                     if success {
+                        
                         print("\nSuccesfully created/saved note to CK and to a Folder\n")
                         DispatchQueue.main.async {
+                            
                             self.navigationController?.popViewController(animated: true)
                         }
                     } else {
                         print("/n💀 Error Saving Note to CK and Folder /n")
+                        let saveErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Note", alertMessage: "Check Your Internet Connection", dismissActionTitle: "OK")
                         DispatchQueue.main.async {
-                            let saveErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Note", alertMessage: "Check Your Internet Connection", dismissActionTitle: "OK")
-                            
                             self.present(saveErrorNotif, animated: true, completion: nil)
                         }
                     }
@@ -101,3 +117,37 @@ class NoteDetailVC: UIViewController {
     }
 }
 
+extension NoteDetailVC: UITextViewDelegate {
+
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        textView.backgroundColor = MyColor.offGrey.value
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        textView.backgroundColor = MyColor.offWhite.value
+    }
+
+    
+    //Able to send those notifications
+    @objc func updateTextView(notification: Notification) {
+        let userInfo = notification.userInfo!
+
+        let keyBoardEndFrameCoords = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+
+        let keyBoardEndFrame = self.view.convert(keyBoardEndFrameCoords, to: view.window)
+
+        if notification.name == UIResponder.keyboardWillHideNotification {
+            textBodyView.contentInset = UIEdgeInsets.zero
+
+        } else {
+            textBodyView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyBoardEndFrame.height, right: 0)
+
+            textBodyView.scrollIndicatorInsets = textBodyView.contentInset
+        }
+
+        textBodyView.scrollRangeToVisible(textBodyView.selectedRange)
+
+
+    }
+
+}

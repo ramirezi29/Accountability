@@ -86,7 +86,6 @@ class FolderTVC: UITableViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
-        tableView.isEditing = false
         DispatchQueue.main.async {
             self.activityIndicator.stopAnimating()
         }
@@ -193,15 +192,15 @@ class FolderTVC: UITableViewController {
         }
     }
     
-    @IBAction func editButtonTapped(_ sender: Any) {
-        print("Edit Tapped")
-        tableView.setEditing(!tableView.isEditing, animated: true)
-        if tableView.isEditing {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped(_:)))
-        } else {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(editButtonTapped(_:)))
-        }
-    }
+//    @IBAction func editButtonTapped(_ sender: Any) {
+//        print("Edit Tapped")
+//        tableView.setEditing(!tableView.isEditing, animated: true)
+//        if tableView.isEditing {
+//            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped(_:)))
+//        } else {
+//            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(editButtonTapped(_:)))
+//        }
+//    }
     
     
     @IBAction func newFolderButtonTapped(_ sender: Any) {
@@ -219,7 +218,7 @@ extension FolderTVC {
         let myCustomerAlert = AlertController.presentAlertControllerWith(alertTitle: "New Folder", alertMessage: "Enter a name for this Folder", dismissActionTitle: "Cancel")
         
         myCustomerAlert.addTextField { (folderName) in
-            folderName.placeholder = "Name"
+            folderName.placeholder = "Enter Name"
             folderNameTextField = folderName
             //Special Font?
         }

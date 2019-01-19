@@ -188,6 +188,7 @@
                         <outlet property="soberSinceLabel" destination="hVp-WB-Gai" id="59G-LZ-kcr"/>
                         <outlet property="soberSinceWeekDayLabel" destination="qMz-DO-Rn3" id="t4W-PS-05h"/>
                         <outlet property="soberSinceYearValueLabel" destination="fwd-w0-oO3" id="Yo0-Dq-Mxl"/>
+                        <outlet property="soberietyUserInfoLRStack" destination="bQz-kN-mD5" id="bdU-40-TOh"/>
                         <outlet property="sobrietyDatePicker" destination="5hP-To-UG2" id="NUL-bQ-CTZ"/>
                         <outlet property="sobrietyDateView" destination="9WM-kN-gr7" id="zqM-3o-10G"/>
                         <outlet property="sobrietySaveButton" destination="teH-2K-i9f" id="cvc-do-Rv4"/>
