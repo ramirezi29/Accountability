@@ -72,6 +72,8 @@ class NoteDetailVC: UIViewController {
             
             NoteController.shared.updateNote(note: note, title: noteTitle, textBody: textBody) { (success) in
                 if success {
+                    
+                     self.navigationItem.rightBarButtonItem?.isEnabled = false
 
                     //Test print
                     print("🙏🏽 Successfully updated Note")
@@ -96,6 +98,8 @@ class NoteDetailVC: UIViewController {
                 print("\nWhen the Save Note Func was called this is the folder tha that got called:\(folder.folderTitle), \(folder.ckRecordID)\n")
                 NoteController.shared.createNewNoteWith(title: noteTitle, textBody: textBody, folder: folder) { (success) in
                     if success {
+                        
+                        self.navigationItem.rightBarButtonItem?.isEnabled = false
                         
                         print("\nSuccesfully created/saved note to CK and to a Folder\n")
                         DispatchQueue.main.async {

@@ -51,6 +51,13 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Navigation bar
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        
+        //
+        
         triggersLabel.textColor = MyColor.offWhite.value
         triggersLabel.text = "My Triggers"
         triggersLogoView.image = UIImage(named: "triggersLogoIcon")
