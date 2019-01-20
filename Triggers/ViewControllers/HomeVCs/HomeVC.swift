@@ -62,6 +62,10 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         print("Location Detail ViewDidLoad")
         
+        //Navigation bar
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
         
         //textField
         userNameTextField.contentVerticalAlignment = .bottom
@@ -583,8 +587,8 @@ extension HomeVC {
         UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 7, initialSpringVelocity: 2, options: [.curveEaseInOut], animations: {
             
             self.phoneBookButton.alpha = 1
-            self.phoneBookButton.setImage(self.phoneBookImage, for: .normal)
-            self.phoneBookButton.center.x += self.view.bounds.width
+
+//            self.phoneBookButton.center.x += self.view.bounds.width
         }) { (success) in
             if success {
                 self.phoneBookButton.isUserInteractionEnabled = true

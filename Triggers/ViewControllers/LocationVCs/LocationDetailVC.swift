@@ -66,7 +66,10 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        //Navigation bar
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
         
         UNUserNotificationCenter.current().delegate = self
         
@@ -276,7 +279,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                     NotificationController.cancelLocalNotificationWith(identifier: location.locationTitle)
                     
                     //Create new notification with identifier as the new location title
-                   NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
+                    NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
                     
                     //Test Print
                     print("🙏🏽 Success updating Location")
@@ -309,7 +312,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                     
                     NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
                     
- 
+                    
                     
                     print("\n🙏🏽Successfully created/saved location🙏🏽")
                     DispatchQueue.main.async {
@@ -526,18 +529,18 @@ extension LocationDetailVC {
 
 //Notification didReceive Delegate
 extension LocationDetailVC: UNUserNotificationCenterDelegate {
-
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-
-
+        
+        
         //Not sure if this is needed
-//        let userInfo = response.notification.request.content.userInfo
-//        let textMessageAction = userInfo[LocationConstants.textSponsorActionKey]
-//        let telephoneAction = userInfo[LocationConstants.telephoneSponsorActionKey]
-
+        //        let userInfo = response.notification.request.content.userInfo
+        //        let textMessageAction = userInfo[LocationConstants.textSponsorActionKey]
+        //        let telephoneAction = userInfo[LocationConstants.telephoneSponsorActionKey]
+        
         //This is the option that was selected
         print("Test: \(response.notification.request.identifier)")
-
+        
         defer {
             completionHandler()
         }
@@ -550,12 +553,12 @@ extension LocationDetailVC: UNUserNotificationCenterDelegate {
         //An action that indicates the user opened the app from the notification interface.
         case UNNotificationDefaultActionIdentifier:
             print("user segued into the app")
-//
-//        case LocationConstants.telephoneSponsorActionKey:
-//            telephoneSponsor()
-//
-//        case LocationConstants.textSponsorActionKey:
-//            composeTextMessage()
+            //
+            //        case LocationConstants.telephoneSponsorActionKey:
+            //            telephoneSponsor()
+            //
+            //        case LocationConstants.textSponsorActionKey:
+        //            composeTextMessage()
         default:
             break
         }
