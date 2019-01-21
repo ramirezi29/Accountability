@@ -75,7 +75,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         
         view.addSubview(calenderView)
         
-        self.activityIndicatorView.isHidden = true
+        self.activityIndicatorView.backgroundColor = .clear
         updateViewsRelatedToSobrietyItems()
         updateDayofWeekLabel()
         sobrietyDateView.layer.cornerRadius = 15
@@ -91,8 +91,8 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         
         //Check in button
         checkInBottomButton.setTitle("Check-In", for: .normal)
-//        checkInBottomButton.setTitleColor(MyColor.blackGrey.value, for: .normal)
-//        checkInBottomButton.backgroundColor = MyColor.offWhite.value
+        //        checkInBottomButton.setTitleColor(MyColor.blackGrey.value, for: .normal)
+        //        checkInBottomButton.backgroundColor = MyColor.offWhite.value
         
         
         calenderView.topAnchor.constraint(equalTo: self.soberietyUserInfoLRStack.bottomAnchor, constant: 18).isActive = true
@@ -213,7 +213,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         print("\nSave Button Tapped")
         
         //Turn the button to a cancel button
-       
+        
         
         UserDefaults.standard.setValue(sobrietyDatePicker.date, forKey: sobrietyUserDefaultKey)
         
@@ -226,7 +226,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         print("Edit buton tapped")
         checkInBottomButton.isEnabled = false
         DispatchQueue.main.async {
-             self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.animateOutOfSobrietyView))
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.animateOutOfSobrietyView))
             self.animateInSobrietyView()
         }
     }
@@ -237,32 +237,77 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     }
     
     @IBAction func checkInButtonTapped(_ sender: IRButton) {
-        
-        //Test print
-        print("checkInBottomButtonTapped tapped")
-        let checkInAlertController = AlertController.presentActionSheetAlertControllerWith(alertTitle: nil, alertMessage: nil, dismissActionTitle: "Cancel")
-        
-        let supportPerson = UserController.shared.loggedInUser
-        
-        let composeEmailAction = UIAlertAction(title: "Email \(supportPerson?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
-            self.composeEmail()
-        }
-        
-        let composeTextAction = UIAlertAction(title: "Text \(supportPerson?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
-            self.composeTextMessage()
-        }
-        
-        let phoneCallAction = UIAlertAction(title: "Call \(supportPerson?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
-            self.telephoneSponsor()
-        }
-        
-        [composeEmailAction, phoneCallAction, composeTextAction].forEach { checkInAlertController.addAction($0)}
-        
-        DispatchQueue.main.async {
-            checkInAlertController.popoverPresentationController?.sourceView = self.view
-            checkInAlertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
-            checkInAlertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
-            self.present(checkInAlertController, animated: true, completion: nil)
+   
+         //Initial check to verify that the user's accountability partners inforamtion is saved
+        if UserController.shared.loggedInUser?.sponsorEmail == "" && UserController.shared.loggedInUser?.sponsorTelephoneNumber == "" ||   UserController.shared.loggedInUser?.sponsorEmail == nil && UserController.shared.loggedInUser?.sponsorTelephoneNumber == nil {
+            let noSponsorInfoFoundALert = AlertController.presentAlertControllerWith(alertTitle: "Missing Information", alertMessage: "There seems to be an issue obtaining your support personsons Email and phone number. Click on the 'Information' tab and ensure that their information is correctly saved", dismissActionTitle: "Ok")
+            DispatchQueue.main.async {
+               
+                self.present(noSponsorInfoFoundALert, animated: true, completion: nil)
+            }
+        } else {
+            
+            let checkInAlertController = AlertController.presentActionSheetAlertControllerWith(alertTitle: nil, alertMessage: nil, dismissActionTitle: "Cancel")
+            
+            let supportPerson = UserController.shared.loggedInUser
+            
+            //Eamil
+            if supportPerson?.sponsorName == "" {
+//                DispatchQueue.main.async {
+//                    self.activityIndicator.isHidden = false
+//                    self.activityIndicator.startAnimating()
+//                }
+                let composeEmailAction = UIAlertAction(title: "Email Your Support Person", style: .default) { (_) in
+                    
+                    self.composeEmail()
+                }
+                // Text
+                let composeTextAction = UIAlertAction(title: "TextYour Support Person", style: .default) { (_) in
+                    self.composeTextMessage()
+                }
+                //Call
+                let phoneCallAction = UIAlertAction(title: "CallYour Support Person", style: .default) { (_) in
+                    self.telephoneSponsor()
+                }
+                
+                [composeEmailAction, phoneCallAction, composeTextAction].forEach { checkInAlertController.addAction($0)}
+                
+                DispatchQueue.main.async {
+                    checkInAlertController.popoverPresentationController?.sourceView = self.view
+                    checkInAlertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
+                    checkInAlertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+                    self.present(checkInAlertController, animated: true, completion: nil)
+                }
+            } else {
+//                DispatchQueue.main.async {
+//                    self.activityIndicator.isHidden = false
+//                    self.activityIndicator.startAnimating()
+//                }
+                let composeEmailAction = UIAlertAction(title: "Email \(supportPerson?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
+                    
+                    self.composeEmail()
+                }
+                // Text
+                let composeTextAction = UIAlertAction(title: "Text \(supportPerson?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
+                    DispatchQueue.main.async {
+                        self.showStartActivityIndicator()
+                    }
+                    self.composeTextMessage()
+                }
+                //Call
+                let phoneCallAction = UIAlertAction(title: "Call \(supportPerson?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
+                    self.telephoneSponsor()
+                }
+                
+                [composeEmailAction, phoneCallAction, composeTextAction].forEach { checkInAlertController.addAction($0)}
+                
+                DispatchQueue.main.async {
+                    checkInAlertController.popoverPresentationController?.sourceView = self.view
+                    checkInAlertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
+                    checkInAlertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+                    self.present(checkInAlertController, animated: true, completion: nil)
+                }
+            }
         }
     }
 }
@@ -272,10 +317,7 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
     
     func composeEmail() {
         
-        DispatchQueue.main.async {
-            self.activityIndicator.isHidden = false
-            self.activityIndicator.startAnimating()
-        }
+       
         //check if device can send mail
         guard MFMailComposeViewController.canSendMail() else {
             
@@ -284,8 +326,7 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
             
             DispatchQueue.main.async {
                 self.present(notMailCompatable, animated: true)
-                self.activityIndicator.isHidden = true
-                self.activityIndicator.stopAnimating()
+                self.hideStopActivityIndictor()
             }
             return
         }
@@ -299,8 +340,7 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
         composeEmail.setMessageBody("Hi there, I just wanted to check in and give you a quick update.", isHTML: false)
         
         DispatchQueue.main.async {
-            self.activityIndicator.isHidden = true
-            self.activityIndicator.stopAnimating()
+            self.hideStopActivityIndictor()
             self.present(composeEmail, animated: true)
         }
     }
@@ -320,8 +360,7 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
         case .failed:
             print("🐦🐦🐦faled")
             DispatchQueue.main.async {
-                self.activityIndicator.isHidden = true
-                self.activityIndicator.stopAnimating()
+                self.hideStopActivityIndictor()
             }
         case .saved:
             print("🐦🐦🐦mail savied")
@@ -329,8 +368,7 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
             print("🐦🐦🐦mail saved")
         }
         DispatchQueue.main.async {
-            self.activityIndicator.isHidden = true
-            self.activityIndicator.stopAnimating()
+            self.hideStopActivityIndictor()
             controller.dismiss(animated: true, completion: nil)
         }
     }
@@ -341,19 +379,20 @@ extension CalendarVC: MFMessageComposeViewControllerDelegate {
     
     func composeTextMessage() {
         
-        DispatchQueue.main.async {
-            self.activityIndicator.isHidden = false
-            self.activityIndicator.startAnimating()
-        }
+      
         
         guard MFMessageComposeViewController.canSendText() else {
             // DO some UI to show that an email cant be sent
             let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing Text Message", alertMessage: "At this time, your device does not support this feature", dismissActionTitle: "OK")
             DispatchQueue.main.async {
+                self.hideStopActivityIndictor()
                 self.present(notMailCompatable, animated: true, completion: nil)
             }
             return
         }
+        
+        
+            self.showStartActivityIndicator()
         
         fetchCurrentuser()
         
@@ -363,13 +402,12 @@ extension CalendarVC: MFMessageComposeViewControllerDelegate {
         composeText.recipients = ["\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "")"]
         composeText.body = "Hi \(UserController.shared.loggedInUser?.sponsorName ?? "Friend"),\n\njust wanted to check in and give you an update."
         
-        present(composeText, animated: true) {
             DispatchQueue.main.async {
-                self.activityIndicator.isHidden = true
-                self.activityIndicator.stopAnimating()
+                self.hideStopActivityIndictor()
+                self.present(composeText, animated: true)
             }
         }
-    }
+    
     
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         
@@ -392,19 +430,19 @@ extension CalendarVC {
     func telephoneSponsor() {
         
         DispatchQueue.main.async {
-            self.activityIndicator.isHidden = true
-            self.activityIndicator.startAnimating()
+            self.showStartActivityIndicator()
         }
         fetchCurrentuser()
-        guard let phoneCallURL = URL(string: "telprompt://\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "7142510446")") else {
+        guard let phoneCallURL = URL(string: "telprompt://\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "")") else {
             let phoneCallError = AlertController.presentAlertControllerWith(alertTitle: "Error Making Phone Call", alertMessage: "Unexpected error please try again later", dismissActionTitle: "OK")
             DispatchQueue.main.async {
-                self.activityIndicator.stopAnimating()
+                self.hideStopActivityIndictor()
                 self.present(phoneCallError, animated: true, completion: nil)
             }
             return
         }
         DispatchQueue.main.async {
+            self.hideStopActivityIndictor()
             UIApplication.shared.open(phoneCallURL)
         }
     }
@@ -462,6 +500,16 @@ extension CalendarVC {
 }
 
 extension CalendarVC {
+    
+    func showStartActivityIndicator() {
+        self.activityIndicator.startAnimating()
+        self.activityIndicator.isHidden = false
+    }
+    
+    func hideStopActivityIndictor() {
+        self.activityIndicator.stopAnimating()
+        self.activityIndicator.isHidden = true
+    }
     func updateLabelUI() {
         //        soberSinceLabel.font = MyFont.sfDisplayMedium43.value
         //        soberSinceDateValueLabel.font = MyFont.sfDisplayMedium43.value

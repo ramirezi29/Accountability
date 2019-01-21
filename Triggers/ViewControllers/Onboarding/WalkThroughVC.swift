@@ -160,8 +160,11 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     func presentMainView() {
         let calendarStoryboard = UIStoryboard(name: StoryboardConstants.mainStoryboard, bundle: nil).instantiateInitialViewController()!
         
-        present(calendarStoryboard, animated: true, completion: nil)
+        UIApplication.shared.keyWindow?.rootViewController = calendarStoryboard
         
+
+        present(calendarStoryboard, animated: true, completion: nil)
+
     }
     
     func didUpdatePageIndex(currentIndex: Int) {

@@ -21,26 +21,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         current.delegate = self
         
         //Declare the actions
-        let dismissAction = UNNotificationAction(identifier: LocationConstants.dismissActionKey, title: "Dismiss", options: [])
-        
-        let telephoneAction = UNNotificationAction(identifier: LocationConstants.telephoneSponsorActionKey, title: "Call Support Person", options: [.authenticationRequired])
-        
-        let textMessageAction = UNNotificationAction(identifier: LocationConstants.textSponsorActionKey, title: "Text Support Person", options: [.authenticationRequired])
-        
-        let locationCategory = UNNotificationCategory(identifier: LocationConstants.notifLocationCatergoryKey, actions: [dismissAction, telephoneAction, textMessageAction], intentIdentifiers: [], options: .customDismissAction)
-        
-        UNUserNotificationCenter.current().setNotificationCategories([locationCategory])
+//        let dismissAction = UNNotificationAction(identifier: LocationConstants.dismissActionKey, title: "Dismiss", options: [])
+//
+//        let telephoneAction = UNNotificationAction(identifier: LocationConstants.telephoneSponsorActionKey, title: "Call Support Person", options: [.authenticationRequired])
+//
+//        let textMessageAction = UNNotificationAction(identifier: LocationConstants.textSponsorActionKey, title: "Text Support Person", options: [.authenticationRequired])
+//
+//        let locationCategory = UNNotificationCategory(identifier: LocationConstants.notifLocationCatergoryKey, actions: [dismissAction, telephoneAction, textMessageAction], intentIdentifiers: [], options: .customDismissAction)
+//
+//        UNUserNotificationCenter.current().setNotificationCategories([locationCategory])
         
         //Onboarding screen check
         window = UIWindow()
         
-        let isOnboarded = UserDefaults.standard.bool(forKey: "hasViewedWalkthrough")
+        let isOnboarded = UserDefaults.standard.bool(forKey: StoryboardConstants.isOnBoardedBool)
         
         if isOnboarded {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let storyboard = UIStoryboard(name: StoryboardConstants.mainStoryboard, bundle: nil)
             window?.rootViewController = storyboard.instantiateInitialViewController()
         } else {
-            let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
+            let storyboard = UIStoryboard(name: StoryboardConstants.onBoardingStoryBoard, bundle: nil)
             window?.rootViewController = storyboard.instantiateInitialViewController()
         }
         
@@ -79,32 +79,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 }
 
 extension AppDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
-        //Run this last
-        defer {
-            completionHandler()
-        }
-        
-        switch response.actionIdentifier {
-            //The action that indicates the user explicitly dismissed the notification interface.
-        //This action is delivered only if the notification’s category object was configured with the customDismissAction option.
-        case UNNotificationDismissActionIdentifier:
-            print( "User tapped dismissed the notification")
-            //
-        //An action that indicates the user opened the app from the notification interface.
-        case UNNotificationDefaultActionIdentifier:
-            print("user segued into the app")
-            
-        case LocationConstants.telephoneSponsorActionKey:
-            print("User selected the telephone option ")
-            //call feature
-        case LocationConstants.textSponsorActionKey:
-            print("user selected the text option ")
-            //text feature
-        default:
-            break
-        }
-    }
+//    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+//
+//        //Run this last
+//        defer {
+//            completionHandler()
+//        }
+//
+//        switch response.actionIdentifier {
+//            //The action that indicates the user explicitly dismissed the notification interface.
+//        //This action is delivered only if the notification’s category object was configured with the customDismissAction option.
+//        case UNNotificationDismissActionIdentifier:
+//            print( "User tapped dismissed the notification")
+//            //
+//        //An action that indicates the user opened the app from the notification interface.
+//        case UNNotificationDefaultActionIdentifier:
+//            print("user segued into the app")
+//
+//        case LocationConstants.telephoneSponsorActionKey:
+//            print("User selected the telephone option ")
+//            //call feature
+//        case LocationConstants.textSponsorActionKey:
+//            print("user selected the text option ")
+//            //text feature
+//        default:
+//            break
+//        }
+//    }
 }
 

@@ -32,8 +32,8 @@ class FolderTVC: UITableViewController {
         
         self.activityIndicator.startAnimating()
 
-        tableView.delegate = self
-        tableView.dataSource = self
+//        tableView.delegate = self
+//        tableView.dataSource = self
   
         //Fetch Folders from CK
         FolderController.shared.fetchItemsFor { (folder, error) in
@@ -53,7 +53,7 @@ class FolderTVC: UITableViewController {
                             }
                             print("\n⛱ Successfully fetched folders from CK \n")
                         } else {
-                            let networkError = AlertController.presentAlertControllerWith(alertTitle: "Unable to Load Your Notes", alertMessage: "Check your internet connection", dismissActionTitle: "OK")
+                            let networkError = AlertController.presentAlertControllerWith(alertTitle: "Unable to Load Your Notes", alertMessage: "Check your internet connection and ensure that you are signed into iCloud", dismissActionTitle: "OK")
                             DispatchQueue.main.async {
                                 self.present(networkError, animated: true, completion: nil)
                             }
@@ -92,7 +92,7 @@ class FolderTVC: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         DispatchQueue.main.async {
-            self.activityIndicator.stopAnimating()
+            self.hideStopActivityIndicator()
         }
     }
     
@@ -220,7 +220,7 @@ extension FolderTVC {
         
         var folderNameTextField: UITextField?
         
-        let myCustomerAlert = AlertController.presentAlertControllerWith(alertTitle: "New Folder", alertMessage: "Enter a name for this Folder", dismissActionTitle: "Cancel")
+        let myCustomerAlert = AlertController.presentAlertControllerWith(alertTitle: "New Folder", alertMessage: "Enter a name for this folder", dismissActionTitle: "Cancel")
         
         myCustomerAlert.addTextField { (folderName) in
             folderName.placeholder = "Enter Name"
@@ -264,7 +264,7 @@ extension FolderTVC {
                 } else {
                     print("There was an error creating the new folder record")
                     DispatchQueue.main.async {
-                        let folderSaveErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error Creating Folder", alertMessage: "Please Try Again, Check your network connection", dismissActionTitle: "OK")
+                        let folderSaveErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error Creating Folder", alertMessage: "Check your internet connection and ensure that you are signed into your iCloud account", dismissActionTitle: "OK")
                         self.present(folderSaveErrorNotif, animated: true, completion: nil)
                     }
                     return
