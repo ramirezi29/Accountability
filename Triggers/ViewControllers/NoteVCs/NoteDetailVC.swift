@@ -27,13 +27,19 @@ class NoteDetailVC: UIViewController {
         textBodyView.delegate = self
         textBodyView.backgroundColor = MyColor.offWhite.value
         
-//        //notification listening
+        //notification listening
         NotificationCenter.default.addObserver(self, selector: #selector(updateTextView(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-
+        
         //Hide
         NotificationCenter.default.addObserver(self, selector: #selector(updateTextView(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         updateViews()
+        
+        if let note = note {
+            title = note.title
+        } else {
+            title = "Note"
+        }
         
         self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
@@ -41,12 +47,10 @@ class NoteDetailVC: UIViewController {
         
         tapGesture.cancelsTouchesInView = true
         self.view.addGestureRecognizer(tapGesture)
-        
-        //Text View
     }
     
     deinit {
-
+        
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -73,8 +77,8 @@ class NoteDetailVC: UIViewController {
             NoteController.shared.updateNote(note: note, title: noteTitle, textBody: textBody) { (success) in
                 if success {
                     
-                     self.navigationItem.rightBarButtonItem?.isEnabled = false
-
+                    self.navigationItem.rightBarButtonItem?.isEnabled = false
+                    
                     //Test print
                     print("🙏🏽 Successfully updated Note")
                     DispatchQueue.main.async {
@@ -108,7 +112,7 @@ class NoteDetailVC: UIViewController {
                         }
                     } else {
                         print("/n💀 Error Saving Note to CK and Folder /n")
-                        let saveErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Note", alertMessage: "Check Your Internet Connection", dismissActionTitle: "OK")
+                        let saveErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Note", alertMessage: "Check Your Internet Connection and ensure that you are signed into your iCloud account", dismissActionTitle: "OK")
                         DispatchQueue.main.async {
                             self.present(saveErrorNotif, animated: true, completion: nil)
                         }
@@ -122,7 +126,7 @@ class NoteDetailVC: UIViewController {
 }
 
 extension NoteDetailVC: UITextViewDelegate {
-
+    
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.backgroundColor = MyColor.offGrey.value
     }
@@ -130,28 +134,27 @@ extension NoteDetailVC: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         textView.backgroundColor = MyColor.offWhite.value
     }
-
+    
     
     //Able to send those notifications
     @objc func updateTextView(notification: Notification) {
         let userInfo = notification.userInfo!
-
+        
         let keyBoardEndFrameCoords = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-
+        
         let keyBoardEndFrame = self.view.convert(keyBoardEndFrameCoords, to: view.window)
-
+        
         if notification.name == UIResponder.keyboardWillHideNotification {
             textBodyView.contentInset = UIEdgeInsets.zero
-
+            
         } else {
             textBodyView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyBoardEndFrame.height, right: 0)
-
+            
             textBodyView.scrollIndicatorInsets = textBodyView.contentInset
         }
-
+        
         textBodyView.scrollRangeToVisible(textBodyView.selectedRange)
-
-
+        
     }
-
+    
 }

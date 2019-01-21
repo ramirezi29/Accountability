@@ -30,6 +30,9 @@ class NotesTVC: UITableViewController {
             
             return
         }
+        
+        title = "\(folder.folderTitle)"
+        
         print("The folder that was selected was 🐠\(folder.folderTitle) and it has \(folder.notes.count) note(s) inside of it, according to iCloud")
     }
     

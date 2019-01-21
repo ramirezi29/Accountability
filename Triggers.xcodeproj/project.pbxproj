@@ -48,7 +48,6 @@
 		47A602FD21D82C2700699EDF /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A602FC21D82C2700699EDF /* Folder.swift */; };
 		47A602FF21D82C7A00699EDF /* FolderConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A602FE21D82C7A00699EDF /* FolderConstants.swift */; };
 		47A6030121D83A1900699EDF /* FolderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A6030021D83A1900699EDF /* FolderController.swift */; };
-		47BA148821F071AE00E2714A /* TriggersAttachmentImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 47BA148721F071AE00E2714A /* TriggersAttachmentImage.png */; };
 		47C3099521DEA16900F578A1 /* StoryboardConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C3099421DEA16900F578A1 /* StoryboardConstants.swift */; };
 		47C4935E21D55FF7002659EE /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C4935D21D55FF7002659EE /* AlertController.swift */; };
 		47E29E1B21C80B0200FA44EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E1A21C80B0200FA44EE /* AppDelegate.swift */; };
@@ -113,7 +112,6 @@
 		47A602FC21D82C2700699EDF /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		47A602FE21D82C7A00699EDF /* FolderConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderConstants.swift; sourceTree = "<group>"; };
 		47A6030021D83A1900699EDF /* FolderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderController.swift; sourceTree = "<group>"; };
-		47BA148721F071AE00E2714A /* TriggersAttachmentImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TriggersAttachmentImage.png; sourceTree = "<group>"; };
 		47C3099421DEA16900F578A1 /* StoryboardConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardConstants.swift; sourceTree = "<group>"; };
 		47C4935D21D55FF7002659EE /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		47E29E1721C80B0200FA44EE /* Triggers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Triggers.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -304,7 +302,6 @@
 				47E29E2121C80B0400FA44EE /* Assets.xcassets */,
 				47E29E2621C80B0400FA44EE /* Info.plist */,
 				47844DEA21F2F1E800ECBCA3 /* myTriggersBannerFinalLogo.png */,
-				47BA148721F071AE00E2714A /* TriggersAttachmentImage.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -495,7 +492,6 @@
 				478707BF21E6EE0B008D442D /* SF-Pro-Text-Medium.otf in Resources */,
 				478707C021E6EE0B008D442D /* SF-Pro-Text-Bold.otf in Resources */,
 				478707C121E6EE0B008D442D /* SF-Pro-Display-Medium.otf in Resources */,
-				47BA148821F071AE00E2714A /* TriggersAttachmentImage.png in Resources */,
 				478707C221E6EE0B008D442D /* SF-Pro-Display-Regular.otf in Resources */,
 				477145EE21C961700016FFAB /* WalkThroughOnBoarding.storyboard in Resources */,
 				474651F721CA0EC700E23BA0 /* Notes.storyboard in Resources */,

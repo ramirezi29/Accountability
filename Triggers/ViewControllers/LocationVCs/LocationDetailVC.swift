@@ -59,7 +59,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     private let resourceType = "png"
     
     let badAddressNotif = AlertController.presentAlertControllerWith(alertTitle: "Address Not Found", alertMessage: "Sorry, Couldnt not find the specified address", dismissActionTitle: "OK")
-    let networkErroNoif = AlertController.presentAlertControllerWith(alertTitle: "Network Error", alertMessage: "Error with your internet connection unable to save", dismissActionTitle: "OK")
+    let networkErroNoif = AlertController.presentAlertControllerWith(alertTitle: "Network Error", alertMessage: "Ensure that you are connected to the internet and signed into your iCloud account", dismissActionTitle: "OK")
     
     
     // MARK: - Life Cyles
@@ -102,13 +102,9 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         mapViewOutlet.showsCompass = true
         locationManager.startUpdatingLocation()
         
-        
         //        let usersLocation = mapViewOutlet.userLocation
         
-        
-        
         mapViewOutlet.addGestureRecognizer(longPressMapTap)
-        
         
         //        let region = MKCoordinateRegion(center: mapViewOutlet.userLocation.coordinate, latitudinalMeters: , longitudinalMeters: 1609.344)
         //
@@ -221,7 +217,13 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
         
-        self.navigationController?.popViewController(animated: true)
+       let isOnboarded = UserDefaults.standard.bool(forKey: "hasViewedWalkthrough")
+       
+       
+        if isOnboarded {
+         self.navigationController?.popViewController(animated: true)
+        }
+            
     }
     
     
@@ -279,7 +281,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                     NotificationController.cancelLocalNotificationWith(identifier: location.locationTitle)
                     
                     //Create new notification with identifier as the new location title
-                    NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
+                    NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
                     
                     //Test Print
                     print("🙏🏽 Success updating Location")
@@ -310,7 +312,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                     
                     // Updated Location Notification with Dismiss Only
                     
-                    NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle.capitalized)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
+                    NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
                     
                     
                     
