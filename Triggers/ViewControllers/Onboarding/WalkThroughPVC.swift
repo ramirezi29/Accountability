@@ -18,15 +18,56 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
     
      weak var walkthroughDelegate: WalkthroughPageViewControllerDelegate?
     
-    var pageHeadings = ["Welcome", "Statistics", "What is Geo-Fence", "How do we track your device", "Why We track your device", "On Boarding User Details"]
-    let pageImages = ["cloudImage", "cloudImage", "cloudImage", "cloudImage", "cloudImage", "cloudImage", "cloudImage"] // can add more
-    let pageSubHeadings = ["Welcome", "Statistics", "What is Geo-Fence", "How do we track your device", "Why We track your device", "On Boarding User Details"]
+    var currentVC: WalkThroughContentVC?
+
+    var pageHeadings = ["My Triggers",
+                        
+                        "Information is saved to your iCloud",
+                        
+                        "Addiction recovery is difficult",
+                        
+                        "Triggers provides an additional layer of support",
+                        
+                        "Don't feel isolated",
+                        
+                        "Contact Information",
+                        
+                        "Triggers is there to help",
+                        
+                        "Allow Location Services",
+                        
+                        "Ready? Let's get to work"]
+    
+    
+    // R. (2011). New findings on biological factors predicting addiction relapse vulnerability. Current Psychiatry Reports, 13(5), 398–405."
+    var pageSubHeadings = ["One Step Closer To Eliminating Your Triggers",
+                           
+                           "Ensure that you are signed into your iCloud Account",
+                           
+                           "Research reflects that 85% of individuals relapse and return to drug use within the year following treatment \n\nSinha, R. (2011). Current Psychiatry Reports.",
+                           
+                           "\n\nAs your companion, we can assist you to stay away from locations that may cause a trigger to relapse",
+                           
+                           "Provide Triggers with the contact information of your accountability partner or sponsor",
+                           
+                           "",
+                           
+                           "We are with you, every step of the way of your journey. \n\nAllow location services in order to better serve you",
+                           
+                           "Add another layer of accountability and support to your addiction recovery journey",
+                           
+                           ""]
+
+    
+    var pageImages = ["LocationLogo", "icloud", "ambulance", "handshake", "friendship", "paperplane", "map", "gps", "landscape"]
+    
     
     var currentIndex = 0
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Set the data source to itself
         dataSource = self
         delegate = self
@@ -35,14 +76,15 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
         if let startingViewController = walkThroughContentController(at: 0) {
             setViewControllers([startingViewController], direction: .forward, animated: true, completion: nil)
         }
-    }
+    } 
 }
+
 
 
 extension WalkThroughPVC {
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        var index = (viewController as? WalkThroughContentVC)?.index ?? 1
+        var index = (viewController as! WalkThroughContentVC).index
         index -= 1
         return walkThroughContentController(at: index)
     }
@@ -59,20 +101,19 @@ extension WalkThroughPVC {
     // page index is in the paramaters, if zero it will create the first onboarding screen
     func walkThroughContentController(at index: Int) -> WalkThroughContentVC? {
         // validation to check
-        if index < 0 || index >= pageHeadings.count
-        {
+        if index < 0 || index >= pageHeadings.count {
             return nil
         }
         //Storyboard ID for the walk through screen. ID used as a ref to create the storyboard instance
         let storyboard = UIStoryboard(name: "WalkThroughOnBoarding", bundle: nil)
         //
-        if let walkthroughVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughContentVC") as? WalkThroughContentVC {
-            walkthroughVC.imageFile = pageImages[index]
-            walkthroughVC.headLine = pageHeadings[index]
-            walkthroughVC.subHeadLine = pageSubHeadings[index]
-            walkthroughVC.index = index
-            
-            return walkthroughVC
+        if let pageContentVC = storyboard.instantiateViewController(withIdentifier: "WalkThroughContentVC") as? WalkThroughContentVC {
+            pageContentVC.imageFile = pageImages[index]
+            pageContentVC.headLine = pageHeadings[index]
+            pageContentVC.subHeadLine = pageSubHeadings[index]
+            pageContentVC.index = index
+            self.currentVC = pageContentVC
+            return pageContentVC
         }
         return nil
     }

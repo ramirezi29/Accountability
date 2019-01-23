@@ -8,12 +8,15 @@
 
 import Foundation
 
-struct UserDetailConstants {
+struct UserConstants {
     
-    static let UserDetailsKey = "UserDetails"
+    static let userTypeKey = "User"
     static let sponseeNameKey = "sponseeName"
     static let sponsorNameKey = "sponsorName"
     static let sponsorTelephoneNumberKey = "sponsorTelephoneNumber"
     static let aaStepKey = "aaStep"
-    
+    static let sponsorEmailKey = "sponsorEmail"
+    static let appleUserRefKey = "appleUserRef"
+    static let zoneName = "userZone"
+    static let ownerName = "userOwnerName"
 }

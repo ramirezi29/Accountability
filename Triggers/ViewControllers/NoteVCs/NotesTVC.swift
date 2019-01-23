@@ -10,89 +10,133 @@ import UIKit
 
 class NotesTVC: UITableViewController {
 
-    @IBOutlet weak var editButton: UIBarButtonItem!
-    @IBOutlet weak var addButton: UIBarButtonItem!
-    
-    
+    //Landing Pad
+    var folder: Folder?
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        view.setGradientToTableView(tableView: tableView, UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        
+        //Delegates
+        tableView.delegate = self
+        tableView.dataSource = self
 
-        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0) ,
-                                      bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        
+        // MARK: - Fetch
+        guard let folder = folder else  {
+            print("\n'folder' in NotesTVC was Nil or something and the fetch func failed")
+            
+            return
+        }
+        
+        title = "\(folder.folderTitle)"
+        
+        print("The folder that was selected was 🐠\(folder.folderTitle) and it has \(folder.notes.count) note(s) inside of it, according to iCloud")
     }
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.reloadData()
+     
+    }
+    
     // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return folder?.notes.count ?? 0
     }
-
-    /*
+    
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        
+         let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.noteCellID, for: indexPath) 
+        
+        //Notes
+//        let note = NoteController.shared.notes[indexPath.row]
+        
+        guard let songInFolder = folder?.notes[indexPath.row] else {return UITableViewCell()}
+        
+        
+        //Folders, just to see if this is the correct one that will get rid of the random bug
+//        let note = folder?.notes[indexPath.row]
+        
+        cell.textLabel?.text = songInFolder.title
+        cell.detailTextLabel?.text = songInFolder.timeStampAsString
+        
+        cell.textLabel?.textColor = MyColor.offWhite.value
+        cell.detailTextLabel?.textColor = MyColor.offWhite.value
         return cell
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
+    
+    //canEditRowAt
+   override  func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    */
-
-    /*
+    
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+            
+           guard let folder = folder else {return}
+            
+//            let noteRecord = NoteController.shared.notes[indexPath.row]
+            let noteRecordInFolder = folder.notes[indexPath.row]
+            NoteController.shared.privateDB.delete(withRecordID: noteRecordInFolder.ckRecordID) { (_, error) in
+                if error != nil {
+                    DispatchQueue.main.async {
+                        //UI STUFF
+                    }
+                } else {
+                    self.folder?.notes.remove(at: indexPath.row)
+//                    NoteController.shared.notes.remove(at: indexPath.row)
+                    DispatchQueue.main.async {
+                        self.tableView.deleteRows(at: [indexPath], with: .fade)
+                    }
+                }
+            }
+        }
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+    
+    //moveRowAt
+   override  func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        
+        let note = NoteController.shared.notes[sourceIndexPath.row]
+        
+        NoteController.shared.notes.remove(at: sourceIndexPath.row)
+        
+        NoteController.shared.notes.insert(note, at: destinationIndexPath.row)
+        
+        // NOTE: - Need to Save the Re-ordering done to CK some how
     }
-    */
+    
+    //canMoveRowAt
+    override  func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
 
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
+     return true
+     }
+   
+    
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        guard let destinationVC = segue.destination as? NoteDetailVC else { return }
+        
+        destinationVC.folder = folder
+        
+        if segue.identifier == NoteConstants.noteSegueID {
+            
+            guard let indexPath = tableView.indexPathForSelectedRow else { return }
+//            let note = NoteController.shared.notes[indexPath.row]
+            let noteInFolder = folder?.notes[indexPath.row]
+            destinationVC.note = noteInFolder
+        }
     }
-    */
 
 }
 
 extension NotesTVC {
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = .clear
+    
+   override  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
+        cell.backgroundColor = .clear
     }
 }
