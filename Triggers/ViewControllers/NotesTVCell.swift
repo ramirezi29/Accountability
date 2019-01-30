@@ -9,7 +9,7 @@
 import UIKit
 
 class NotesTVCell: UITableViewCell {
-
+    
     @IBOutlet weak var noteTitleLabel: UILabel!
     @IBOutlet weak var timeStampLabel: UILabel!
     
@@ -21,16 +21,13 @@ class NotesTVCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-       
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
     }
     
     func udpateViews() {
-        
         guard let note = note else {return}
         noteTitleLabel.text = note.title
         timeStampLabel.text = "\(note.timeStamp)"

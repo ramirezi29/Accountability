@@ -39,7 +39,14 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     var walkThroughCVC: WalkThroughContentVC?
     var hasSeenPermissions = false
     var user: User?
+    var walkThroughContentVC: WalkThroughContentVC?
     
+    //Landing Pad
+    var userName: String?
+    var sponsorName: String?
+    var sponsorPhone: String?
+    var sponsorEmail: String?
+    var aaStep: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,11 +105,11 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
             switch index {
             case 4:
                 print("case 4 was called")
-//                nextButton.setTitle("Next", for: .normal)
+                //                nextButton.setTitle("Next", for: .normal)
                 self.nextButton.alpha = 0
-   
-            case 5:
                 
+            case 5:
+                self.nextButton.alpha = 1.0
                 if UserController.shared.loggedInUser == nil {
                     self.nextButton.setTitle("Save", for: .normal)
                     UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseOut], animations: {
@@ -110,8 +117,9 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                         self.nextButton.alpha = 1.0
                     }, completion: nil)
                 } else {
-//                    self.nextButton.setTitle("Next", for: .normal)
-                    self.nextButton.alpha = 0
+                    self.nextButton.alpha = 0.0
+                    //                    self.nextButton.setTitle("Next", for: .normal)
+                    //                     self.nextButton.setTitle("Thers a user", for: .normal)
                 }
                 
             case 6:
@@ -125,18 +133,18 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                 
             case 7:
                 self.nextButton.alpha = 0
-//                UIView.animate(withDuration: 0.9, delay: 0.1, options: [.curveEaseOut], animations: {
-//                    self.nextButton.backgroundColor =  MyColor.hardBlue.value
-//
-//                }, completion: nil)
-//
-//                nextButton.setTitle("Next", for: .normal)
-//
-//                UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations: {
-//                    self.nextButton.alpha = 1.0
-//                }, completion: nil)
+                //                UIView.animate(withDuration: 0.9, delay: 0.1, options: [.curveEaseOut], animations: {
+                //                    self.nextButton.backgroundColor =  MyColor.hardBlue.value
+                //
+                //                }, completion: nil)
+                //
+                //                nextButton.setTitle("Next", for: .normal)
+                //
+                //                UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations: {
+                //                    self.nextButton.alpha = 1.0
+                //                }, completion: nil)
                 print("case 7")
-
+                
             case 8:
                 nextButton.setTitle("GET STARTED", for: .normal)
                 
@@ -162,9 +170,9 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         
         UIApplication.shared.keyWindow?.rootViewController = calendarStoryboard
         
-
+        
         present(calendarStoryboard, animated: true, completion: nil)
-
+        
     }
     
     func didUpdatePageIndex(currentIndex: Int) {
@@ -195,23 +203,36 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                 walkThroughPVC?.forwardPage()
                 
             case 5:
-                walkThroughPVC?.currentVC?.saveInfoToCloudKit(completion: { (success) in
+                
+                delegateSaveToCK { (success) in
                     if success {
-                        DispatchQueue.main.async {
-                            
-                        }
+  print("🐶 Successfully saved to cloudkit yay 🔥")
+                    } else {
+                        print("\nError saving to cloud kit")
                     }
-                })
+                }
+                //                walkThroughPVC?.currentVC?.saveInfoToCloudKit(completion: { (success) in
+                //                    if success {
+                //
+                //                     user?.userName =   walkThroughPVC?.currentVC?.userNameTextField.text
+                //                    user?.userName =     walkThroughPVC?.currentVC?.sponsorsNameTextField.text
+                //                        walkThroughPVC?.currentVC?.sponsorsPhoneNumberTextField.text
+                //                        walkThroughPVC?.currentVC?.sponsorsPhoneNumberTextField.text
+                //                        walkThroughPVC?.currentVC?.sponsorsEmailAddressTextField.text
+                //
+                //                        DispatchQueue.main.async {
+                //
+                //                        }
+                //                    }
+                //                })
                 self.walkThroughPVC?.forwardPage()
                 
                 print("case 4")
-                
                 
             case 6:
                 
                 walkThroughPVC?.forwardPage()
                 print("case 5")
-                
                 
             case 7:
                 walkThroughPVC?.forwardPage()
@@ -226,7 +247,7 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                         }
                     })
                 }
-                    
+                
                 UserDefaults.standard.set(true, forKey: UserDefaultConstants.isOnboardedKey)
                 
                 presentMainView()
@@ -242,27 +263,61 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
 }
 
 extension WalkThroughVC : WalkThroughContentVCDelegate {
-    
+//    func validUserNameEntered(username: String, isHidden: Bool) {
+//        print("Random")
+//    }
+////}
+
+
     func validUserNameEntered(username: String, isHidden: Bool) {
-        
+
         switch isHidden {
         case true:
             nextButton.isEnabled = true
             nextButton.isHidden = isHidden
-            
+
             UIView.animate(withDuration: 0.8, delay: 0.1, options: [], animations: {
                 self.nextButton.alpha = 0.0
             }, completion: nil)
-            
+
         case false:
             nextButton.isHidden = isHidden
-            
+
             UIView.animate(withDuration: 0.8, delay: 0.1, options: [], animations: {
                 self.nextButton.alpha = 1.0
             }, completion: nil)
-            
+
             nextButton.setTitle("GET STARTED", for: .normal)
         }
-        
     }
 }
+
+extension WalkThroughVC {
+    
+    func delegateSaveToCK(completion: @escaping (Bool) -> Void) {
+        
+        if walkThroughPVC?.currentVC?.loggedInUserExist == true { return }
+        
+        
+            guard let userName =  userName,
+                let sponsorName = sponsorName,
+                let sponsorPhoneNumber = sponsorPhone,
+                let sponsorEmail = sponsorEmail,
+                let aaStep = aaStep else { return }
+            
+        UserController.shared.createNewUserDetailsWith(userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorPhoneNumber, sponsorEmail: sponsorEmail, aaStep: Int(aaStep) ) { (success) in
+                if success {
+                    print("\n🙏🏽 Creating new userDetails to CK successful\n")
+                    DispatchQueue.main.async {
+                        self.title = "Sucessflly Saved Example saveInfoToCloudKit func"
+                    }
+                    completion(true)
+                } else {
+                    print("Error Saving to Cloud Kit 💀")
+                    completion(false)
+                    return
+                }
+            }
+        }
+    }
+

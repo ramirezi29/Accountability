@@ -97,7 +97,7 @@ class HomeVC: UIViewController {
         supportPersonImageView.image = UIImage(named: "friendshipMaleIcon")
         phoneImageView.image = UIImage(named: "smartphone")
         emailImageView.image = UIImage(named: "paperPlaneIcon")
-  
+        
         //Tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(HomeVC.hideKeyboard))
         
@@ -238,7 +238,7 @@ class HomeVC: UIViewController {
         self.aaDismissButton.setTitle("Dismiss", for: .normal)
         
         
-        self.aaExplinationLabel.text = "If you are currently in an Alchol Anonymous or 12 Step program you can track your progress by selcting your current step"
+        self.aaExplinationLabel.text = "If you are currently in an Alcohol Anonymous or 12 Step type program you can track your progress by selcting your current step"
         
         animateInAAInfoView()
         
