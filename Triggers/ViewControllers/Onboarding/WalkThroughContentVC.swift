@@ -198,22 +198,43 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
                         self.textFieldAppearAnimation()
                     }
                 }
+            } else {
+                print("🍎🐦 The text fields did not appear bc logged in user exists: \(String(describing: loggedInUserExist)) and or the shared user is: \(String(describing: UserController.shared.loggedInUser))")
             }
-            
+            print("☄️ Case 5")
         case 6:
+            
+            
+            
+             print("☄️ Case 6")
+//            saveInfoToCloudKit { (_) in
+//            }
             
             self.contactButton.isHidden = true
             hideTextFields()
             
         case 7:
-            
             self.inquirePermissions()
             
         default:
             break
         }
     }
+   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if loggedInUserExist == true {return}
+    guard let userName = userNameTextField.text,
+        let sponsorName = sponsorsNameTextField.text,
+        let sponsorsEmail = sponsorsEmailAddressTextField.text,
+        let sponsorsPhoneNumber = sponsorsPhoneNumberTextField.text,
+        let  aaStep = aaStepTextField.text else { return }
     
+    guard let destinationVC = segue.destination as? WalkThroughVC else {return}
+    destinationVC.userName = userName
+    destinationVC.sponsorName = sponsorName
+    destinationVC.sponsorPhone = sponsorsPhoneNumber
+    destinationVC.sponsorEmail = sponsorsEmail
+    destinationVC.aaStep = Int(aaStep) ?? 0
+    }
     // MARK: - KEYBOARD
     
     //Stop listening for certain events reltated to the keybaord such as hide/show
@@ -228,16 +249,22 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     @objc func keyboardWillShow(notification: Notification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= 150
+                self.view.frame.origin.y -= keyboardSize.height / 1.8
             }
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
         
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0 {
+                self.view.frame.origin.y += keyboardSize.height / 1.8
+            }
         }
+//        if self.view.frame.origin.y != 0 {
+//            self.view.frame.origin.y = 0
+//
+//        }
     }
     
     func loadLoggedUserDefaults(){
@@ -301,6 +328,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         //If there is already a user update the views
         // NOTE: - This feature can be updated
         self.updateViews()
+        
         UIView.animateKeyframes(withDuration: 2.0, delay: 0.0, options: [], animations: {
             self.userNameTextField.alpha = 0.5
         }) { (success) in
