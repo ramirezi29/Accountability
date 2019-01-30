@@ -22,6 +22,7 @@
 		474651F721CA0EC700E23BA0 /* Notes.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 474651F621CA0EC700E23BA0 /* Notes.storyboard */; };
 		474651F921CA0FFB00E23BA0 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 474651F821CA0FFB00E23BA0 /* Home.storyboard */; };
 		475AD3F621E4398F00023B63 /* DateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475AD3F521E4398F00023B63 /* DateController.swift */; };
+		475B9A302202223300060D0D /* CGRECTExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475B9A2F2202223300060D0D /* CGRECTExtension.swift */; };
 		476A26FE21E5198900CB864A /* ButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A26FD21E5198900CB864A /* ButtonController.swift */; };
 		476A270321E55E5F00CB864A /* SecondLaunchScreenV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A270221E55E5F00CB864A /* SecondLaunchScreenV.swift */; };
 		476A270821E5BDE100CB864A /* FontController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A270721E5BDE100CB864A /* FontController.swift */; };
@@ -86,6 +87,7 @@
 		474651F621CA0EC700E23BA0 /* Notes.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Notes.storyboard; sourceTree = "<group>"; };
 		474651F821CA0FFB00E23BA0 /* Home.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		475AD3F521E4398F00023B63 /* DateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateController.swift; sourceTree = "<group>"; };
+		475B9A2F2202223300060D0D /* CGRECTExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRECTExtension.swift; sourceTree = "<group>"; };
 		476A26FD21E5198900CB864A /* ButtonController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonController.swift; sourceTree = "<group>"; };
 		476A270221E55E5F00CB864A /* SecondLaunchScreenV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondLaunchScreenV.swift; sourceTree = "<group>"; };
 		476A270721E5BDE100CB864A /* FontController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontController.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				476A26FD21E5198900CB864A /* ButtonController.swift */,
 				476A270721E5BDE100CB864A /* FontController.swift */,
 				4719D3BD21F055AD00DFD578 /* UILabelAlignment.swift */,
+				475B9A2F2202223300060D0D /* CGRECTExtension.swift */,
 			);
 			path = HelperFiles;
 			sourceTree = "<group>";
@@ -534,6 +537,7 @@
 				4771461021C9C4210016FFAB /* WalkThroughContentVC.swift in Sources */,
 				4771460021C9A8DC0016FFAB /* CalendarVC.swift in Sources */,
 				476A270821E5BDE100CB864A /* FontController.swift in Sources */,
+				475B9A302202223300060D0D /* CGRECTExtension.swift in Sources */,
 				47E29E4F21C852DC00FA44EE /* LocationDetailVC.swift in Sources */,
 				472EA53421CC05740022EE0A /* Location.swift in Sources */,
 				47A602FD21D82C2700699EDF /* Folder.swift in Sources */,
