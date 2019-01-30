@@ -30,6 +30,7 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     }
     
     @IBOutlet var skipButton: UIButton!
+    @IBOutlet weak var tintedBackgroundView: UIView!
     
     weak var saveInfoDelegate: SaveUserInfoDelegate?
     
@@ -40,17 +41,19 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     var hasSeenPermissions = false
     var user: User?
     var walkThroughContentVC: WalkThroughContentVC?
-    
+
     //Landing Pad
     var userName: String?
     var sponsorName: String?
     var sponsorPhone: String?
     var sponsorEmail: String?
     var aaStep: Int?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // user defualts
+        
+        //Background
+        tintedBackgroundView.backgroundColor = MyColor.powderBlue.value
         
         //Button
         nextButton.alpha = 0
@@ -109,18 +112,18 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                 self.nextButton.alpha = 0
                 
             case 5:
-                self.nextButton.alpha = 1.0
-                if UserController.shared.loggedInUser == nil {
-                    self.nextButton.setTitle("Save", for: .normal)
-                    UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseOut], animations: {
-                        
-                        self.nextButton.alpha = 1.0
-                    }, completion: nil)
-                } else {
-                    self.nextButton.alpha = 0.0
+                self.nextButton.alpha = 0
+//                if UserController.shared.loggedInUser == nil {
+//                    self.nextButton.setTitle("Save", for: .normal)
+//                    UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseOut], animations: {
+//
+//                        self.nextButton.alpha = 1.0
+//                    }, completion: nil)
+//                } else {
+//                    self.nextButton.alpha = 0.0
                     //                    self.nextButton.setTitle("Next", for: .normal)
                     //                     self.nextButton.setTitle("Thers a user", for: .normal)
-                }
+                //}
                 
             case 6:
                 nextButton.setTitle("I Understand", for: .normal)
@@ -190,6 +193,16 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         }
     }
     
+//    func updateViews() {
+//        guard let walkThroughContentVC = walkThroughContentVC else { return }
+//        let userName = walkThroughContentVC.userNameTextField.text ?? ""
+//        let sponsorName = walkThroughContentVC.sponsorsNameTextField.text ?? ""
+//        let sponsorPhoneNumber = walkThroughContentVC.sponsorsPhoneNumberTextField.text ?? ""
+//        let sponsorEmail = walkThroughContentVC.sponsorsEmailAddressTextField.text ?? ""
+//        let aaStep = walkThroughContentVC.aaStepTextField.text
+//    }
+    
+    
     @IBAction func saveSaveButtonTapped(_ sender: Any) {
     }
     
@@ -204,34 +217,35 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                 
             case 5:
                 
-                delegateSaveToCK { (success) in
-                    if success {
-  print("🐶 Successfully saved to cloudkit yay 🔥")
-                    } else {
-                        print("\nError saving to cloud kit")
-                    }
-                }
-                //                walkThroughPVC?.currentVC?.saveInfoToCloudKit(completion: { (success) in
+                //                delegateSaveToCK { (success) in
                 //                    if success {
-                //
-                //                     user?.userName =   walkThroughPVC?.currentVC?.userNameTextField.text
-                //                    user?.userName =     walkThroughPVC?.currentVC?.sponsorsNameTextField.text
-                //                        walkThroughPVC?.currentVC?.sponsorsPhoneNumberTextField.text
-                //                        walkThroughPVC?.currentVC?.sponsorsPhoneNumberTextField.text
-                //                        walkThroughPVC?.currentVC?.sponsorsEmailAddressTextField.text
-                //
-                //                        DispatchQueue.main.async {
-                //
-                //                        }
+                //  print("🐶 Successfully saved to cloudkit yay 🔥")
+                //                    } else {
+                //                        print("\nError saving to cloud kit")
                 //                    }
-                //                })
+                //                }
+//                walkThroughPVC?.currentVC?.saveInfoToCloudKit(completion: { (success) in
+//                    if success {
+//                        print("\n🌃 Successfully saved user to CK\n")
+//                        user?.userName =   walkThroughPVC?.currentVC?.userNameTextField.text ?? <#default value#>
+//                        user?.userName =     walkThroughPVC?.currentVC?.sponsorsNameTextField.text
+//                        walkThroughPVC?.currentVC?.sponsorsPhoneNumberTextField.text
+//                        walkThroughPVC?.currentVC?.sponsorsPhoneNumberTextField.text
+//                        walkThroughPVC?.currentVC?.sponsorsEmailAddressTextField.text
+                        
+//                        DispatchQueue.main.async {
+//
+//                        }
+//                    }
+//                })
                 self.walkThroughPVC?.forwardPage()
                 
                 print("case 4")
                 
             case 6:
-                
+                walkThroughPVC?.currentVC?.inquirePermissions()
                 walkThroughPVC?.forwardPage()
+                walkThroughPVC?.currentVC?.inquirePermissions()
                 print("case 5")
                 
             case 7:
@@ -242,7 +256,7 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                     walkThroughPVC?.currentVC?.saveInfoToCloudKit(completion: { (success) in
                         if success {
                             DispatchQueue.main.async {
-                                
+                                //Future version animate the screen out
                             }
                         }
                     })
@@ -263,61 +277,33 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
 }
 
 extension WalkThroughVC : WalkThroughContentVCDelegate {
-//    func validUserNameEntered(username: String, isHidden: Bool) {
-//        print("Random")
-//    }
-////}
-
-
+    //    func validUserNameEntered(username: String, isHidden: Bool) {
+    //        print("Random")
+    //    }
+    ////}
+    
+    
     func validUserNameEntered(username: String, isHidden: Bool) {
-
+        
         switch isHidden {
         case true:
             nextButton.isEnabled = true
             nextButton.isHidden = isHidden
-
+            
             UIView.animate(withDuration: 0.8, delay: 0.1, options: [], animations: {
                 self.nextButton.alpha = 0.0
             }, completion: nil)
-
+            
         case false:
             nextButton.isHidden = isHidden
-
+            
             UIView.animate(withDuration: 0.8, delay: 0.1, options: [], animations: {
                 self.nextButton.alpha = 1.0
             }, completion: nil)
-
+            
             nextButton.setTitle("GET STARTED", for: .normal)
         }
     }
 }
 
-extension WalkThroughVC {
-    
-    func delegateSaveToCK(completion: @escaping (Bool) -> Void) {
-        
-        if walkThroughPVC?.currentVC?.loggedInUserExist == true { return }
-        
-        
-            guard let userName =  userName,
-                let sponsorName = sponsorName,
-                let sponsorPhoneNumber = sponsorPhone,
-                let sponsorEmail = sponsorEmail,
-                let aaStep = aaStep else { return }
-            
-        UserController.shared.createNewUserDetailsWith(userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorPhoneNumber, sponsorEmail: sponsorEmail, aaStep: Int(aaStep) ) { (success) in
-                if success {
-                    print("\n🙏🏽 Creating new userDetails to CK successful\n")
-                    DispatchQueue.main.async {
-                        self.title = "Sucessflly Saved Example saveInfoToCloudKit func"
-                    }
-                    completion(true)
-                } else {
-                    print("Error Saving to Cloud Kit 💀")
-                    completion(false)
-                    return
-                }
-            }
-        }
-    }
 
