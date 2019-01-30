@@ -240,7 +240,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
    
          //Initial check to verify that the user's accountability partners inforamtion is saved
         if UserController.shared.loggedInUser?.sponsorEmail == "" && UserController.shared.loggedInUser?.sponsorTelephoneNumber == "" ||   UserController.shared.loggedInUser?.sponsorEmail == nil && UserController.shared.loggedInUser?.sponsorTelephoneNumber == nil {
-            let noSponsorInfoFoundALert = AlertController.presentAlertControllerWith(alertTitle: "Missing Information", alertMessage: "There seems to be an issue obtaining your support personsons Email and phone number. Click on the 'Information' tab and ensure that their information is correctly saved", dismissActionTitle: "Ok")
+            let noSponsorInfoFoundALert = AlertController.presentAlertControllerWith(alertTitle: "Error Obtain Information", alertMessage: "There seems to be an issue obtaining your support person's email and phone number. Click on the 'Information' tab and ensure that their information is correctly saved", dismissActionTitle: "Ok")
             DispatchQueue.main.async {
                
                 self.present(noSponsorInfoFoundALert, animated: true, completion: nil)
@@ -379,8 +379,6 @@ extension CalendarVC: MFMessageComposeViewControllerDelegate {
     
     func composeTextMessage() {
         
-      
-        
         guard MFMessageComposeViewController.canSendText() else {
             // DO some UI to show that an email cant be sent
             let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing Text Message", alertMessage: "At this time, your device does not support this feature", dismissActionTitle: "OK")
@@ -390,7 +388,6 @@ extension CalendarVC: MFMessageComposeViewControllerDelegate {
             }
             return
         }
-        
         
             self.showStartActivityIndicator()
         

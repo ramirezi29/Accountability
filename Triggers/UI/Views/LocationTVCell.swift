@@ -15,7 +15,7 @@ class LocationTVCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-       
+        
     }
     
     var location: Location? {
@@ -26,14 +26,12 @@ class LocationTVCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-    
     }
-
+    
     func updateViews() {
-        
         guard let location = location else {return}
         locationTitleLabel.text = location.locationTitle
         locationImageView.image = UIImage(named: "triggersLogoIcon")
-         locationTitleLabel.textColor = MyColor.offWhite.value
+        locationTitleLabel.textColor = MyColor.offWhite.value
     }
 }

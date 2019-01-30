@@ -22,7 +22,7 @@ class MonthView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor=UIColor.clear
+        self.backgroundColor = UIColor.clear
         
         currentMonthIndex = Calendar.current.component(.month, from: Date()) - 1
         
