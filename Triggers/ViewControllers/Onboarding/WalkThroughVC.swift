@@ -41,14 +41,14 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     var hasSeenPermissions = false
     var user: User?
     var walkThroughContentVC: WalkThroughContentVC?
-
+    
     //Landing Pad
     var userName: String?
     var sponsorName: String?
     var sponsorPhone: String?
     var sponsorEmail: String?
     var aaStep: Int?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -65,7 +65,6 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         if disableOnBardingBool == true  {
             presentMainView()
             
-            // NOTE: - Not sure if this is needed return
             return
         }
         
@@ -108,22 +107,10 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
             switch index {
             case 4:
                 print("case 4 was called")
-                //                nextButton.setTitle("Next", for: .normal)
                 self.nextButton.alpha = 0
                 
             case 5:
                 self.nextButton.alpha = 0
-//                if UserController.shared.loggedInUser == nil {
-//                    self.nextButton.setTitle("Save", for: .normal)
-//                    UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseOut], animations: {
-//
-//                        self.nextButton.alpha = 1.0
-//                    }, completion: nil)
-//                } else {
-//                    self.nextButton.alpha = 0.0
-                    //                    self.nextButton.setTitle("Next", for: .normal)
-                    //                     self.nextButton.setTitle("Thers a user", for: .normal)
-                //}
                 
             case 6:
                 nextButton.setTitle("I Understand", for: .normal)
@@ -136,16 +123,6 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                 
             case 7:
                 self.nextButton.alpha = 0
-                //                UIView.animate(withDuration: 0.9, delay: 0.1, options: [.curveEaseOut], animations: {
-                //                    self.nextButton.backgroundColor =  MyColor.hardBlue.value
-                //
-                //                }, completion: nil)
-                //
-                //                nextButton.setTitle("Next", for: .normal)
-                //
-                //                UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseInOut], animations: {
-                //                    self.nextButton.alpha = 1.0
-                //                }, completion: nil)
                 print("case 7")
                 
             case 8:
@@ -173,7 +150,6 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         
         UIApplication.shared.keyWindow?.rootViewController = calendarStoryboard
         
-        
         present(calendarStoryboard, animated: true, completion: nil)
         
     }
@@ -193,54 +169,13 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         }
     }
     
-//    func updateViews() {
-//        guard let walkThroughContentVC = walkThroughContentVC else { return }
-//        let userName = walkThroughContentVC.userNameTextField.text ?? ""
-//        let sponsorName = walkThroughContentVC.sponsorsNameTextField.text ?? ""
-//        let sponsorPhoneNumber = walkThroughContentVC.sponsorsPhoneNumberTextField.text ?? ""
-//        let sponsorEmail = walkThroughContentVC.sponsorsEmailAddressTextField.text ?? ""
-//        let aaStep = walkThroughContentVC.aaStepTextField.text
-//    }
-    
-    
-    @IBAction func saveSaveButtonTapped(_ sender: Any) {
-    }
-    
-    
     @IBAction func nextButtonTapped(_ sender: Any) {
         
         if let index = walkThroughPVC?.currentIndex {
             
             switch index {
-            case 0...4:
+            case 0...5:
                 walkThroughPVC?.forwardPage()
-                
-            case 5:
-                
-                //                delegateSaveToCK { (success) in
-                //                    if success {
-                //  print("🐶 Successfully saved to cloudkit yay 🔥")
-                //                    } else {
-                //                        print("\nError saving to cloud kit")
-                //                    }
-                //                }
-//                walkThroughPVC?.currentVC?.saveInfoToCloudKit(completion: { (success) in
-//                    if success {
-//                        print("\n🌃 Successfully saved user to CK\n")
-//                        user?.userName =   walkThroughPVC?.currentVC?.userNameTextField.text ?? <#default value#>
-//                        user?.userName =     walkThroughPVC?.currentVC?.sponsorsNameTextField.text
-//                        walkThroughPVC?.currentVC?.sponsorsPhoneNumberTextField.text
-//                        walkThroughPVC?.currentVC?.sponsorsPhoneNumberTextField.text
-//                        walkThroughPVC?.currentVC?.sponsorsEmailAddressTextField.text
-                        
-//                        DispatchQueue.main.async {
-//
-//                        }
-//                    }
-//                })
-                self.walkThroughPVC?.forwardPage()
-                
-                print("case 4")
                 
             case 6:
                 walkThroughPVC?.currentVC?.inquirePermissions()
@@ -266,7 +201,6 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                 
                 presentMainView()
                 
-                
             default: break
                 
             }
@@ -277,11 +211,6 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
 }
 
 extension WalkThroughVC : WalkThroughContentVCDelegate {
-    //    func validUserNameEntered(username: String, isHidden: Bool) {
-    //        print("Random")
-    //    }
-    ////}
-    
     
     func validUserNameEntered(username: String, isHidden: Bool) {
         

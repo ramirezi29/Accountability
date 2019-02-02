@@ -32,6 +32,7 @@ class NotesTVCell: UITableViewCell {
         noteTitleLabel.text = note.title
         timeStampLabel.text = "\(note.timeStamp)"
         
+        //Color
         noteTitleLabel.textColor = MyColor.offWhite.value
         timeStampLabel.textColor = MyColor.offWhite.value
     }

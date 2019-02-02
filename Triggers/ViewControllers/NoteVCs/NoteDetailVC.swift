@@ -56,7 +56,6 @@ class NoteDetailVC: UIViewController {
     }
     
     func updateViews() {
-        
         guard let note = note else {return}
         titelTextField.text = note.title
         textBodyView.text = note.textBody
@@ -67,13 +66,10 @@ class NoteDetailVC: UIViewController {
     }
     
     @IBAction func saveButtonTapped(_ sender: Any) {
-        //Test Print
-        print("/n/n⛲️Save Button Tapped")
         
         guard let noteTitle = titelTextField.text, let textBody = textBodyView.text, !textBody.isEmpty else { return }
         
         if let note = note {
-            
             NoteController.shared.updateNote(note: note, title: noteTitle, textBody: textBody) { (success) in
                 if success {
                     
@@ -85,9 +81,8 @@ class NoteDetailVC: UIViewController {
                         
                         self.navigationController?.popViewController(animated: true)
                     }
-                    
                 } else {
-                    AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                     print("\n💀 Error updating NOte to CK\n")
                     let errorUpdatingNote = AlertController.presentAlertControllerWith(alertTitle: "Error Updating Note", alertMessage: "Check your internet connection and ensure you are signed into you iCloud account", dismissActionTitle: "OK")
                     DispatchQueue.main.async {
@@ -119,7 +114,7 @@ class NoteDetailVC: UIViewController {
                     }
                 }
             } else {
-                print("\n😭 THere is no Folder for the Note\n")
+                print("\n check cloud kit func. There is no Folder for the Note\n")
             }
         }
     }
@@ -135,7 +130,6 @@ extension NoteDetailVC: UITextViewDelegate {
         textView.backgroundColor = MyColor.offWhite.value
     }
     
-    
     //Able to send those notifications
     @objc func updateTextView(notification: Notification) {
         let userInfo = notification.userInfo!
@@ -149,12 +143,9 @@ extension NoteDetailVC: UITextViewDelegate {
             
         } else {
             textBodyView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyBoardEndFrame.height, right: 0)
-            
             textBodyView.scrollIndicatorInsets = textBodyView.contentInset
         }
         
         textBodyView.scrollRangeToVisible(textBodyView.selectedRange)
-        
     }
-    
 }

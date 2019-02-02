@@ -9,36 +9,35 @@
 import UIKit
 
 class NotesTVC: UITableViewController {
-
+    
     //Landing Pad
     var folder: Folder?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         view.setGradientToTableView(tableView: tableView, UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
         //Delegates
         tableView.delegate = self
         tableView.dataSource = self
-
         
         // MARK: - Fetch
         guard let folder = folder else  {
-            print("\n'folder' in NotesTVC was Nil or something and the fetch func failed")
+            print("\n There is an issue with the folders perhaps it is nil")
             
             return
         }
         
         title = "\(folder.folderTitle)"
         
-        print("The folder that was selected was 🐠\(folder.folderTitle) and it has \(folder.notes.count) note(s) inside of it, according to iCloud")
+        //Test Pring
+        //print("The folder that was selected was 🐠\(folder.folderTitle) and it has \(folder.notes.count) note(s) inside of it, according to iCloud")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
-     
+        
     }
     
     // MARK: - Table view data source
@@ -49,16 +48,9 @@ class NotesTVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-         let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.noteCellID, for: indexPath) 
-        
-        //Notes
-//        let note = NoteController.shared.notes[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.noteCellID, for: indexPath)
         
         guard let songInFolder = folder?.notes[indexPath.row] else {return UITableViewCell()}
-        
-        
-        //Folders, just to see if this is the correct one that will get rid of the random bug
-//        let note = folder?.notes[indexPath.row]
         
         cell.textLabel?.text = songInFolder.title
         cell.detailTextLabel?.text = songInFolder.timeStampAsString
@@ -69,7 +61,7 @@ class NotesTVC: UITableViewController {
     }
     
     //canEditRowAt
-   override  func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    override  func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
@@ -77,18 +69,18 @@ class NotesTVC: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-           guard let folder = folder else {return}
+            guard let folder = folder else {return}
             
-//            let noteRecord = NoteController.shared.notes[indexPath.row]
             let noteRecordInFolder = folder.notes[indexPath.row]
             NoteController.shared.privateDB.delete(withRecordID: noteRecordInFolder.ckRecordID) { (_, error) in
                 if error != nil {
                     DispatchQueue.main.async {
+                        //Future version will include a UI element
                         //UI STUFF
                     }
                 } else {
                     self.folder?.notes.remove(at: indexPath.row)
-//                    NoteController.shared.notes.remove(at: indexPath.row)
+                    //                    NoteController.shared.notes.remove(at: indexPath.row)
                     DispatchQueue.main.async {
                         self.tableView.deleteRows(at: [indexPath], with: .fade)
                     }
@@ -98,12 +90,11 @@ class NotesTVC: UITableViewController {
     }
     
     //moveRowAt
-   override  func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    override  func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         let note = NoteController.shared.notes[sourceIndexPath.row]
         
         NoteController.shared.notes.remove(at: sourceIndexPath.row)
-        
         NoteController.shared.notes.insert(note, at: destinationIndexPath.row)
         
         // NOTE: - Need to Save the Re-ordering done to CK some how
@@ -111,31 +102,31 @@ class NotesTVC: UITableViewController {
     
     //canMoveRowAt
     override  func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-
-     return true
-     }
-   
+        
+        return true
+    }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destinationVC = segue.destination as? NoteDetailVC else { return }
+        guard let destinationVC = segue.destination as? NoteDetailVC else {
+            return
+        }
         
         destinationVC.folder = folder
         
         if segue.identifier == NoteConstants.noteSegueID {
             
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
-//            let note = NoteController.shared.notes[indexPath.row]
+            //            let note = NoteController.shared.notes[indexPath.row]
             let noteInFolder = folder?.notes[indexPath.row]
             destinationVC.note = noteInFolder
         }
     }
-
 }
 
 extension NotesTVC {
     
-   override  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    override  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = .clear
     }

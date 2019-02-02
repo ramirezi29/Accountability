@@ -73,6 +73,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //upper save button
         upperSaveButtonView.isHidden = true
         //location
@@ -87,12 +88,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         locationManger.desiredAccuracy = kCLLocationAccuracyBest
         
         locationManger.distanceFilter = 10
-        
-        //Listening for certain events related to the keyboard
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-//
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
         
         //updateViews
         UserController.shared.fetchCurrentUser { (success, _) in
@@ -111,7 +106,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         
         loadLoggedUserDefaults()
         
-        print("\(String(describing: self.loggedInUserExist))")
+        //Tst print
+        //print("\(String(describing: self.loggedInUserExist))")
         
         //Text Fields
         hideTextFields()
@@ -173,49 +169,48 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         case 3:
             self.textFieldsDisappearAnimation()
         case 4:
-            print("\n🔷 DOnt feel isolated view🌎\n")
             
             self.hideTextFields()
             self.contactButton.isHidden = true
             
         case 5:
             
-               
-                contentImageView.alpha = 0.4
+            contentImageView.alpha = 0.4
             
-            
-            print("🍔🍔🍔🍔\(String(describing: self.loggedInUserExist)) and user defautls has it as \(UserDefaults.standard.bool(forKey: loggedInUserExistKey))")
+            //Test Print
+            //print("\(String(describing: self.loggedInUserExist)) and user defautls has it as \(UserDefaults.standard.bool(forKey: loggedInUserExistKey))")
             
             if loggedInUserExist == false || UserController.shared.loggedInUser == nil {
                 self.textFieldAlphaZero()
                 self.showTextFields()
-
+                
                 let tapGesture = UITapGestureRecognizer(target: self, action: #selector(WalkThroughContentVC.hideKeyboard))
+                
                 tapGesture.cancelsTouchesInView = true
+                
                 self.view.addGestureRecognizer(tapGesture)
                 
+                //Edge case, in order to present the animation to the user when they naviagete to this particular index slowly
                 let deadlineTime = DispatchTime.now() + .seconds(1)
                 
                 DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-                    print("test")
+                    
                     DispatchQueue.main.async {
                         
-                       //Uncover the top save button
+                        //Uncover the top save button
                         self.upperSaveButtonView.setTitle("Save", for: .normal)
-                        
                         self.upperSaveButtonView.isHidden = false
-                        print("🎸🎸🎸🎸🎸TExt Fields should appear now")
                         self.textFieldAppearAnimation()
                     }
                 }
             } else {
-                print("🍎🐦 The text fields did not appear bc logged in user exists: \(String(describing: loggedInUserExist)) and or the shared user is: \(String(describing: UserController.shared.loggedInUser))")
+                print("The text fields did not appear bc logged in user exists: \(String(describing: loggedInUserExist)) and or the shared user is: \(String(describing: UserController.shared.loggedInUser))")
             }
             print("☄️ Case 5")
-         
+            
         case 6:
             
-             print("☄️ Case 6")
+            print("☄️ Case 6")
             
             self.contactButton.isHidden = true
             
@@ -223,64 +218,34 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             
         case 7:
             print(index)
-           
+            
         case 8:
+            //Safety net. if permisions were not asked in the previous index, as them before they exit the onboarding screen
             self.inquirePermissions()
             print(index)
-         //            self.inquirePermissions()
-
+            
         default:
-
             break
         }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if loggedInUserExist == true {return}
         
+        guard let userName = userNameTextField.text,
+            let sponsorName = sponsorsNameTextField.text,
+            let sponsorsEmail = sponsorsEmailAddressTextField.text,
+            let sponsorsPhoneNumber = sponsorsPhoneNumberTextField.text,
+            let  aaStep = aaStepTextField.text else { return }
+        
+        guard let destinationVC = segue.destination as? WalkThroughVC else {return}
+        
+        destinationVC.userName = userName
+        destinationVC.sponsorName = sponsorName
+        destinationVC.sponsorPhone = sponsorsPhoneNumber
+        destinationVC.sponsorEmail = sponsorsEmail
+        destinationVC.aaStep = Int(aaStep) ?? 0
     }
-   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if loggedInUserExist == true {return}
-    guard let userName = userNameTextField.text,
-        let sponsorName = sponsorsNameTextField.text,
-        let sponsorsEmail = sponsorsEmailAddressTextField.text,
-        let sponsorsPhoneNumber = sponsorsPhoneNumberTextField.text,
-        let  aaStep = aaStepTextField.text else { return }
-    
-    guard let destinationVC = segue.destination as? WalkThroughVC else {return}
-    destinationVC.userName = userName
-    destinationVC.sponsorName = sponsorName
-    destinationVC.sponsorPhone = sponsorsPhoneNumber
-    destinationVC.sponsorEmail = sponsorsEmail
-    destinationVC.aaStep = Int(aaStep) ?? 0
-    }
-    // MARK: - KEYBOARD
-    
-    //Stop listening for certain events reltated to the keybaord such as hide/show
-//    deinit {
-//
-//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-//    }
-    
-    // MARK: - KEYBOARD ACTIONS
-    
-//    @objc func keyboardWillShow(notification: Notification) {
-//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//            if self.view.frame.origin.y == 0 {
-//                self.view.frame.origin.y -= keyboardSize.height / 1.8
-//            }
-//        }
-//    }
-//
-//    @objc func keyboardWillHide(notification: NSNotification) {
-//
-//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-//            if self.view.frame.origin.y != 0 {
-//                self.view.frame.origin.y += keyboardSize.height / 1.8
-//            }
-//        }
-//        if self.view.frame.origin.y != 0 {
-//            self.view.frame.origin.y = 0
-//
-//        }
-//    }
     
     func loadLoggedUserDefaults(){
         loggedInUserExist = UserDefaults.standard.bool(forKey: loggedInUserExistKey)
@@ -338,7 +303,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     }
     
     func textFieldAppearAnimation() {
-        print("🍁🍁🍁🍁🍁text field appear animation was called )")
         
         //If there is already a user update the views
         // NOTE: - This feature can be updated
@@ -350,7 +314,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             
             self.userNameTextField.isUserInteractionEnabled = true
             self.contactButton.isHidden = false
-            print("\n ☎️ contact button appeared\n")
         }
         
         UIView.animateKeyframes(withDuration: 2.0, delay: 0.2, options: [], animations: {
@@ -401,7 +364,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             switch CLLocationManager.authorizationStatus() {
                 
             case .notDetermined:
-                //self.locationManger.requestWhenInUseAuthorization()
                 self.locationManger.requestAlwaysAuthorization()
                 
             default:
@@ -415,7 +377,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         disableDeniedAlertBool = UserDefaults.standard.bool(forKey: deniedBoolKey)
         disableRestrictedAlertBool = UserDefaults.standard.bool(forKey: restrictedBoolKey)
     }
-    
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
@@ -465,11 +426,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     
     // Contact Button
     lazy var contactButton: UIButton = {
-        
         let contactButtonImage = UIImage(named: "phoneBook")
-        
         let button = UIButton()
-        
         button.setImage(contactButtonImage, for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(contactButtonAction(_:)), for: .touchUpInside)
@@ -478,12 +436,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     
     //Programatic Text Fields
     //User Name
-//    lazy var userNameTextField: UITextField = {
-       var userNameTextField: UITextField = {
-    
+    lazy var userNameTextField: UITextField = {
         let textField = UITextField()
-        //Test Purposes
-        //        textField.text = "Jan 07 User Name Exaample"
         textField.layer.cornerRadius = 7
         textField.backgroundColor = MyColor.offWhite.value
         textField.textColor = .black
@@ -493,12 +447,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     }()
     
     //SponsorName
-//    lazy var sponsorsNameTextField: UITextField = {
-             var sponsorsNameTextField: UITextField = {
-        
+    lazy var sponsorsNameTextField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 7
-        //textField.text = "🐠🐠🐠🐠"
         textField.backgroundColor = MyColor.offWhite.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
@@ -506,12 +457,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         return textField
     }()
     
-//    lazy var sponsorsPhoneNumberTextField: UITextField = {
-            var sponsorsPhoneNumberTextField: UITextField = {
-        
+    lazy var sponsorsPhoneNumberTextField: UITextField = {
         let textField = UITextField()
-         textField.layer.cornerRadius = 7
-        //textField.text = "☔️☔️☔️☔️"
+        textField.layer.cornerRadius = 7
         textField.backgroundColor = MyColor.offWhite.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
@@ -519,13 +467,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         return textField
     }()
     
-//    lazy var sponsorsEmailAddressTextField: UITextField = {
-      var sponsorsEmailAddressTextField: UITextField = {
-    
+    lazy var sponsorsEmailAddressTextField: UITextField = {
         let textField = UITextField()
-         textField.layer.cornerRadius = 7
-        //Test Purposes
-        //textField.text = "🍎🍎🍎🍎"
+        textField.layer.cornerRadius = 7
         textField.backgroundColor = MyColor.offWhite.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Email Address", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
@@ -533,12 +477,10 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         return textField
     }()
     
-//    lazy var aaStepTextField: UITextField = {
-          var aaStepTextField: UITextField = {
+    lazy var aaStepTextField: UITextField = {
         let textField = UITextField()
-         textField.layer.cornerRadius = 7
-        //Test Purposes
-        //textField.text = "99"
+        textField.layer.cornerRadius = 7
+        
         textField.backgroundColor = MyColor.offWhite.value
         textField.textColor = .black
         textField.attributedPlaceholder = NSAttributedString(string: "If in AA, enter current step", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
@@ -596,12 +538,11 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             sponsorsEmailAddressTextField.topAnchor.constraint(equalTo: sponsorsPhoneNumberTextField.bottomAnchor, constant: 15),
             sponsorsEmailAddressTextField.leadingAnchor.constraint(equalTo: sponsorsPhoneNumberTextField.leadingAnchor, constant: 0)
             ])
-
     }
     
     func aaStepConstraint() {
         aaStepTextField.translatesAutoresizingMaskIntoConstraints = false
-
+        
         NSLayoutConstraint.activate([
             aaStepTextField.topAnchor.constraint(equalTo: sponsorsEmailAddressTextField.bottomAnchor, constant: 15),
             aaStepTextField.leadingAnchor.constraint(equalTo: sponsorsEmailAddressTextField.leadingAnchor, constant: 0)
@@ -627,64 +568,45 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
                 }, completion: nil)
             }
         }
-        //
+    }
 }
-}
-        
-//        let startPosition = CGPoint(x: upperSaveButtonView.frame.origin.x , y: upperSaveButtonView.frame.origin.y)
-//
-//        let endPosition = CGPoint(x: view.frame.origin.x, y: 100)
-//         let duration: Double = 6.0
-//        
-//        let positionAnimation = constructAnimationWith(endPoint: endPosition, animationDuration: duration)
-//
-//        upperSaveButtonView.layer.add(positionAnimation, forKey: "position")
-//    }
-//
-//    private func constructAnimationWith( endPoint: CGPoint, animationDuration: Double) -> CABasicAnimation {
-//        let positionAnimation = CABasicAnimation(keyPath: "position")
-////        positionAnimation.fromValue = NSValue(cgPoint: startingPoint)
-//        positionAnimation.toValue = NSValue(cgPoint: endPoint)
-//        positionAnimation.duration = animationDuration
-//        positionAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
-//        return positionAnimation
-//    }
-//}
 
-//Location Delegates
+//Location Delegates For Test Purposes Uncommented the code to view print statments
 extension WalkThroughContentVC {
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        
         //NOTE: - Uncomment in order for testing purposes
         print("🚀🚀🌎 didEnterRegion: User Entered location🌎🚀🚀")
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         //NOTE: - Uncomment in order for testing purposes
-        print("🌎 didStartMonitoringFor: The monitored regions are: \(manager.monitoredRegions)")
+        //        print("🌎 didStartMonitoringFor: The monitored regions are: \(manager.monitoredRegions)")
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         //NOTE: - Uncomment in order for testing purposes
-        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+        //        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+        
         //uncomment in order for testing purposes
-        print("🌎 didUpdateLocations: locations = \(locValue.latitude) \(locValue.longitude)")
+        //        print("🌎 didUpdateLocations: locations = \(locValue.latitude) \(locValue.longitude)")
     }
 }
 
 extension WalkThroughContentVC : UITextFieldDelegate {
     
+    // MARK: - Future version check to make sure their is valid info in the textfields
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        // MARK: - Future version check to make sure their is valid info in the textfields
-//        if textField.text!.count + 1 >= 2 {
-//            delegate?.validUserNameEntered(username: string, isHidden: false)
-//            return true
-//        }
-//
-//        if textField.text!.count - 1 < 2 {
-//            delegate?.validUserNameEntered(username: "", isHidden: true)
-//        }
+        //        if textField.text!.count + 1 >= 2 {
+        //            delegate?.validUserNameEntered(username: string, isHidden: false)
+        //            return true
+        //        }
+        //
+        //        if textField.text!.count - 1 < 2 {
+        //            delegate?.validUserNameEntered(username: "", isHidden: true)
+        //        }
         return true
     }
     
@@ -770,19 +692,13 @@ extension WalkThroughContentVC {
     }
 }
 
-
-
 // MARK: - Contact Button Action
 extension WalkThroughContentVC: CNContactPickerDelegate {
     
     @objc private func contactButtonAction(_ sender: UIButton?) {
         print("Contact Button Tapped")
-     
-        //Test print
+        
         loadLoggedUserDefaults()
-//        saveInfoToCloudKit { (_) in
-//            print("\n\n\nSuccesffuly saved text to ck using contact button\n\n")
-//        }
         
         let picker = CNContactPickerViewController()
         picker.delegate = self
@@ -800,11 +716,10 @@ extension WalkThroughContentVC: CNContactPickerDelegate {
         
         let sponsorsName = contact.givenName
         let sponsorsFamilyName = contact.familyName
-    
+        
         sponsorsNameTextField.text = "\(sponsorsName) \(sponsorsFamilyName)"
         
         let email = contact.emailAddresses.first
-        
         let emailString = email?.value
         
         sponsorsEmailAddressTextField.text = "\(emailString ?? "")"
@@ -827,7 +742,9 @@ extension WalkThroughContentVC {
                     self.title = "Sucessflly Saved Example saveInfoToCloudKit func"
                 }
                 completion(true)
+                
             } else {
+                
                 AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                 let errorMessage = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Information", alertMessage: "Ensure that you are connected to the internet and are signed into your iCloud account", dismissActionTitle: "OK")
                 DispatchQueue.main.async {
@@ -841,7 +758,6 @@ extension WalkThroughContentVC {
         }
     }
 }
-
 
 extension WalkThroughContentVC {
     
