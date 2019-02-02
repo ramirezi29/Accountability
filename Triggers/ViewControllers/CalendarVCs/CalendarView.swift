@@ -90,12 +90,11 @@ class CalenderView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         todaysDate = Calendar.current.component(.day, from: Date())
         firstWeekDayOfMonth=getFirstWeekDay()
         
-        //for leap years, make february month of 29 days
+        //for leap years, make february month reflect 29 days
         if currentMonthIndex == 2 && currentYear % 4 == 0 {
             numOfDaysInMonth[currentMonthIndex-1] = 29
         }
         
-        //end
         presentMonthIndex = currentMonthIndex
         presentYear = currentYear
         
@@ -111,14 +110,17 @@ class CalenderView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! dateCVCell
         cell.backgroundColor = UIColor.clear
+        
         if indexPath.item <= firstWeekDayOfMonth - 2 {
             cell.isHidden = true
         } else {
             let calcDate = indexPath.row-firstWeekDayOfMonth + 2
             cell.isHidden = false
             cell.dayNumericValue.text="\(calcDate)"
+            
             if calcDate < todaysDate && currentYear == presentYear && currentMonthIndex == presentMonthIndex {
                 cell.isUserInteractionEnabled = false
                 cell.dayNumericValue.textColor = UIColor.green
@@ -132,15 +134,20 @@ class CalenderView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath)
+        
         cell?.backgroundColor = MyColor.hardBlue.value
+        
         let cellLabel = cell?.subviews[1] as! UILabel
         cellLabel.textColor = UIColor.white
     }
     
     //User selected a cell the label will turn the set color once it is unselected
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let cell=collectionView.cellForItem(at: indexPath)
-        cell?.backgroundColor=UIColor.clear
+        
+        let cell = collectionView.cellForItem(at: indexPath)
+        
+        cell?.backgroundColor = UIColor.clear
+        
         let cellLabel = cell?.subviews[1] as! UILabel
         cellLabel.textColor = MyColor.offWhite.value
     }
@@ -148,20 +155,23 @@ class CalenderView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width/7 - 8
         let height: CGFloat = 40
+        
         return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
         return 8.0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        
         return 8.0
     }
     
     func getFirstWeekDay() -> Int {
         let day = ("\(currentYear)-\(currentMonthIndex)-01".date?.firstDayOfTheMonth.weekday)!
-        //return day == 7 ? 1 : day
+        //Return day == 7 ? 1 : day
         return day
     }
     
@@ -169,7 +179,7 @@ class CalenderView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         currentMonthIndex = monthIndex + 1
         currentYear = year
         
-        //for leap year, make february month of 29 days
+        //For leap year, make february month reflect 29 days
         if monthIndex == 1 {
             if currentYear % 4 == 0 {
                 numOfDaysInMonth[monthIndex] = 29
@@ -178,7 +188,6 @@ class CalenderView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
             }
         }
         //end
-        
         firstWeekDayOfMonth = getFirstWeekDay()
         
         myCollectionView.reloadData()
@@ -210,12 +219,14 @@ class CalenderView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     let monthView: MonthView = {
         let monthView = MonthView()
         monthView.translatesAutoresizingMaskIntoConstraints = false
+        
         return monthView
     }()
     
     let weekdaysView: WeekdaysView = {
         let weekDayView = WeekdaysView()
         weekDayView.translatesAutoresizingMaskIntoConstraints = false
+        
         return weekDayView
     }()
     
@@ -262,6 +273,7 @@ class dateCVCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 17)
         label.textColor = MyColor.softGreen.value
         label.translatesAutoresizingMaskIntoConstraints = false
+        
         return label
     }()
     
@@ -270,7 +282,7 @@ class dateCVCell: UICollectionViewCell {
     }
 }
 
-//get first day of the month
+//Get first day of the month
 extension Date {
     var weekday: Int {
         return Calendar.current.component(.weekday, from: self)
@@ -280,11 +292,12 @@ extension Date {
     }
 }
 
-//get date from string
+//Get date from string
 extension String {
     static var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
+        
         return formatter
     }()
     

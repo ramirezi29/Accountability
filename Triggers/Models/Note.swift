@@ -40,8 +40,6 @@ class Note {
             let folderReference = ckRecord[NoteConstants.folderReferenceKey] as? CKRecord.Reference else { return nil }
         
         self.init(title: title, textBody: textBody, folderReference: folderReference)
-        
-        //🍕 Step 2. Set tthose values as my initial values for my new instance
     }
 }
 

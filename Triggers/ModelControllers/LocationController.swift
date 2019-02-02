@@ -29,8 +29,6 @@ class LocationController {
     // MARK: - Fetch
     func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping fetchCompletion) {
         
-        print("☃️When this page was loaded and the fetch func was first called there were \(locations.count) found")
-        
         guard let user = user else {
             completion(nil, .invalidData("Invalid User"))
             return
@@ -55,14 +53,14 @@ class LocationController {
                 completion(nil, .forwardedError(error))
                 return
             }
-            // Make sure we have records
+            // NOTE: - Make sure there are records
             guard let records = records else {
                 completion(nil, .invalidData("\nINvalid Data\n"))
                 return
             }
             let fetchItems = records.compactMap { Location(ckRecord: $0) }
             self.locations = fetchItems
-            print("🎸 The fetch func finished fetching and there are: \(self.locations.count) locations")
+            
             completion(fetchItems, nil)
         }
     }
@@ -95,7 +93,7 @@ class LocationController {
         
         saveToCloudKit(locations: newLocation) { (success) in
             if success {
-                print("\n🙏🏽Successfully created record\n")
+                print("\nSuccessfully created record\n")
                 completion(true)
             } else {
                 //Test Print
@@ -103,7 +101,7 @@ class LocationController {
                 
                 completion(false)
                 //for test purposes fatal error
-//                fatalError("\n💀💀Fatal Error , error creating location record💀💀\n")
+                //                fatalError("\n💀Fatal Error , error creating location record\n")
             }
         }
     }

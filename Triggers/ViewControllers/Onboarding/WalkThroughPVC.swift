@@ -16,10 +16,10 @@ protocol WalkthroughPageViewControllerDelegate: class {
 
 class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
-     weak var walkthroughDelegate: WalkthroughPageViewControllerDelegate?
+    weak var walkthroughDelegate: WalkthroughPageViewControllerDelegate?
     
     var currentVC: WalkThroughContentVC?
-
+    
     var pageHeadings = ["My Triggers",
                         
                         "Information is saved to your iCloud",
@@ -38,8 +38,6 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
                         
                         "Ready? Let's get to work"]
     
-    
-    // R. (2011). New findings on biological factors predicting addiction relapse vulnerability. Current Psychiatry Reports, 13(5), 398–405."
     var pageSubHeadings = ["One Step Closer To Eliminating Your Triggers",
                            
                            "Ensure that you are signed into your iCloud Account",
@@ -57,13 +55,11 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
                            "Add another layer of accountability and support to your addiction recovery journey",
                            
                            ""]
-
+    
     
     var pageImages = ["LocationLogo", "icloud", "ambulance", "handshake", "friendship", "paperplane", "map", "gps", "landscape"]
     
-    
     var currentIndex = 0
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,10 +75,8 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
     } 
 }
 
-
-
 extension WalkThroughPVC {
-
+    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         var index = (viewController as! WalkThroughContentVC).index
         index -= 1
@@ -94,9 +88,6 @@ extension WalkThroughPVC {
         index += 1
         return walkThroughContentController(at: index)
     }
-    
-    
-    
     
     // page index is in the paramaters, if zero it will create the first onboarding screen
     func walkThroughContentController(at index: Int) -> WalkThroughContentVC? {
@@ -126,7 +117,6 @@ extension WalkThroughPVC {
     }
     
     // MARK: - Page View Controller delegate
-    
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             if let contentViewController = pageViewController.viewControllers?.first as? WalkThroughContentVC {

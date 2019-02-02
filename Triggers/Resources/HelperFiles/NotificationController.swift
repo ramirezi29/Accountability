@@ -42,7 +42,6 @@ class NotificationController {
         } catch {
             print("\n\nThere was an error with the attachment in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription)\n\n")
         }
-        //
         
         let region = circularRegion
         
@@ -51,7 +50,6 @@ class NotificationController {
         let trigger = UNLocationNotificationTrigger(region: region, repeats: true)
         
         let request = UNNotificationRequest(identifier: notifIdentifier, content: content, trigger: trigger)
-        
         
         UNUserNotificationCenter.current().add(request) { (error) in
             if let error = error {
@@ -73,7 +71,6 @@ class NotificationController {
         let textMessageAction = UNNotificationAction(identifier: LocationConstants.textSponsorActionKey, title: textActionTitle, options: [.authenticationRequired])
         
         let locationCategory = UNNotificationCategory(identifier: LocationConstants.notifLocationCatergoryKey, actions: [dismissAction, telephoneAction, textMessageAction], intentIdentifiers: [], options: .customDismissAction)
-        
         UNUserNotificationCenter.current().setNotificationCategories([locationCategory])
         
         // Content of the message
@@ -93,7 +90,6 @@ class NotificationController {
         } catch {
             print("\n\nThere was an error with the attachment in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription)\n\n")
         }
-        //
         
         let region = circularRegion
         
@@ -109,7 +105,6 @@ class NotificationController {
                 print("There was an error in \(#function) ; (error) ; \(error.localizedDescription)")
             } else {
                 print("\n Successfuly created location based notification")
-                
             }
         }
     }

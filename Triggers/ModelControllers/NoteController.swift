@@ -27,7 +27,7 @@ class NoteController {
     func fetchItems(folder: Folder, completion: @escaping fetchCompletion) {
         
         //Test Print
-        print("Random info From folder fetch: user: \(folder)")
+//        print("Random info From folder fetch: user: \(folder)")
         
         let folderParentID = folder.ckRecordID
         
@@ -67,6 +67,7 @@ class NoteController {
                 completion(false)
                 return
             }
+            
             guard let record = record, let newNote = Note(ckRecord: record) else {
                 
                 print("\n💀 No Record came back from CloudKit\n")
@@ -98,7 +99,7 @@ class NoteController {
                 completion(false)
                 
                 //for test purposes fatal error
-//                fatalError("\nFatal Error , error creating record\n")
+                //                fatalError("\nFatal Error , error creating record\n")
             }
         }
     }

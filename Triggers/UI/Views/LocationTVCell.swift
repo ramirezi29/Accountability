@@ -14,8 +14,7 @@ class LocationTVCell: UITableViewCell {
     @IBOutlet weak var locationTitleLabel: UILabel!
     
     override func awakeFromNib() {
-        super.awakeFromNib()
-        
+        super.awakeFromNib()   
     }
     
     var location: Location? {

@@ -35,7 +35,6 @@ class Folder {
     
     // NOTE: - Fech ckRecord
     convenience init?(ckRecord: CKRecord) {
-        
         guard let folderTitle = ckRecord[FolderConstants.folderTitleKey] as? String else { return nil }
         
         let userFolderReference = ckRecord[FolderConstants.userFolderReferenceKey] as? CKRecord.Reference

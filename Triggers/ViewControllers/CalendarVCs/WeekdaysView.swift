@@ -27,7 +27,7 @@ class WeekdaysView: UIView {
         var daysArray = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
         for i in 0..<7 {
             let dayLabel = UILabel()
-            dayLabel.text=daysArray[i]
+            dayLabel.text = daysArray[i]
             dayLabel.textAlignment = .center
             dayLabel.textColor = MyColor.offWhite.value
             myStackView.addArrangedSubview(dayLabel)
@@ -37,7 +37,7 @@ class WeekdaysView: UIView {
     let myStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.distribution = .fillEqually
-        stackView.translatesAutoresizingMaskIntoConstraints=false
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     

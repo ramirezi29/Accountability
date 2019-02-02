@@ -26,9 +26,6 @@ class FolderController {
     // MARK: - Fetch
     func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping fetchCompletion) {
         
-        //Test Print
-        print("☃️ WHen the page was loaded and the Folder fetch func ran, there were \(folders.count) folders fetched")
-        
         guard let user = user else {
             completion(nil, .invalidData("Invalid user"))
             return
@@ -62,7 +59,7 @@ class FolderController {
             self.folders = fetchItems
             
             //Test Print
-            print("\n📍Number of folders fetched: \(self.folders.count)")
+            //            print("\nNumber of folders fetched: \(self.folders.count)")
             completion(fetchItems, nil)
         }
     }
@@ -83,7 +80,7 @@ class FolderController {
                 else {
                     
                     //Test Print
-                    print("\n🤫 No Folder Record was saved to  Cloud😩\n")
+                    print("\nNo Folder Record was saved to  Cloud\n")
                     completion(false)
                     return
             }
@@ -100,21 +97,17 @@ class FolderController {
         saveToCloudKit(folder: newFolder) { (success) in
             if success {
                 //Test Print
-                print("\n🙏🏽 Succesfully created folder record\n")
+                //                print("\nSuccesfully created folder record\n")
                 completion(true)
             } else {
                 //Test Print
                 print("\n💀 Error Creating Folder Record\n")
                 completion(false)
-                
-                //For Test Purposes Only Fatal Error
-//                fatalError("\n💀💀Fatal Error, Error creating folder record💀💀\n")
             }
         }
     }
     
     // Creat Entry and Folder
-    
     func updateFolder(folder: Folder, folderTitle: String, completion: @escaping boolVoidCompletion) {
         
         folder.folderTitle = folderTitle
@@ -126,7 +119,6 @@ class FolderController {
         operration.queuePriority = .high
         operration.qualityOfService = .userInteractive
         operration.completionBlock = {
-            
             
             completion(true)
         }

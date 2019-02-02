@@ -641,7 +641,6 @@ extension HomeVC {
         }
     }
     
-    
     func animateOutAAInfoView() {
         UIView.animate(withDuration: 0.3, animations: {
             self.aaStepInfoView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
@@ -658,13 +657,13 @@ extension HomeVC {
     
     @IBDesignable class BottomAlignedLabel: UILabel {
         override func drawText(in rect: CGRect) {
+            
             if let stringText = text {
                 let stringTextAsNSString = stringText as NSString
-                let labelStringSize = stringTextAsNSString.boundingRect(with: CGSize(width: self.frame.width,height: CGFloat.greatestFiniteMagnitude),
-                                                                        options: NSStringDrawingOptions.usesLineFragmentOrigin,
-                                                                        attributes: [NSAttributedString.Key.font: font],
-                                                                        context: nil).size
+                let labelStringSize = stringTextAsNSString.boundingRect(with: CGSize(width: self.frame.width,height: CGFloat.greatestFiniteMagnitude), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font],context: nil).size
+                
                 super.drawText(in: CGRect(x:0,y: rect.size.height - labelStringSize.height, width: self.frame.width, height: ceil(labelStringSize.height)))
+                
             } else {
                 super.drawText(in: rect)
             }
