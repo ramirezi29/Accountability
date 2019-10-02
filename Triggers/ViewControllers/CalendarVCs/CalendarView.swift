@@ -135,9 +135,13 @@ class CalenderView: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath)
         
+        print("\n\nDate Selected:\(String(describing: cell?.description))\n\n")
+        
         cell?.backgroundColor = MyColor.hardBlue.value
         
         let cellLabel = cell?.subviews[1] as! UILabel
+        
+        print("\n\nDate Selected: \(String(describing: cellLabel.text))\n\n")
         cellLabel.textColor = UIColor.white
     }
     

@@ -17,7 +17,6 @@ class Location {
     var latitude: Double
     var timeStamp: Date
     var ckRecordID: CKRecord.ID
-    
     var userLocationReference: CKRecord.Reference?
     
     init(geoCodeAddressString: String, addressTitle: String, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), longitude: Double, latitude: Double) {
