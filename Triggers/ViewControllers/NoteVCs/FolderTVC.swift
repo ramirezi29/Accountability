@@ -45,14 +45,14 @@ class FolderTVC: UITableViewController {
                                 self.hideStopActivityIndicator()
                             }
                             //Test print
-                            print("\nSuccessfully fetched folders from CK\n")
+                            //                            print("\nSuccessfully fetched folders from CK\n")
                         } else {
                             let networkError = AlertController.presentAlertControllerWith(alertTitle: "Unable to Load Your Notes", alertMessage: "Check your internet connection and ensure that you are signed into iCloud", dismissActionTitle: "OK")
                             DispatchQueue.main.async {
                                 self.present(networkError, animated: true, completion: nil)
                             }
                             //Test print
-                            print("\n💀 Error fetching forders from CK\n")
+                            //                            print("\n💀 Error fetching forders from CK\n")
                             return
                         }
                     }
@@ -91,8 +91,9 @@ class FolderTVC: UITableViewController {
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let folderCount = FolderController.shared.folders.count
         
-        return FolderController.shared.folders.count
+        return folderCount
     }
     
     //Cell for row at
@@ -107,6 +108,7 @@ class FolderTVC: UITableViewController {
         
         cell.textLabel?.textColor = MyColor.offWhite.value
         cell.detailTextLabel?.textColor = MyColor.offWhite.value
+        
         return cell
         
     }
@@ -242,10 +244,13 @@ extension FolderTVC {
 extension FolderTVC {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
+
+        tableView.tableFooterView = UIView()
         cell.backgroundColor = .clear
     }
 }
+
+
 
 extension FolderTVC {
     

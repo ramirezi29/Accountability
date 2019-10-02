@@ -16,7 +16,7 @@ import MessageUI
 import ContactsUI
 
 
-class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
+class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -102,8 +102,17 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         locationManager.startUpdatingLocation()
         mapViewOutlet.addGestureRecognizer(longPressMapTap)
         
+        //TextFieldDelegate
+        addressTextField.delegate = self
+        
+        //Auto Complete
+        let completer = MKLocalSearchCompleter()
+        completer.delegate = self as! MKLocalSearchCompleterDelegate
+        completer.region = mapViewOutlet.region
+        
+        
         //Test print
-        print(mapViewOutlet.isUserLocationVisible)
+        //print(mapViewOutlet.isUserLocationVisible)
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         //Activity Indicator
@@ -191,6 +200,11 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
             self.mapViewOutlet.setRegion(viewRegion, animated: true)
         }
     }
+    
+    // Address TextField
+    
+    
+    
     
     // MARK: - Actions
     @IBAction func mapTypeButtonTapped(_ sender: UIButton) {

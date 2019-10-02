@@ -59,9 +59,11 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         nextButton.alpha = 0
         
         //Get the users info in order to check if an account already exists
+        //⛺️  //⛺️
         loadUserDefaults()
         
         //In order to not present the onboarding screen
+        //⛺️  //⛺️  //⛺️
         if disableOnBardingBool == true  {
             presentMainView()
             
@@ -96,6 +98,7 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         return true
     }
     
+    //⛺️  //⛺️  //⛺️
     func loadUserDefaults(){
         disableOnBardingBool = UserDefaults.standard.bool(forKey: disableOnboardingKey)
     }

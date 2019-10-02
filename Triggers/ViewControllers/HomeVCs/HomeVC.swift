@@ -79,6 +79,8 @@ class HomeVC: UIViewController {
         self.phoneBookButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFit
         self.aaIconButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFill
         
+//        self.aaIconButton.setImage(<#T##image: UIImage?##UIImage?#>, for: <#T##UIControl.State#>)
+        
         //Label
         self.currentAAStepValueLabel.contentMode = UIView.ContentMode.scaleAspectFill
         

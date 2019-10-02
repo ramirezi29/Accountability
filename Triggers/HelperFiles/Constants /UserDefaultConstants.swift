@@ -12,3 +12,4 @@ struct UserDefaultConstants {
     
     static let isOnboardedKey = "hasViewedWalkthrough"
 }
+

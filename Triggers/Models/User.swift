@@ -9,7 +9,7 @@
 import Foundation
 import CloudKit
 
-class User {
+class User { // Sales Peson
     var userName: String
     var sponsorName: String?
     var sponsorTelephoneNumber: String?
@@ -20,9 +20,9 @@ class User {
     var appleUserRef: CKRecord.Reference
     
     var targetLocations: [Location] = []
-    
+    //Contacts
     var folders: [Folder] = []
-    
+    //SCripts // -> EMail, Text, Phone
     var notes: [Note] = []
     
     init(userName: String = "Your Name", sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), appleUserRef: CKRecord.Reference) {

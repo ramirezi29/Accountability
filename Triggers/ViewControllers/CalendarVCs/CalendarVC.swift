@@ -452,7 +452,10 @@ extension CalendarVC {
         }) { (success: Bool) in
             self.sobrietyDateView.removeFromSuperview()
             DispatchQueue.main.async {
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editButtonTapped(_:)))
+//                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editButtonTapped(_:)))
+                DispatchQueue.main.async {
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit Date", style: .plain, target: self, action: #selector(self.editButtonTapped(_:)))
+                }
             }
             self.checkInBottomButton.isEnabled = true
         }
