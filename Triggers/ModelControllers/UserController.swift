@@ -26,8 +26,14 @@ class UserController {
     typealias boolVoidCompletion = (Bool) -> Void
     
     // MARK: - Fetch
+    
+    /**
+     Fetch the user's details.
+     
+     ## Important Note ##
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func fetchCurrentUser(completion: @escaping fetchCompletion) {
-        
         
         CKContainer.default().fetchUserRecordID { (recordID, error) in
             if let error = error {
@@ -66,6 +72,15 @@ class UserController {
     }
     
     // MARK: - Save
+    
+    /**
+     Save the user's details to  iCloud
+     
+     - Parameter user: User Object
+     
+     ## Important Note ##
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func saveToCloudKit(user: User, completion: @escaping boolVoidCompletion) {
         
         let userRecord = CKRecord(user: user)
@@ -83,6 +98,19 @@ class UserController {
     }
     
     // MARK: - Create
+    
+    /**
+     Create CloudKit User object
+     
+     - Parameter userName: String description of the user's name
+     - Parameter sponsorName: String description of the sponsor's name
+     - Parameter sponserTelephoneNumber: String description ofthe sponsor's telephone number
+     - Parameter sponsorEmail: String description of the sponsor's e-mail
+     - Parameter aaStep: String description of the user's current AA step
+     
+     ## Important Note ##
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func createNewUserDetailsWith(userName: String, sponsorName: String, sponserTelephoneNumber: String, sponsorEmail: String, aaStep: Int, completion: @escaping boolVoidCompletion) {
         
         guard let appleUserRecordID = appleUserRecordID else { completion(false)
@@ -101,13 +129,28 @@ class UserController {
                 completion(false)
                 print("\n💀Error Creating Record💀\n")
                 //                for test purposes fatal error
-//                                fatalError("\nFatal Error , error creating record\n")
+                //                                fatalError("\nFatal Error , error creating record\n")
             }
         }
         
     }
     
     // MARK: - Update
+    
+    /**
+     Update CloudKit User object with high que priority
+     
+     - Parameter user: The User object that is to be updated
+     - Parameter userName: String description of the user's name
+     - Parameter sponsorName: String description of the sponsor's name
+     - Parameter sponserTelephoneNumber: String description ofthe sponsor's telephone number
+     - Parameter sponsorEmail: String description of the sponsor's e-mail
+     - Parameter aaStep: String description of the user's current AA step
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     -The device must be signed into an iCloud account and be connected to the internet
+     */
     func updateUserDetails(user: User, userName: String, sponsorName: String, sponserTelephoneNumber: String, sponsorEmail: String, aaStep: Int, completion: @escaping boolVoidCompletion) {
         user.userName = userName
         user.sponsorName = sponsorName

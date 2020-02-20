@@ -37,9 +37,9 @@ class Location {
         return DateFormatter.localizedString(from: timeStamp, dateStyle: .short, timeStyle: .short)
     }
     
-    // NOTE: - 🔥Fetch Create a model object fromR a CKRecord
+    // NOTE: - Fetch Create a model object fromR a CKRecord
     convenience init?(ckRecord: CKRecord) {
-        //Step 1. Unpack the values that i want from the CKREcord
+        //Step 1. Unpack the values that are linked to the CKRecord
         guard let geoCodeAddressString = ckRecord[LocationConstants.geoCodeAddressStringKey] as? String,
             
             let addressTitle = ckRecord[LocationConstants.locationTitleKey] as? String,
@@ -51,7 +51,7 @@ class Location {
             else { return nil }
         
         let userLocationReference = ckRecord[LocationConstants.usersLocationRefKey] as? CKRecord.Reference
-        // Step 2. Set tthose values as my initial values for my new instance
+        // Step 2. Set those values as initial values for a new instance
         self.init(geoCodeAddressString: geoCodeAddressString, addressTitle: addressTitle, ckRecordID: ckRecord.recordID, longitude: longitude, latitude: latitude)
         
         self.userLocationReference = userLocationReference
@@ -59,7 +59,7 @@ class Location {
     }
 }
 
-// NOTE: - 🔥Push -- Create a CKRecord using our model object
+// NOTE: Push - Create a CKRecord using our model object
 extension CKRecord {
     convenience init(location: Location) {
         

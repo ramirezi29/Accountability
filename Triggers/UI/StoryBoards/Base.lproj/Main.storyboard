@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9Y9-Ru-B5x">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9Y9-Ru-B5x">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -86,68 +84,5 @@
             </objects>
             <point key="canvasLocation" x="-3681" y="-640"/>
         </scene>
-        <!--Second Launch ScreenV-->
-        <scene sceneID="wCB-Wn-Y2T">
-            <objects>
-                <viewController id="4da-eM-0bc" customClass="SecondLaunchScreenV" customModule="Triggers" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="T9k-AX-aWj">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="JYn-iX-ofN">
-                                <rect key="frame" x="38" y="44" width="298.66666666666669" height="184"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2nd Launch" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jcu-7G-mWe">
-                                        <rect key="frame" x="35.333333333333314" y="0.0" width="228" height="51.666666666666664"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="43"/>
-                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Triggers: Addiction Recovery Assistant " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="POa-iL-mj7">
-                                        <rect key="frame" x="0.0" y="76.666666666666686" width="298.66666666666669" height="107.33333333333331"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="POa-iL-mj7" firstAttribute="top" secondItem="JYn-iX-ofN" secondAttribute="top" constant="76.5" id="7qo-KD-6zP"/>
-                                    <constraint firstItem="Jcu-7G-mWe" firstAttribute="top" secondItem="JYn-iX-ofN" secondAttribute="top" id="BwI-O8-lCC"/>
-                                    <constraint firstItem="POa-iL-mj7" firstAttribute="width" secondItem="JYn-iX-ofN" secondAttribute="width" id="Ibc-q6-1SL"/>
-                                    <constraint firstAttribute="bottom" secondItem="POa-iL-mj7" secondAttribute="bottom" id="q1X-f8-DnE"/>
-                                </constraints>
-                            </stackView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LocationLogo" translatesAutoresizingMaskIntoConstraints="NO" id="DFU-nY-Wvy">
-                                <rect key="frame" x="16" y="267" width="343" height="343"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="DFU-nY-Wvy" secondAttribute="height" multiplier="1:1" id="hiD-pz-QmR"/>
-                                </constraints>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.92941176470588238" green="0.3411764705882353" blue="0.023529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="cFl-WG-YeO" firstAttribute="bottom" secondItem="DFU-nY-Wvy" secondAttribute="bottom" constant="168" id="BZC-et-LA9"/>
-                            <constraint firstItem="cFl-WG-YeO" firstAttribute="trailing" secondItem="DFU-nY-Wvy" secondAttribute="trailing" constant="16" id="Ioa-f7-i7b"/>
-                            <constraint firstItem="JYn-iX-ofN" firstAttribute="leading" secondItem="cFl-WG-YeO" secondAttribute="leading" constant="38" id="KsP-MQ-ejN"/>
-                            <constraint firstItem="DFU-nY-Wvy" firstAttribute="top" secondItem="POa-iL-mj7" secondAttribute="bottom" constant="39" id="O9n-jr-86w"/>
-                            <constraint firstItem="cFl-WG-YeO" firstAttribute="bottom" secondItem="JYn-iX-ofN" secondAttribute="bottom" constant="550" id="SGp-s8-TuA"/>
-                            <constraint firstItem="JYn-iX-ofN" firstAttribute="top" secondItem="cFl-WG-YeO" secondAttribute="top" id="rDs-2f-H5r"/>
-                            <constraint firstItem="DFU-nY-Wvy" firstAttribute="leading" secondItem="cFl-WG-YeO" secondAttribute="leading" constant="16" id="rH4-Cf-VhF"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="cFl-WG-YeO"/>
-                    </view>
-                    <connections>
-                        <outlet property="subTitleLabel" destination="POa-iL-mj7" id="TKS-ul-Ntz"/>
-                        <outlet property="titleLabel" destination="Jcu-7G-mWe" id="cXl-VM-o8w"/>
-                        <segue destination="9Y9-Ru-B5x" kind="show" identifier="segueToHome" id="xEG-gX-1pD"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0dN-qX-MKP" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-4748" y="-1040"/>
-        </scene>
     </scenes>
-    <resources>
-        <image name="LocationLogo" width="512" height="512"/>
-    </resources>
 </document>

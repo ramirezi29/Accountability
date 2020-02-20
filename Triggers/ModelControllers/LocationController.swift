@@ -27,6 +27,16 @@ class LocationController {
     
     
     // MARK: - Fetch
+    
+    /**
+     Fetch CloudKit location object. This is done by querying the User object's CKRecordID with the LocationConstants' usersLocationRefKey and LocationTypeKey.
+     
+     - Parameter user: The User object which the location records will be fetched from.
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping fetchCompletion) {
         
         guard let user = user else {
@@ -66,6 +76,16 @@ class LocationController {
     }
     
     // MARK: - Save
+    
+    /**
+     Save a Location object to CloudKit
+     
+     - Parameter locations: A Location object.
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func saveToCloudKit(locations: Location, completion: @escaping boolVoidCompletion) {
         
         let locationRecord = CKRecord(location: locations)
@@ -87,6 +107,20 @@ class LocationController {
     }
     
     // MARK: - Create
+    
+    /**
+     Create a new Location object to CloudKit
+     
+     - Parameter geoCodeAddressString: The String address of the loction.
+     - Parameter addressTitle: The String address title
+     - Parameter longitude: The longitude Double of the address.
+     - Parameter latitude: The latitude Double of the address.
+     
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func createNewLocation(geoCodeAddressString: String, addressTitle: String, longitude: Double, latitude: Double, completion: @escaping boolVoidCompletion) {
         
         let newLocation = Location(geoCodeAddressString: geoCodeAddressString, addressTitle: addressTitle, longitude: longitude, latitude: latitude)
@@ -106,6 +140,20 @@ class LocationController {
         }
     }
     
+    /**
+     Create a new Location object to CloudKit with que priority set to high
+     
+     - Parameter location: The Location object.
+     - Parameter geoCodeAddressString: The String address of the loction.
+     - Parameter addressTitle: The String address title
+     - Parameter longitude: The longitude Double of the address.
+     - Parameter latitude: The latitude Double of the address.
+     
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func updateTargetLocation(location: Location, geoCodeAddressString: String, addressTitle: String, latitude: Double, longitude: Double, completion: @escaping boolVoidCompletion) {
         
         location.geoCodeAddressString = geoCodeAddressString
