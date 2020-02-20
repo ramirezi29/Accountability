@@ -16,7 +16,7 @@ import MessageUI
 import ContactsUI
 
 
-class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
+class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, UISearchBarDelegate, MKLocalSearchCompleterDelegate {
     
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -36,6 +36,8 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
     //Tools
     @IBOutlet weak var mapTypeButton: UIButton!
     @IBOutlet weak var userLoactionButton: UIButton!
+    
+    lazy var searchBar:UISearchBar = UISearchBar()
     
     //Mark: - Landing Pad
     var location: Location? {
@@ -107,7 +109,8 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         
         //Auto Complete
         let completer = MKLocalSearchCompleter()
-        completer.delegate = self as! MKLocalSearchCompleterDelegate
+        completer.delegate = self
+//            as! MKLocalSearchCompleterDelegate
         completer.region = mapViewOutlet.region
         
         
@@ -124,6 +127,15 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         
         //Background UI
         view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        
+        // Searchbar
+        searchBar.searchBarStyle = UISearchBar.Style.prominent
+        searchBar.placeholder = " Search..."
+        searchBar.sizeToFit()
+        searchBar.isTranslucent = false
+//        searchBar.backgroundImage =
+        searchBar.delegate = self
+        navigationItem.titleView = searchBar
         
         loadViewIfNeeded()
         updateViews()

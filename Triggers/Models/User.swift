@@ -9,7 +9,7 @@
 import Foundation
 import CloudKit
 
-class User { // Sales Peson
+class User {
     var userName: String
     var sponsorName: String?
     var sponsorTelephoneNumber: String?
@@ -18,11 +18,8 @@ class User { // Sales Peson
     var ckRecordID: CKRecord.ID?
     var date: Date?
     var appleUserRef: CKRecord.Reference
-    
     var targetLocations: [Location] = []
-    //Contacts
     var folders: [Folder] = []
-    //SCripts // -> EMail, Text, Phone
     var notes: [Note] = []
     
     init(userName: String = "Your Name", sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), appleUserRef: CKRecord.Reference) {
@@ -36,9 +33,8 @@ class User { // Sales Peson
         self.appleUserRef = appleUserRef
     }
     
-    // NOTE: - Create a model object fromR a CKRecord -- 🔥Fetch
+    // NOTE: - Create a model object fromR a CKRecord - Fetch
     convenience init?(ckRecord: CKRecord) {
-        
         guard let userName = ckRecord[UserConstants.sponseeNameKey] as? String,
             
             let sponsorName = ckRecord[UserConstants.sponsorNameKey] as? String,
@@ -58,7 +54,7 @@ class User { // Sales Peson
     }
 }
 
-// NOTE: - Create a CKRecord using our model object -- 🔥Push
+// NOTE: - Create a CKRecord using our model object - Push
 extension CKRecord {
     convenience init(user: User) {
         
@@ -78,7 +74,6 @@ extension CKRecord {
 }
 
 extension User: Equatable {
-    
     static func == (lhs: User, rhs: User) -> Bool {
         if lhs.ckRecordID != rhs.ckRecordID {return false}
         
