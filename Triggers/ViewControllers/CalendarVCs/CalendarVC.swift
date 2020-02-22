@@ -10,11 +10,13 @@ import UIKit
 import CloudKit
 import MessageUI
 
+//Dark and light theme will be implemented in a future version
 enum MyTheme {
     case light
     case dark
 }
 
+// NOTE: The Calendar in this app will soon be replaced by a cocoapod
 class CalendarVC: UIViewController, UINavigationBarDelegate {
     
     // MARK: - IBoutlets
@@ -87,24 +89,17 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         //UI
         self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
-        updateLabelUI()
-        
         //Check in button
         checkInBottomButton.setTitle("Check-In", for: .normal)
-        //        checkInBottomButton.setTitleColor(MyColor.blackGrey.value, for: .normal)
-        //        checkInBottomButton.backgroundColor = MyColor.offWhite.value
-        
         
         calenderView.topAnchor.constraint(equalTo: self.soberietyUserInfoLRStack.bottomAnchor, constant: 18).isActive = true
         calenderView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12).isActive = true
         calenderView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 12).isActive = true
         calenderView.heightAnchor.constraint(equalToConstant: 300).isActive = true
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -114,19 +109,18 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     }
     
     override func viewWillLayoutSubviews() {
+        
         super.viewWillLayoutSubviews()
         calenderView.myCollectionView.collectionViewLayout.invalidateLayout()
     }
     
-    
-    
-    
     let calenderView: CalenderView = {
-        let v = CalenderView(theme: MyTheme.dark)
-        v.translatesAutoresizingMaskIntoConstraints=false
-        return v
+        
+        let cView = CalenderView(theme: MyTheme.dark)
+        cView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return cView
     }()
-    
     
     func updateViewsRelatedToSobrietyItems() {
         
@@ -164,11 +158,10 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         
         soberSinceDateValueLabel.text = sobrietyMonthDayValue
         soberSinceYearValueLabel.text = "\(yearOfSobreity ?? 0)"
-        
     }
     
-    
     func updateDayofWeekLabel() {
+        
         guard let usersSobrietyDate = sobrietyDate else { return }
         
         let dayOfWeekType = "EEEE"
@@ -184,7 +177,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     func updateViewsFonts() {
         
         //Future version include 'kern' to text style
-        //        let kernAttribute = [NSAttributedString.Key.kern: 10]
+        //let kernAttribute = [NSAttributedString.Key.kern: 10]
         
         //Left side date related to Sober Since
         soberSinceLabel.font = MyFont.SFDisMed.withSize(size: 17)
@@ -209,11 +202,6 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     
     // MARK: - Actions
     @IBAction func sobrietySaveButtonTapped(_ sender: IRButton) {
-        //TestPrint
-        print("\nSave Button Tapped")
-        
-        //Turn the button to a cancel button
-        
         
         UserDefaults.standard.setValue(sobrietyDatePicker.date, forKey: sobrietyUserDefaultKey)
         
@@ -223,7 +211,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     }
     
     @IBAction func editButtonTapped(_ sender: Any) {
-        print("Edit buton tapped")
+        
         checkInBottomButton.isEnabled = false
         DispatchQueue.main.async {
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.animateOutOfSobrietyView))
@@ -231,18 +219,13 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         }
     }
     
-    
-    @objc func cancelSobrietyDateSelection() {
-        
-    }
-    
     @IBAction func checkInButtonTapped(_ sender: IRButton) {
-   
-         //Initial check to verify that the user's accountability partners inforamtion is saved
+        
+        //Initial check to verify that the user's accountability partners inforamtion is saved
         if UserController.shared.loggedInUser?.sponsorEmail == "" && UserController.shared.loggedInUser?.sponsorTelephoneNumber == "" ||   UserController.shared.loggedInUser?.sponsorEmail == nil && UserController.shared.loggedInUser?.sponsorTelephoneNumber == nil {
-            let noSponsorInfoFoundALert = AlertController.presentAlertControllerWith(alertTitle: "Error Obtain Information", alertMessage: "There seems to be an issue obtaining your support person's email and phone number. Click on the 'Information' tab and ensure that their information is correctly saved", dismissActionTitle: "Ok")
+            let noSponsorInfoFoundALert = AlertController.presentAlertControllerWith(alertTitle: "Error Obtaining Information", alertMessage: "There seems to be an issue obtaining your support person's email and phone number. Click on the 'Information' tab and ensure that their information is correctly saved", dismissActionTitle: "Ok")
             DispatchQueue.main.async {
-               
+                
                 self.present(noSponsorInfoFoundALert, animated: true, completion: nil)
             }
         } else {
@@ -253,10 +236,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
             
             //Eamil
             if supportPerson?.sponsorName == "" {
-//                DispatchQueue.main.async {
-//                    self.activityIndicator.isHidden = false
-//                    self.activityIndicator.startAnimating()
-//                }
+                
                 let composeEmailAction = UIAlertAction(title: "Email Your Support Person", style: .default) { (_) in
                     
                     self.composeEmail()
@@ -276,13 +256,11 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
                     checkInAlertController.popoverPresentationController?.sourceView = self.view
                     checkInAlertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
                     checkInAlertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+                    
                     self.present(checkInAlertController, animated: true, completion: nil)
                 }
             } else {
-//                DispatchQueue.main.async {
-//                    self.activityIndicator.isHidden = false
-//                    self.activityIndicator.startAnimating()
-//                }
+                
                 let composeEmailAction = UIAlertAction(title: "Email \(supportPerson?.sponsorName ?? "Your Support Person")", style: .default) { (_) in
                     
                     self.composeEmail()
@@ -317,7 +295,6 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
     
     func composeEmail() {
         
-       
         //check if device can send mail
         guard MFMailComposeViewController.canSendMail() else {
             
@@ -367,6 +344,7 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
         case .sent:
             print("🐦🐦🐦mail saved")
         }
+        
         DispatchQueue.main.async {
             self.hideStopActivityIndictor()
             controller.dismiss(animated: true, completion: nil)
@@ -389,7 +367,7 @@ extension CalendarVC: MFMessageComposeViewControllerDelegate {
             return
         }
         
-            self.showStartActivityIndicator()
+        self.showStartActivityIndicator()
         
         fetchCurrentuser()
         
@@ -399,12 +377,11 @@ extension CalendarVC: MFMessageComposeViewControllerDelegate {
         composeText.recipients = ["\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "")"]
         composeText.body = "Hi \(UserController.shared.loggedInUser?.sponsorName ?? "Friend"),\n\njust wanted to check in and give you an update."
         
-            DispatchQueue.main.async {
-                self.hideStopActivityIndictor()
-                self.present(composeText, animated: true)
-            }
+        DispatchQueue.main.async {
+            self.hideStopActivityIndictor()
+            self.present(composeText, animated: true)
         }
-    
+    }
     
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         
@@ -430,8 +407,10 @@ extension CalendarVC {
             self.showStartActivityIndicator()
         }
         fetchCurrentuser()
+        
         guard let phoneCallURL = URL(string: "telprompt://\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "")") else {
             let phoneCallError = AlertController.presentAlertControllerWith(alertTitle: "Error Making Phone Call", alertMessage: "Unexpected error please try again later", dismissActionTitle: "OK")
+            
             DispatchQueue.main.async {
                 self.hideStopActivityIndictor()
                 self.present(phoneCallError, animated: true, completion: nil)
@@ -445,6 +424,7 @@ extension CalendarVC {
     }
 }
 
+// MARK: - Fetch
 extension CalendarVC {
     
     func fetchCurrentuser() {
@@ -472,7 +452,10 @@ extension CalendarVC {
         }) { (success: Bool) in
             self.sobrietyDateView.removeFromSuperview()
             DispatchQueue.main.async {
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editButtonTapped(_:)))
+//                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editButtonTapped(_:)))
+                DispatchQueue.main.async {
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit Date", style: .plain, target: self, action: #selector(self.editButtonTapped(_:)))
+                }
             }
             self.checkInBottomButton.isEnabled = true
         }
@@ -507,14 +490,9 @@ extension CalendarVC {
         self.activityIndicator.stopAnimating()
         self.activityIndicator.isHidden = true
     }
-    func updateLabelUI() {
-        //        soberSinceLabel.font = MyFont.sfDisplayMedium43.value
-        //        soberSinceDateValueLabel.font = MyFont.sfDisplayMedium43.value
-        //        numberOfDaysSoberLabel.font = MyFont.sFMedium17.value
-        //        numberOfDaysSoberValueLabel.font = MyFont.sFMedium17.value
-    }
 }
 
+// NOTE: - Future version code below
 /*
  self.navigationController?.navigationBar.isTranslucent = false
  

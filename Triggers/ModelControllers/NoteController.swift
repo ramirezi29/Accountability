@@ -24,10 +24,17 @@ class NoteController {
     typealias boolVoidCompletion = (Bool) -> Void
     
     // MARK: - Fetch
+    
+    /**
+     Fetch Cloudkit Note object.
+     
+     - Parameter folder: Folder object
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func fetchItems(folder: Folder, completion: @escaping fetchCompletion) {
-        
-        //Test Print
-        print("Random info From folder fetch: user: \(folder)")
         
         let folderParentID = folder.ckRecordID
         
@@ -57,6 +64,16 @@ class NoteController {
     }
     
     // MARK: - Save
+    
+    /**
+     Fetch Cloudkit Note object.
+     
+     - Parameter notes: Note object
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func saveToCloudKit(notes: Note, completion: @escaping boolVoidCompletion) {
         
         let notesRecord = CKRecord(note: notes)
@@ -67,6 +84,7 @@ class NoteController {
                 completion(false)
                 return
             }
+            
             guard let record = record, let newNote = Note(ckRecord: record) else {
                 
                 print("\n💀 No Record came back from CloudKit\n")
@@ -81,6 +99,18 @@ class NoteController {
     }
     
     // MARK: - Create
+    
+    /**
+     Fetch Cloudkit Note object.
+     
+     - Parameter title: String title for the note to be created.
+     - Parameter textBody: The String body text of note.
+     - Parameter folder: The Folder object that is to be linked to the new note
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func createNewNoteWith(title: String, textBody: String, folder: Folder, completion: @escaping boolVoidCompletion) {
         
         let newNote = Note(title: title, textBody: textBody, folderReference: CKRecord.Reference(recordID: folder.ckRecordID, action: .deleteSelf))
@@ -98,12 +128,24 @@ class NoteController {
                 completion(false)
                 
                 //for test purposes fatal error
-//                fatalError("\nFatal Error , error creating record\n")
+                //                fatalError("\nFatal Error , error creating record\n")
             }
         }
     }
     
     // MARK: - Update
+    
+    /**
+     Fetch Cloudkit Note object.
+     
+     - Parameter note: The Note object that is to be updated.
+     - Parameter title: The title for the note to be created.
+     - Parameter textBody: The  body text of note.
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func updateNote(note: Note, title: String, textBody: String, completion: @escaping boolVoidCompletion) {
         note.title = title
         note.textBody = textBody

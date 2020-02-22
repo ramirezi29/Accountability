@@ -30,9 +30,9 @@ class Note {
         return DateFormatter.localizedString(from: timeStamp, dateStyle: .short, timeStyle: .none)
     }
     
-    // NOTE: - Create a model object fromR a CKRecord -- 🔥Fetch
+    // NOTE: - Create a model object fromR a CKRecord - Fetch
     convenience init?(ckRecord: CKRecord) {
-        //🍕 Step 1. Unpack the values that i want from the CKREcord
+        // Step 1. Unpack the values that i want from the CKREcord
         guard let title = ckRecord[NoteConstants.titleKey] as? String,
             
             let textBody = ckRecord[NoteConstants.textBodyKey] as? String,
@@ -40,12 +40,10 @@ class Note {
             let folderReference = ckRecord[NoteConstants.folderReferenceKey] as? CKRecord.Reference else { return nil }
         
         self.init(title: title, textBody: textBody, folderReference: folderReference)
-        
-        //🍕 Step 2. Set tthose values as my initial values for my new instance
     }
 }
 
-// NOTE: - Create a CKRecord using our model object -- 🔥Push
+// NOTE: - Create a CKRecord using our model object - Push
 extension CKRecord {
     convenience init(note: Note) {
         

@@ -44,12 +44,3 @@ extension MyColor {
         }
     }
 }
-//Anotation ff492a
-// complimentary #e66a54
-/*
- Instead of textField.textColor = .black
- 
- use:
- textField.backgroundColor = MyColor.blackGrey.value
-
- */

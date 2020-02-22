@@ -24,10 +24,17 @@ class FolderController {
     typealias boolVoidCompletion = (Bool) -> Void
     
     // MARK: - Fetch
+    
+    /**
+     Fetch CloudKit Folder objects. This is done by querying the User object's CKRecordID with the FolderConsants's userFolderRefKey and FolderTypeKey.
+     
+     - Parameter user: The User object which the location records will be fetched from.
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping fetchCompletion) {
-        
-        //Test Print
-        print("☃️ WHen the page was loaded and the Folder fetch func ran, there were \(folders.count) folders fetched")
         
         guard let user = user else {
             completion(nil, .invalidData("Invalid user"))
@@ -62,12 +69,22 @@ class FolderController {
             self.folders = fetchItems
             
             //Test Print
-            print("\n📍Number of folders fetched: \(self.folders.count)")
+            //            print("\nNumber of folders fetched: \(self.folders.count)")
             completion(fetchItems, nil)
         }
     }
     
     // MARK: - Save
+    
+    /**
+     Save CloudKit Folder object.
+     
+     - Parameter folder: The Folder object to be saved to CloudKit.
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func saveToCloudKit(folder: Folder, completion: @escaping boolVoidCompletion) {
         
         let folderRecord = CKRecord(folder: folder)
@@ -83,7 +100,7 @@ class FolderController {
                 else {
                     
                     //Test Print
-                    print("\n🤫 No Folder Record was saved to  Cloud😩\n")
+                    print("\nNo Folder Record was saved to  Cloud\n")
                     completion(false)
                     return
             }
@@ -93,6 +110,15 @@ class FolderController {
         }
     }
     
+    /**
+     Create CloudKit Folder object.
+     
+     - Parameter folderTitle: The String title for the folder
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func createNewFolder(folderTitle: String, completion: @escaping boolVoidCompletion) {
         
         let newFolder = Folder(folderTitle: folderTitle)
@@ -100,21 +126,28 @@ class FolderController {
         saveToCloudKit(folder: newFolder) { (success) in
             if success {
                 //Test Print
-                print("\n🙏🏽 Succesfully created folder record\n")
+                //                print("\nSuccesfully created folder record\n")
                 completion(true)
             } else {
                 //Test Print
                 print("\n💀 Error Creating Folder Record\n")
                 completion(false)
-                
-                //For Test Purposes Only Fatal Error
-//                fatalError("\n💀💀Fatal Error, Error creating folder record💀💀\n")
             }
         }
     }
     
     // Creat Entry and Folder
     
+    /**
+     Create CloudKit Folder object.
+     
+     - Parameter folder: Folder object that is to be updated
+     - Parameter folderTitle: The new String title for the folder
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func updateFolder(folder: Folder, folderTitle: String, completion: @escaping boolVoidCompletion) {
         
         folder.folderTitle = folderTitle
@@ -127,13 +160,23 @@ class FolderController {
         operration.qualityOfService = .userInteractive
         operration.completionBlock = {
             
-            
             completion(true)
         }
         privateDB.add(operration)
     }
     
-    // MARK: - Add Note to the specific Folder 
+    // MARK: - Add Note to the specific Folder
+    
+    /**
+      Add a Note object to an existing Folder.
+      
+      - Parameter note: Note object
+      - Parameter folder: Folder object
+      
+      ## Important Note ##
+      - A valid User object must already exist
+      - The device must be signed into an iCloud account and be connected to the internet
+      */
     func add(note: Note, to folder: Folder) {
         folder.notes.append(note)
     }

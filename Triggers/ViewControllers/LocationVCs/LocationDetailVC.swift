@@ -16,7 +16,7 @@ import MessageUI
 import ContactsUI
 
 
-class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
+class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, UISearchBarDelegate, MKLocalSearchCompleterDelegate {
     
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -37,6 +37,8 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var mapTypeButton: UIButton!
     @IBOutlet weak var userLoactionButton: UIButton!
     
+    lazy var searchBar:UISearchBar = UISearchBar()
+    
     //Mark: - Landing Pad
     var location: Location? {
         didSet {
@@ -44,6 +46,8 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
             addAnnotation()
         }
     }
+    
+    //Access user properties
     var user: User?
     
     private let geocoder = CLGeocoder()
@@ -58,6 +62,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     private let bannerResouceName = "myTriggersBannerFinalLogo"
     private let resourceType = "png"
     
+    //NOTE: Trying out a different layout to put the alert constants
     let badAddressNotif = AlertController.presentAlertControllerWith(alertTitle: "Address Not Found", alertMessage: "Sorry, Couldnt not find the specified address", dismissActionTitle: "OK")
     let networkErroNoif = AlertController.presentAlertControllerWith(alertTitle: "Network Error", alertMessage: "Ensure that you are connected to the internet and signed into your iCloud account", dismissActionTitle: "OK")
     
@@ -82,9 +87,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         tapGesture.cancelsTouchesInView = true
         self.view.addGestureRecognizer(tapGesture)
         
-        //Tap guesture for map taps
-        //        let mapTapGesture = UITapGestureRecognizer(target: self, action:#selector(LocationDetailVC.handleTap(_:)))
-        
         let longPressMapTap = UILongPressGestureRecognizer(target: self, action: #selector(LocationDetailVC.handleTap(_:)))
         
         longPressMapTap.delegate = self
@@ -96,22 +98,24 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         mapViewOutlet.delegate = self
         
         //Map
-        
         mapViewOutlet.showsUserLocation = true
         mapViewOutlet.userTrackingMode = .follow
         mapViewOutlet.showsCompass = true
         locationManager.startUpdatingLocation()
-        
-        //        let usersLocation = mapViewOutlet.userLocation
-        
         mapViewOutlet.addGestureRecognizer(longPressMapTap)
         
-        //        let region = MKCoordinateRegion(center: mapViewOutlet.userLocation.coordinate, latitudinalMeters: , longitudinalMeters: 1609.344)
-        //
-        //        mapViewOutlet.setRegion(region, animated: true)
+        //TextFieldDelegate
+        addressTextField.delegate = self
+        
+        //Auto Complete
+        let completer = MKLocalSearchCompleter()
+        completer.delegate = self
+//            as! MKLocalSearchCompleterDelegate
+        completer.region = mapViewOutlet.region
         
         
-        print(mapViewOutlet.isUserLocationVisible)
+        //Test print
+        //print(mapViewOutlet.isUserLocationVisible)
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         //Activity Indicator
@@ -124,9 +128,17 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         //Background UI
         view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         
+        // Searchbar
+        searchBar.searchBarStyle = UISearchBar.Style.prominent
+        searchBar.placeholder = " Search..."
+        searchBar.sizeToFit()
+        searchBar.isTranslucent = false
+//        searchBar.backgroundImage =
+        searchBar.delegate = self
+        navigationItem.titleView = searchBar
+        
         loadViewIfNeeded()
         updateViews()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -150,11 +162,9 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: self.metersPerHalfMile, longitudinalMeters: self.metersPerHalfMile)
         print("Is user location visable \(mapViewOutlet.isUserLocationVisible). Clled in the add annotation func")
         self.mapViewOutlet.setRegion(viewRegion, animated: true)
-        
     }
     
     func updateViews() {
-        
         //Update the text fields
         guard let location = location else {return}
         locationTitleTextField.text = location.locationTitle
@@ -166,13 +176,11 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
             guard let `self` = self else { return }
             
             guard error == nil else {
-                
                 return
             }
             
             guard let placemark = placemarks?.first,
                 let coordinate = placemark.location?.coordinate else {
-                    
                     return
             }
             
@@ -205,10 +213,15 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    // Address TextField
+    
+    
+    
+    
+    // MARK: - Actions
     @IBAction func mapTypeButtonTapped(_ sender: UIButton) {
         presentMapTypes()
     }
-    
     
     @IBAction func userLocationButtonTapped(_ sender: UIButton) {
         centerMapOnUserLocation()
@@ -217,15 +230,12 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
         
-       let isOnboarded = UserDefaults.standard.bool(forKey: "hasViewedWalkthrough")
-       
-       
+        let isOnboarded = UserDefaults.standard.bool(forKey: "hasViewedWalkthrough")
+        
         if isOnboarded {
-         self.navigationController?.popViewController(animated: true)
+            self.navigationController?.popViewController(animated: true)
         }
-            
     }
-    
     
     @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
         
@@ -292,8 +302,10 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                         self.navigationController?.popViewController(animated: true)
                     }
                 } else {
+                    
+                    //Vibrate in order to alert the user something odd just happened
                     AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                    // prseent UI Alert expalining error
+                    
                     DispatchQueue.main.async {
                         
                         self.stopHideActivityIndicator()
@@ -311,12 +323,9 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                 if success {
                     
                     // Updated Location Notification with Dismiss Only
-                    
                     NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
                     
-                    
-                    
-                    print("\n🙏🏽Successfully created/saved location🙏🏽")
+                    print("\nSuccessfully created/saved location")
                     DispatchQueue.main.async {
                         
                         self.navigationController?.popViewController(animated: true)
@@ -348,7 +357,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
                 
                 print("Invalid Address enetered")
             }
-            
             return
         }
         
@@ -358,24 +366,20 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate {
         DispatchQueue.main.async {
             self.stopHideActivityIndicator()
         }
-        
     }
 }
 
 extension LocationDetailVC {
     
     func searchButtonUI() {
-        
         searchButton.setTitle("Search", for: .normal)
     }
 }
 
-// Long Press on Map
+//User long Pressed on the Map view
 extension LocationDetailVC: CLLocationManagerDelegate {
     
-    
-    @objc func handleTap(_ sender: UIGestureRecognizer)
-    {
+    @objc func handleTap(_ sender: UIGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.ended {
             
             let touchPoint = sender.location(in: mapViewOutlet)
@@ -384,8 +388,9 @@ extension LocationDetailVC: CLLocationManagerDelegate {
             let touchCoordinate = mapViewOutlet.convert(touchPoint, toCoordinateFrom: mapViewOutlet)
             let annotation = MKPointAnnotation()
             annotation.coordinate = touchCoordinate
-            //            annotation.title = "My Trigger"
             
+            //Future version customize the location pin
+            //annotation.title = "My Trigger"
             
             // what you annotatded Long and Lat
             let longPressedLatitude = annotation.coordinate.latitude
@@ -393,19 +398,17 @@ extension LocationDetailVC: CLLocationManagerDelegate {
             
             print("\(touchCoordinate)")
             mapViewOutlet.removeAnnotations(mapViewOutlet.annotations)
-            //            mapViewOutlet.addAnnotation(annotation) //drops the pin
+            //mapViewOutlet.addAnnotation(annotation)
+            //drops the pin
             
             let geoCoder = CLGeocoder()
             geoCoder.reverseGeocodeLocation(CLLocation(latitude: longPressedLatitude, longitude: longPressedLongitude)) { (placemarks, error) in
                 guard let placemarks = placemarks, let placemark = placemarks.first else { return }
-                //                placemark.locality the city
-                // this location address has the address
                 
                 guard let addressComponents = placemark.postalAddress  else {return}
                 
-                //Long and Lat
+                //Long and Lat of location
                 let longPressedLatAndLongString = "(\(longPressedLatitude)\(longPressedLongitude))"
-                
                 
                 print("This is the Lat and Long that was long pressed \(longPressedLatAndLongString)")
                 
@@ -429,7 +432,9 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                     self.addressTextField.text = ("\(street) \(city), \(state) \(postalCode)")
                 } else {
                     let noStreetAddressFoundAlert = AlertController.presentAlertControllerWith(alertTitle: "No Street Address Found", alertMessage: "Latitude and Longitude were only obtained", dismissActionTitle: "OK")
+                    
                     DispatchQueue.main.async {
+                        //Present alert
                         self.present(noStreetAddressFoundAlert, animated: true, completion: nil)
                     }
                     self.addressTextField.text = ("\(longPressedLatitude), \(longPressedLongitude)")
@@ -443,15 +448,14 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                     DispatchQueue.main.async {
                         self.activityIndicator.stopAnimating()
                         self.activityIndicator.isHidden = true
+                        
                         //present UI Alert Controller
                         self.present(self.badAddressNotif, animated: true, completion: nil)
                         
                         print("Invalid Address enetered")
                     }
-                    
                     return
                 }
-                
                 
                 self.showAddressOnMap(address: addressToSearchFor)
                 
@@ -464,8 +468,6 @@ extension LocationDetailVC: CLLocationManagerDelegate {
         }
     }
 }
-
-
 
 extension LocationDetailVC: MKMapViewDelegate {
     
@@ -483,6 +485,7 @@ extension LocationDetailVC: MKMapViewDelegate {
         }
     }
     
+    //Users location for future use
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         //        centerMapOnUserLocation()
     }
@@ -510,11 +513,11 @@ extension LocationDetailVC {
             mapTypesAlertController.popoverPresentationController?.sourceView = self.view
             mapTypesAlertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
             mapTypesAlertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            
             self.present(mapTypesAlertController, animated: true, completion: nil)
         }
     }
 }
-
 
 extension LocationDetailVC {
     
@@ -529,18 +532,12 @@ extension LocationDetailVC {
     }
 }
 
-//Notification didReceive Delegate
+// MARK: - Notification didReceive Delegate
 extension LocationDetailVC: UNUserNotificationCenterDelegate {
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
-        
-        //Not sure if this is needed
-        //        let userInfo = response.notification.request.content.userInfo
-        //        let textMessageAction = userInfo[LocationConstants.textSponsorActionKey]
-        //        let telephoneAction = userInfo[LocationConstants.telephoneSponsorActionKey]
-        
-        //This is the option that was selected
+        //Test print
         print("Test: \(response.notification.request.identifier)")
         
         defer {
@@ -554,83 +551,13 @@ extension LocationDetailVC: UNUserNotificationCenterDelegate {
             
         //An action that indicates the user opened the app from the notification interface.
         case UNNotificationDefaultActionIdentifier:
-            print("user segued into the app")
-            //
-            //        case LocationConstants.telephoneSponsorActionKey:
-            //            telephoneSponsor()
-            //
-            //        case LocationConstants.textSponsorActionKey:
-        //            composeTextMessage()
+            print("user was taken into the app")
+            
         default:
             break
         }
     }
 }
-
-
-//// MARK: - Text Message
-//extension LocationDetailVC: MFMessageComposeViewControllerDelegate {
-//
-//    func composeTextMessage() {
-//
-//        guard MFMessageComposeViewController.canSendText() else {
-//            // DO some UI to show that an email cant be sent
-//            let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing Text Message", alertMessage: "At this time, your device does not support this feature", dismissActionTitle: "OK")
-//            DispatchQueue.main.async {
-//                self.present(notMailCompatable, animated: true, completion: nil)
-//            }
-//            return
-//        }
-//
-//        fetchCurrentuser()
-//
-//        let composeText = MFMessageComposeViewController()
-//        composeText.messageComposeDelegate = self
-//
-//        composeText.recipients = ["\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "")"]
-//        composeText.body = "Hi \(UserController.shared.loggedInUser?.sponsorName ?? "Friend"),\n\njust wanted to check in and give you an update."
-//
-//
-//        DispatchQueue.main.async {
-//            self.present(composeText, animated: true) {
-//            }
-//        }
-//    }
-//
-//    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-//
-//        switch result {
-//        case .cancelled:
-//            controller.dismiss(animated: true, completion: nil)
-//        case .failed:
-//            controller.dismiss(animated: true, completion: nil)
-//        case .sent:
-//            controller.dismiss(animated: true, completion: nil)
-//        default:
-//            break
-//        }
-//    }
-//}
-//
-//
-//// MARK: - Telephone
-//extension LocationDetailVC {
-//
-//    func telephoneSponsor() {
-//
-//        fetchCurrentuser()
-//        guard let phoneCallURL = URL(string: "telprompt://\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "7142510446")") else {
-//            let phoneCallError = AlertController.presentAlertControllerWith(alertTitle: "Error Making Phone Call", alertMessage: "Unexpected error please try again later", dismissActionTitle: "OK")
-//            DispatchQueue.main.async {
-//                self.present(phoneCallError, animated: true, completion: nil)
-//            }
-//            return
-//        }
-//        DispatchQueue.main.async {
-//            UIApplication.shared.open(phoneCallURL)
-//        }
-//    }
-//}
 
 extension LocationDetailVC {
     
@@ -648,6 +575,4 @@ extension LocationDetailVC {
         }
     }
 }
-
-
 
