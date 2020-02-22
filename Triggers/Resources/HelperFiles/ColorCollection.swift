@@ -8,9 +8,13 @@
 
 import UIKit
 
+/**
+ A collection of colors linked to a given value.
+ */
 enum MyColor {
     
     case powderBlue
+    case buttonBlue
     case hardBlue
     case offGrey
     case offWhite
@@ -21,11 +25,19 @@ enum MyColor {
 }
 
 extension MyColor {
+    
+    /**
+     An exention of MyColor which holds the color values.
+     
+     - Parameter value: Contains the red, green, blue and alpha values to create the particular color.
+     */
     var value: UIColor {
         get {
             switch self {
             case .powderBlue:
                 return UIColor(red: 229/255, green: 246/255, blue: 255/255, alpha: 1.0)
+            case .buttonBlue:
+                return UIColor(red: 0.4588, green: 0.7765, blue: 0.2902, alpha: 1.0)
             case .hardBlue:
                 return UIColor(red: 0/255, green: 164/255, blue: 252/255, alpha: 1.0)
             case .offGrey:

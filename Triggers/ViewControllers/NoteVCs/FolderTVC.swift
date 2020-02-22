@@ -47,7 +47,7 @@ class FolderTVC: UITableViewController {
                             //Test print
                             //                            print("\nSuccessfully fetched folders from CK\n")
                         } else {
-                            let networkError = AlertController.presentAlertControllerWith(alertTitle: "Unable to Load Your Notes", alertMessage: "Check your internet connection and ensure that you are signed into iCloud", dismissActionTitle: "OK")
+                            let networkError = AlertController.presentAlertControllerWith(alertTitle: "Unable to load notes", alertMessage: "Check your internet connection and ensure that you are signed into iCloud", dismissActionTitle: "OK")
                             DispatchQueue.main.async {
                                 self.present(networkError, animated: true, completion: nil)
                             }

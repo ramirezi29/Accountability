@@ -24,10 +24,9 @@ class HomeVC: UIViewController {
     
     //View
     @IBOutlet var aaStepInfoView: UIView!
-    
     @IBOutlet weak var seperatingLineView: UIView!
+   
     //Buttons
-    
     @IBOutlet weak var phoneBookButton: UIButton!
     @IBOutlet weak var aaIconButton: UIButton!
     @IBOutlet weak var aaDismissButton: IRButton!
@@ -35,7 +34,6 @@ class HomeVC: UIViewController {
     
     //Navigation Bar BUttons
     @IBOutlet weak var editButton: UIBarButtonItem!
-    
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     
     //TextFields
@@ -54,7 +52,7 @@ class HomeVC: UIViewController {
     let phoneBookImage = UIImage(named: "phoneBook")
     let locationLogoImage = UIImage(named: "LocationLogo")
     
-    let networkErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Unable able to Save Entry", alertMessage: "The Internet connection appears to be offline", dismissActionTitle: "OK")
+    let networkErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Unable to save entry", alertMessage: "The Internet connection appears to be offline", dismissActionTitle: "OK")
     let fetchErrorNotif  = AlertController.presentAlertControllerWith(alertTitle: "Unable to load data", alertMessage: "The Internet connection appears to be offline", dismissActionTitle: "OK")
     
     // MARK: - Life Cyles
@@ -71,15 +69,13 @@ class HomeVC: UIViewController {
         userNameTextField.contentVerticalAlignment = .bottom
         //view
         aaStepInfoView.layer.cornerRadius = 15
-        seperatingLineView.backgroundColor = MyColor.annotationOrange.value
+        seperatingLineView.backgroundColor = MyColor.buttonBlue.value
         
         //Button
         self.phoneBookButton.isUserInteractionEnabled = false
         self.phoneBookButton.alpha = 0
         self.phoneBookButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFit
         self.aaIconButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFill
-        
-//        self.aaIconButton.setImage(<#T##image: UIImage?##UIImage?#>, for: <#T##UIControl.State#>)
         
         //Label
         self.currentAAStepValueLabel.contentMode = UIView.ContentMode.scaleAspectFill
