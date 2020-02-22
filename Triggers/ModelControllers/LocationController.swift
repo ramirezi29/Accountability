@@ -12,17 +12,11 @@ import CloudKit
 class LocationController {
     
     static let shared = LocationController()
-    
     private init() {}
-    
     var locations = [Location]()
-    
     let privateDB = CKContainer.default().privateCloudDatabase
-    
     var locationUserRecordID: CKRecord.ID?
-    
     typealias fetchCompletion = ([Location]?, NetworkingError?) -> Void
-    
     typealias boolVoidCompletion = (Bool) -> Void
     
     

@@ -12,17 +12,11 @@ import CloudKit
 class UserController {
     
     static let shared = UserController()
-    
     private init() {}
-    
     var loggedInUser: User?
-    
     var appleUserRecordID: CKRecord.ID?
-    
     let privateDB = CKContainer.default().privateCloudDatabase
-    
     typealias fetchCompletion = (Bool, NetworkingError?) -> Void
-    
     typealias boolVoidCompletion = (Bool) -> Void
     
     // MARK: - Fetch

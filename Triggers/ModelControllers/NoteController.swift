@@ -135,17 +135,17 @@ class NoteController {
     
     // MARK: - Update
     
-     /**
-      Fetch Cloudkit Note object.
+    /**
+     Fetch Cloudkit Note object.
      
-      - Parameter note: The Note object that is to be updated.
-      - Parameter title: The title for the note to be created.
-      - Parameter textBody: The  body text of note.
-      
-      ## Important Note ##
-      - A valid User object must already exist
-      - The device must be signed into an iCloud account and be connected to the internet
-      */
+     - Parameter note: The Note object that is to be updated.
+     - Parameter title: The title for the note to be created.
+     - Parameter textBody: The  body text of note.
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func updateNote(note: Note, title: String, textBody: String, completion: @escaping boolVoidCompletion) {
         note.title = title
         note.textBody = textBody

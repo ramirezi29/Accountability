@@ -24,7 +24,7 @@ class WeekdaysView: UIView {
         myStackView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         myStackView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
-        var daysArray = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+        let daysArray = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
         for i in 0..<7 {
             let dayLabel = UILabel()
             dayLabel.text = daysArray[i]
