@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+San Francisco Pro Text styles
+*/
 enum MyFont: String {
     case SFReg = "SFProText-Regular"
     case SFMed = "SFProText-Medium"

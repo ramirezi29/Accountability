@@ -343,6 +343,8 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
             print("🐦🐦🐦mail savied")
         case .sent:
             print("🐦🐦🐦mail saved")
+        default:
+            break
         }
         
         DispatchQueue.main.async {
@@ -452,7 +454,7 @@ extension CalendarVC {
         }) { (success: Bool) in
             self.sobrietyDateView.removeFromSuperview()
             DispatchQueue.main.async {
-//                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editButtonTapped(_:)))
+                //                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editButtonTapped(_:)))
                 DispatchQueue.main.async {
                     self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit Date", style: .plain, target: self, action: #selector(self.editButtonTapped(_:)))
                 }
@@ -491,36 +493,3 @@ extension CalendarVC {
         self.activityIndicator.isHidden = true
     }
 }
-
-// NOTE: - Future version code below
-/*
- self.navigationController?.navigationBar.isTranslucent = false
- 
- //Future Versions will have themes
- //    @IBAction func themeButtonTapped(_ sender: UIBarButtonItem) {
- //        if theme == .dark {
- //            sender.title = "Dark"
- //            theme = .light
- //            Style.themeLight()
- //
- //        } else {
- //            sender.title = "Light"
- //            theme = .dark
- //            Style.themeDark()
- //
- //        }
- //        self.view.backgroundColor=Style.bgColor
- //        calenderView.changeTheme()
- //    }
- 
- */
-
-//Test print to verify the custom San Francisco fonts are include in this projects build
-//        for family: String in UIFont.familyNames
-//        {
-//            print(family)
-//            for names: String in UIFont.fontNames(forFamilyName: family)
-//            {
-//                print("== \(names)")
-//            }
-//        }
