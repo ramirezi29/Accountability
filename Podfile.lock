@@ -1,16 +1,16 @@
 PODS:
-  - SwiftLint (0.39.1)
+  - JTAppleCalendar (8.0.3)
 
 DEPENDENCIES:
-  - SwiftLint
+  - JTAppleCalendar
 
 SPEC REPOS:
   trunk:
-    - SwiftLint
+    - JTAppleCalendar
 
 SPEC CHECKSUMS:
-  SwiftLint: 55e96a4a4d537d4a3156859fc1c54bd24851a046
+  JTAppleCalendar: 932cadea40b1051beab10f67843451d48ba16c99
 
-PODFILE CHECKSUM: 3ceb0afd69e0a7480c9dcdf9ca4b1e295df74004
+PODFILE CHECKSUM: 56d5f76f23c532c565a3c4ac6ae51efb8f7bd644
 
 COCOAPODS: 1.8.4
