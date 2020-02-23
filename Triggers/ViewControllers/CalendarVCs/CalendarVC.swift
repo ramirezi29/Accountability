@@ -9,15 +9,12 @@
 import UIKit
 import CloudKit
 import MessageUI
-
-//Dark and light theme will be implemented in a future version
-enum MyTheme {
-    case light
-    case dark
-}
+import JTAppleCalendar
 
 // NOTE: The Calendar in this app will soon be replaced by a cocoapod
-class CalendarVC: UIViewController, UINavigationBarDelegate {
+class CalendarVC: UIViewController, UINavigationBarDelegate, JTACMonthViewDataSource, JTACMonthViewDelegate {
+    
+    
     
     // MARK: - IBoutlets
     @IBOutlet weak var triggersLabel: UILabel!
@@ -36,14 +33,40 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     @IBOutlet weak var numberOfDaysSoberValueLabel: UILabel!
     @IBOutlet weak var triggersLogoView: UIImageView!
     @IBOutlet weak var checkInBottomButton: UIButton!
-    
-    //Stalk View
     @IBOutlet weak var soberietyUserInfoLRStack: UIStackView!
     
-    var theme = MyTheme.dark
-    var user: User?
+    @IBOutlet weak var firstDayLabel: UILabel!
+    
+    @IBOutlet weak var secondDayLabel: UILabel!
+    @IBOutlet weak var thirdDayLabel: UILabel!
+    @IBOutlet weak var fourthDayLabel: UILabel!
+    @IBOutlet weak var fifthDayLabel: UILabel!
+    @IBOutlet weak var sixthDayLabel: UILabel!
+    
+    @IBOutlet weak var seventhDayLabel: UILabel!
+    
+    @IBOutlet weak var monthLabel: UILabel!
+    @IBOutlet weak var rightArrow: UIButton!
+    @IBOutlet weak var leftArrow: UIButton!
+    
+    @IBOutlet weak var calendarView: JTACMonthView!
+    
+    
     private let localeUSA = "en_US"
     private let sobrietyUserDefaultKey = "sobrietyUserDefaultKey"
+    var user: User?
+    var dayLabels = [UILabel]()
+    var directionArrows = [UIButton]()
+    let dateFormatter = DateFormatter()
+    let currentCalendar = Calendar.current
+    let todaysDate = Date()
+    
+    //
+    var dayLabelArray = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
+    var selectedDate = Date()
+    var preSelectedCell = DateCell()
+    var willTurnDarkGray = true
+    //
     
     var sobrietyDate: Date? {
         return UserDefaults.standard.value(forKey: sobrietyUserDefaultKey) as? Date
@@ -53,12 +76,14 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Calendar
+        self.calendarView.calendarDelegate = self
+        self.calendarView.calendarDataSource = self
+        
         //Navigation bar
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
-        
-        //
         
         triggersLabel.textColor = MyColor.offWhite.value
         triggersLabel.text = "My Triggers"
@@ -66,16 +91,13 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         checkInBottomButton.isUserInteractionEnabled = true
         rightView.backgroundColor = .clear
         rightView.layer.borderWidth = 0.5
-        rightView.layer.borderColor = MyColor.offWhite.value.cgColor
+        rightView.layer.borderColor = UIColor.white.cgColor
         
         leftView.backgroundColor = .clear
         leftView.layer.borderWidth = 0.5
-        leftView.layer.borderColor = UIColor.black.cgColor
-        leftView.layer.borderColor = MyColor.offWhite.value.cgColor
+        leftView.layer.borderColor = UIColor.white.cgColor
         
         updateViewsFonts()
-        
-        view.addSubview(calenderView)
         
         self.activityIndicatorView.backgroundColor = .clear
         updateViewsRelatedToSobrietyItems()
@@ -92,10 +114,9 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         //Check in button
         checkInBottomButton.setTitle("Check-In", for: .normal)
         
-        calenderView.topAnchor.constraint(equalTo: self.soberietyUserInfoLRStack.bottomAnchor, constant: 18).isActive = true
-        calenderView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12).isActive = true
-        calenderView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 12).isActive = true
-        calenderView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        setUPCalendar()
+        
+        calendarView.calendarDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -111,16 +132,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     override func viewWillLayoutSubviews() {
         
         super.viewWillLayoutSubviews()
-        calenderView.myCollectionView.collectionViewLayout.invalidateLayout()
     }
-    
-    let calenderView: CalenderView = {
-        
-        let cView = CalenderView(theme: MyTheme.dark)
-        cView.translatesAutoresizingMaskIntoConstraints = false
-        
-        return cView
-    }()
     
     func updateViewsRelatedToSobrietyItems() {
         
@@ -199,12 +211,229 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         numberOfDaysSoberValueLabel.textColor = MyColor.offWhite.value
     }
     
+    // MARK: - Calendar
+    
+    func configureCalendar(_ calendar: JTACMonthView) -> ConfigurationParameters {
+        
+        let endDate = currentCalendar.date(byAdding: .year, value: 6, to: todaysDate) ?? todaysDate
+        
+        let calendarParameters = ConfigurationParameters(startDate: todaysDate, endDate: endDate, numberOfRows: 6, calendar: currentCalendar, generateInDates: .forAllMonths, generateOutDates: .tillEndOfRow, firstDayOfWeek: .sunday, hasStrictBoundaries: true)
+        
+        return calendarParameters
+    }
+    
+    func calendar(_ calendar: JTACMonthView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTACDayCell {
+        guard let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: KeyConstants.calendarDateCell, for: indexPath) as? DateCell else {
+            return JTACDayCell()
+        }
+        
+        let currentCalendar = Calendar.current
+        
+        self.calendar(calendar, willDisplay: cell, forItemAt: date, cellState: cellState, indexPath: indexPath)
+        
+        guard let yesterday = currentCalendar.date(byAdding: .day, value: -1, to: todaysDate) else { return cell }
+        if date < yesterday {
+            cell.cellDateLabel.textColor = UIColor.gray
+        }
+        
+        return cell
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        let visibleDates = calendarView.visibleDates()
+        calendarView.viewWillTransition(to: .zero, with: coordinator, anchorDate: visibleDates.monthDates.first?.date)
+    }
+    
+    func configureCell(view: JTACDayCell?, cellState: CellState, date: Date) {
+        guard let cell = view as? DateCell  else { return }
+        cell.cellDateLabel.text = cellState.text
+        cell.layer.borderColor = UIColor.white.cgColor
+        cell.layer.borderWidth = 0.5
+        
+        handleCellConfiguration(cell: cell, cellState: cellState, date: date)
+    }
+    
+    // MARK: - Handle Cell Properties
+    
+    func handleCellConfiguration(cell: JTACDayCell?, cellState: CellState, date: Date) {
+        
+        handleCellTextColor(view: cell, cellState: cellState, date: date)
+        handleCellSelection(view: cell, cellState: cellState, date: date)
+    }
+    
+    func handleCellTextColor(view: JTACDayCell?, cellState: CellState, date: Date) {
+        guard let cell = view as? DateCell else { return }
+        
+        // Text color of the date cell
+        if cellState.dateBelongsTo == .thisMonth {
+            cell.cellDateLabel.textColor = UIColor.white
+        } else {
+            cell.cellDateLabel.textColor = UIColor.gray
+        }
+        
+        // The cell that is today's actual date
+        cell.cellDateLabel.text = cellState.text
+        
+        if currentCalendar.isDateInToday(date) {
+            cell.cellDateLabel.textColor = UIColor.black
+        }
+    }
+    
+    func handleCellSelection(view: JTACDayCell?, cellState: CellState, date: Date) {
+        guard let cell = view as? DateCell else { return }
+        dateFormatter.dateStyle = .short
+        switch cellState.isSelected {
+        case true:
+            cell.backgroundColor = MyColor.annotationOrange.value
+            preSelectedCell.backgroundColor = willTurnDarkGray ? .blue : .yellow
+        case false:
+            switch date.isSameDay(as: selectedDate) {
+            case true:
+                cell.backgroundColor = MyColor.annotationOrange.value
+                preSelectedCell = cell
+                willTurnDarkGray = date.isSameDay(as: todaysDate) ? false : true
+            case false:
+                cell.backgroundColor = .darkGray
+            }
+        }
+    }
+    
+    func calendar(_ calendar: JTACMonthView, willDisplay cell: JTACDayCell, forItemAt date: Date, cellState: CellState, indexPath: IndexPath) {
+        
+        configureCell(view: cell, cellState: cellState, date: date)
+        if date.isSameDay(as: todaysDate) {
+            cell.backgroundColor = date.isSameDay(as: selectedDate) ? MyColor.annotationOrange.value : .gray
+        }
+    }
+    
+    // MARK: - Calendar Selection Properites
+    
+    func calendar(_ calendar: JTACMonthView, shouldSelectDate date: Date, cell: JTACDayCell?, cellState: CellState) -> Bool {
+        
+        guard let yesterday = currentCalendar.date(byAdding: .day, value: -1, to: todaysDate) else { return false }
+        if  date < yesterday || cellState.dateBelongsTo != .thisMonth { return false }
+        return true
+    }
+    
+    func calendar(_ calendar: JTACMonthView, didSelectDate date: Date, cell: JTACDayCell?, cellState: CellState) {
+        handleCellConfiguration(cell: cell, cellState: cellState, date: date)
+        selectedDate = date
+    }
+    
+    func calendar(_ calendar: JTACMonthView, didDeselectDate date: Date, cell: JTACDayCell?, cellState: CellState) {
+        handleCellConfiguration(cell: cell, cellState: cellState, date: date)
+        cell?.backgroundColor = .darkGray
+    }
+    
+    // Month Label bit of code
+    func calendar(_ calendar: JTACMonthView, didScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
+        DispatchQueue.main.async {
+            self.setupViewsOfCalendar(from: visibleDates)
+        }
+    }
+    
+    func setupViewsOfCalendar(from visibleDates: DateSegmentInfo) {
+        guard let startDate = visibleDates.monthDates.first?.date,
+            
+            let month = currentCalendar.dateComponents([.month], from: startDate).month else {
+                return
+        }
+        let monthName = dateFormatter.monthSymbols[(month-1) % 12]
+        // 0 indexed array
+        let year = currentCalendar.component(.year, from: startDate)
+        monthLabel.text = monthName + " " + String(year)
+    }
+    
+    func calendar(_ calendar: JTACMonthView, willScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
+        DispatchQueue.main.async {
+            self.animateArrows()
+            self.setupViewsOfCalendar(from: visibleDates)
+        }
+    }
+    
+    func sizeOfDecorationView(indexPath: IndexPath) -> CGRect {
+        let stride = calendarView.frame.width * CGFloat(indexPath.section)
+        return CGRect(x: stride + 5, y: 5, width: calendarView.frame.width - 10, height: calendarView.frame.height - 10)
+    }
+    
+    func animateArrows() {
+        UIView.animateKeyframes(withDuration: 1.5, delay: 0.0, animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5, animations: {
+                self.rightArrow.titleLabel?.alpha = 0
+                self.leftArrow.titleLabel?.alpha = 0
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5, animations: {
+                self.rightArrow.titleLabel?.alpha = 1
+                self.leftArrow.titleLabel?.alpha = 1
+            })
+        }, completion: nil)
+    }
+    
+    func setUPCalendar() {
+        dayLabels.append(firstDayLabel)
+        dayLabels.append(secondDayLabel)
+        dayLabels.append(thirdDayLabel)
+        dayLabels.append(fourthDayLabel)
+        dayLabels.append(fifthDayLabel)
+        dayLabels.append(sixthDayLabel)
+        dayLabels.append(seventhDayLabel)
+        
+        directionArrows.append(leftArrow)
+        directionArrows.append(rightArrow)
+        
+        for label in dayLabels {
+            label.layer.borderColor = UIColor.white.cgColor
+            label.layer.borderWidth = 0.5
+        }
+        
+        for arrow in directionArrows {
+            arrow.layer.borderColor = UIColor.white.cgColor
+            arrow.layer.borderWidth = 0.5
+        }
+        
+        monthLabel.layer.borderColor = UIColor.white.cgColor
+        monthLabel.layer.borderWidth = 0.5
+        //        monthLabel.backgroundColor = .darkGray
+        
+        // Populates the month label with the current month, when the VC is first loaded
+        self.calendarView.visibleDates {[unowned self] (visibleDates: DateSegmentInfo) in
+            self.setupViewsOfCalendar(from: visibleDates)
+        }
+        
+        calendarView.scrollDirection = .horizontal
+        calendarView.isScrollEnabled = true
+        calendarView.allowsMultipleSelection = false
+        calendarView.scrollingMode = .stopAtEachSection
+        calendarView.showsVerticalScrollIndicator = false
+        
+        // dayLabelArray contains the 7 values. The order of the string values can be re-arranged by changing the order in the dayLabelArray array syntax
+        firstDayLabel.text = dayLabelArray[0]
+        secondDayLabel.text = dayLabelArray[1]
+        thirdDayLabel.text = dayLabelArray[2]
+        fourthDayLabel.text = dayLabelArray[3]
+        fifthDayLabel.text = dayLabelArray[4]
+        sixthDayLabel.text = dayLabelArray[5]
+        seventhDayLabel.text = dayLabelArray[6]
+    }
+    
+    
     
     // MARK: - Actions
+    
+    //Calendar
+    @IBAction func leftArowTapped(_ sender: UIButton) {
+        calendarView.scrollToSegment(.previous)
+    }
+    
+    @IBAction func rightArrowTapped(_ sender: Any) {
+        calendarView.scrollToSegment(.next)
+    }
+    
+    //Sobriety
     @IBAction func sobrietySaveButtonTapped(_ sender: IRButton) {
         
         UserDefaults.standard.setValue(sobrietyDatePicker.date, forKey: sobrietyUserDefaultKey)
-        
         updateViewsRelatedToSobrietyItems()
         updateDayofWeekLabel()
         animateOutOfSobrietyView()
@@ -346,7 +575,6 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
         default:
             break
         }
-        
         DispatchQueue.main.async {
             self.hideStopActivityIndictor()
             controller.dismiss(animated: true, completion: nil)
