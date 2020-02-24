@@ -29,14 +29,14 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     @IBOutlet var headLineLabel: UILabel! {
         didSet {
             headLineLabel.numberOfLines = 0
-            headLineLabel.textColor = MyColor.blackGrey.value
+            headLineLabel.textColor = ColorPallet.blackGrey.value
         }
     }
     
     @IBOutlet var subHeadLineLabel: UILabel! {
         didSet {
             headLineLabel.numberOfLines = 0
-            headLineLabel.textColor = MyColor.blackGrey.value
+            headLineLabel.textColor = ColorPallet.blackGrey.value
         }
     }
     
@@ -152,9 +152,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         locationManger.delegate = self
         
         //viewbackground
-        borderView.backgroundColor = MyColor.offWhite.value
+        borderView.backgroundColor = ColorPallet.offWhite.value
         
-        backGroundView.backgroundColor = MyColor.powderBlue.value
+        backGroundView.backgroundColor = ColorPallet.powderBlue.value
         backGroundView.alpha = 1
         
         headLineLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 22)
@@ -381,7 +381,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .restricted:
-            
             if disableRestrictedAlertBool == false {
                 disableRestrictedAlertBool = true
                 
@@ -398,7 +397,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             print("\nUsers location is restricted")
             
         case .denied:
-            
             if disableDeniedAlertBool == false {
                 disableDeniedAlertBool = true
                 
@@ -407,11 +405,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
                 let deniedAlertController = AlertController.presentAlertControllerWith(alertTitle: "To beter serve you allow location services", alertMessage: "Go to your device's settings and allow location service", dismissActionTitle: "OK")
                 
                 DispatchQueue.main.async {
-                    
                     self.present(deniedAlertController, animated: true)
                 }
             }
-            
             print("\nUser denied access to use their location\n")
             
         case .authorizedWhenInUse:
@@ -439,9 +435,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     lazy var userNameTextField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 7
-        textField.backgroundColor = MyColor.offWhite.value
+        textField.backgroundColor = ColorPallet.offWhite.value
         textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter Your Name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Your Name", attributes: [NSAttributedString.Key.foregroundColor: ColorPallet.blackGrey.value])
         
         return textField
     }()
@@ -450,9 +446,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     lazy var sponsorsNameTextField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 7
-        textField.backgroundColor = MyColor.offWhite.value
+        textField.backgroundColor = ColorPallet.offWhite.value
         textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Name", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Name", attributes: [NSAttributedString.Key.foregroundColor: ColorPallet.blackGrey.value])
         
         return textField
     }()
@@ -460,9 +456,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     lazy var sponsorsPhoneNumberTextField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 7
-        textField.backgroundColor = MyColor.offWhite.value
+        textField.backgroundColor = ColorPallet.offWhite.value
         textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Phone Number", attributes: [NSAttributedString.Key.foregroundColor: ColorPallet.blackGrey.value])
         
         return textField
     }()
@@ -470,9 +466,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     lazy var sponsorsEmailAddressTextField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 7
-        textField.backgroundColor = MyColor.offWhite.value
+        textField.backgroundColor = ColorPallet.offWhite.value
         textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Email Address", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter Sponsor's Email Address", attributes: [NSAttributedString.Key.foregroundColor: ColorPallet.blackGrey.value])
         
         return textField
     }()
@@ -481,9 +477,9 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         let textField = UITextField()
         textField.layer.cornerRadius = 7
         
-        textField.backgroundColor = MyColor.offWhite.value
+        textField.backgroundColor = ColorPallet.offWhite.value
         textField.textColor = .black
-        textField.attributedPlaceholder = NSAttributedString(string: "If in AA, enter current step", attributes: [NSAttributedString.Key.foregroundColor: MyColor.blackGrey.value])
+        textField.attributedPlaceholder = NSAttributedString(string: "If in AA, enter current step", attributes: [NSAttributedString.Key.foregroundColor: ColorPallet.blackGrey.value])
         
         return textField
     }()
@@ -497,7 +493,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
             contactButton.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: 0),
             contactButton.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 35),
             
-            ])
+        ])
     }
     
     //User Name Constraints
@@ -507,7 +503,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         NSLayoutConstraint.activate([
             userNameTextField.topAnchor.constraint(equalTo: headLineLabel.bottomAnchor, constant: 15),
             userNameTextField.leadingAnchor.constraint(equalTo: contentImageView.leadingAnchor, constant: 0)
-            ])
+        ])
     }
     
     //Sponsors Name Constraint
@@ -518,7 +514,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         NSLayoutConstraint.activate([
             sponsorsNameTextField.topAnchor.constraint(equalTo: userNameTextField.bottomAnchor, constant: 15),
             sponsorsNameTextField.leadingAnchor.constraint(equalTo: userNameTextField.leadingAnchor, constant: 0)
-            ])
+        ])
     }
     
     //Sponsor Telephone Constraints
@@ -528,7 +524,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         NSLayoutConstraint.activate([
             sponsorsPhoneNumberTextField.topAnchor.constraint(equalTo: sponsorsNameTextField.bottomAnchor, constant: 15),
             sponsorsPhoneNumberTextField.leadingAnchor.constraint(equalTo: sponsorsNameTextField.leadingAnchor, constant: 0)
-            ])
+        ])
     }
     
     func sponorsEmailConstraints() {
@@ -537,7 +533,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         NSLayoutConstraint.activate([
             sponsorsEmailAddressTextField.topAnchor.constraint(equalTo: sponsorsPhoneNumberTextField.bottomAnchor, constant: 15),
             sponsorsEmailAddressTextField.leadingAnchor.constraint(equalTo: sponsorsPhoneNumberTextField.leadingAnchor, constant: 0)
-            ])
+        ])
     }
     
     func aaStepConstraint() {
@@ -546,7 +542,7 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         NSLayoutConstraint.activate([
             aaStepTextField.topAnchor.constraint(equalTo: sponsorsEmailAddressTextField.bottomAnchor, constant: 15),
             aaStepTextField.leadingAnchor.constraint(equalTo: sponsorsEmailAddressTextField.leadingAnchor, constant: 0)
-            ])
+        ])
     }
     
     //Actions
@@ -577,12 +573,12 @@ extension WalkThroughContentVC {
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         
         //NOTE: - Uncomment in order for testing purposes
-        print("🚀🚀🌎 didEnterRegion: User Entered location🌎🚀🚀")
+        //print("🌎 didEnterRegion: User Entered location🌎")
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         //NOTE: - Uncomment in order for testing purposes
-        //        print("🌎 didStartMonitoringFor: The monitored regions are: \(manager.monitoredRegions)")
+        //print("🌎 didStartMonitoringFor: The monitored regions are: \(manager.monitoredRegions)")
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -696,8 +692,6 @@ extension WalkThroughContentVC {
 extension WalkThroughContentVC: CNContactPickerDelegate {
     
     @objc private func contactButtonAction(_ sender: UIButton?) {
-        print("Contact Button Tapped")
-        
         loadLoggedUserDefaults()
         
         let picker = CNContactPickerViewController()
@@ -708,7 +702,6 @@ extension WalkThroughContentVC: CNContactPickerDelegate {
     }
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
-        
         for data in contact.phoneNumbers {
             let contactInfo = data.value
             sponsorsPhoneNumberTextField.text = contactInfo.stringValue
@@ -716,12 +709,10 @@ extension WalkThroughContentVC: CNContactPickerDelegate {
         
         let sponsorsName = contact.givenName
         let sponsorsFamilyName = contact.familyName
-        
-        sponsorsNameTextField.text = "\(sponsorsName) \(sponsorsFamilyName)"
-        
         let email = contact.emailAddresses.first
         let emailString = email?.value
         
+        sponsorsNameTextField.text = "\(sponsorsName) \(sponsorsFamilyName)"
         sponsorsEmailAddressTextField.text = "\(emailString ?? "")"
     }
 }
@@ -737,43 +728,21 @@ extension WalkThroughContentVC {
         
         UserController.shared.createNewUserDetailsWith(userName: userName, sponsorName: sponsorName, sponserTelephoneNumber: sponsorsPhoneNumber, sponsorEmail: sponsorsEmail, aaStep: Int(aaStep) ?? 0) { (success) in
             if success {
-                print("\n🙏🏽 Creating new userDetails to CK successful\n")
                 DispatchQueue.main.async {
                     self.title = "Sucessflly Saved Example saveInfoToCloudKit func"
                 }
                 completion(true)
-                
             } else {
-                
                 AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                 let errorMessage = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Information", alertMessage: "Ensure that you are connected to the internet and are signed into your iCloud account", dismissActionTitle: "OK")
                 DispatchQueue.main.async {
                     self.present(errorMessage, animated: true, completion: nil)
                 }
                 // prseent UI Alert expalining error
-                print("💀error with the upating the data")
                 completion(false)
                 return
             }
         }
     }
 }
-
-extension WalkThroughContentVC {
-    
-    func fetchCurrentuser() {
-        UserController.shared.fetchCurrentUser { (success, _) in
-            if success {
-                guard let loggedInUser = UserController.shared.loggedInUser
-                    else { return }
-                print(loggedInUser.userName)
-                print("\(loggedInUser.aaStep)")
-                
-            } else {
-                print("\nUnable to fetch current user\n")
-            }
-        }
-    }
-}
-
 

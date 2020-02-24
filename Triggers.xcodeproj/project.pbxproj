@@ -25,7 +25,7 @@
 		476A26FE21E5198900CB864A /* ButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A26FD21E5198900CB864A /* ButtonController.swift */; };
 		476A270821E5BDE100CB864A /* FontController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476A270721E5BDE100CB864A /* FontController.swift */; };
 		477145E721C953960016FFAB /* ColorGradientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145E621C953960016FFAB /* ColorGradientExtension.swift */; };
-		477145EA21C956CB0016FFAB /* ColorCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145E921C956CB0016FFAB /* ColorCollection.swift */; };
+		477145EA21C956CB0016FFAB /* ColorPallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145E921C956CB0016FFAB /* ColorPallet.swift */; };
 		477145EE21C961700016FFAB /* WalkThroughOnBoarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 477145EC21C961700016FFAB /* WalkThroughOnBoarding.storyboard */; };
 		477145F221C99E640016FFAB /* NotesTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145F121C99E640016FFAB /* NotesTVC.swift */; };
 		477145F421C99FE00016FFAB /* NotesTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477145F321C99FE00016FFAB /* NotesTVCell.swift */; };
@@ -52,7 +52,6 @@
 		47E29E2021C80B0200FA44EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47E29E1E21C80B0200FA44EE /* Main.storyboard */; };
 		47E29E2221C80B0400FA44EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47E29E2121C80B0400FA44EE /* Assets.xcassets */; };
 		47E29E2521C80B0400FA44EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47E29E2321C80B0400FA44EE /* LaunchScreen.storyboard */; };
-		47E29E3821C82A1900FA44EE /* LocationOnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E3721C82A1900FA44EE /* LocationOnboardingVC.swift */; };
 		47E29E4221C82DAA00FA44EE /* LocationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E4121C82DAA00FA44EE /* LocationConstants.swift */; };
 		47E29E4821C8524A00FA44EE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 47E29E4A21C8524A00FA44EE /* Localizable.strings */; };
 		47E29E4F21C852DC00FA44EE /* LocationDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E4E21C852DC00FA44EE /* LocationDetailVC.swift */; };
@@ -102,7 +101,7 @@
 		476A26FD21E5198900CB864A /* ButtonController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonController.swift; sourceTree = "<group>"; };
 		476A270721E5BDE100CB864A /* FontController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontController.swift; sourceTree = "<group>"; };
 		477145E621C953960016FFAB /* ColorGradientExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorGradientExtension.swift; sourceTree = "<group>"; };
-		477145E921C956CB0016FFAB /* ColorCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollection.swift; sourceTree = "<group>"; };
+		477145E921C956CB0016FFAB /* ColorPallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPallet.swift; sourceTree = "<group>"; };
 		477145ED21C961700016FFAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Triggers/UI/StoryBoards/Base.lproj/WalkThroughOnBoarding.storyboard; sourceTree = "<group>"; };
 		477145F121C99E640016FFAB /* NotesTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTVC.swift; sourceTree = "<group>"; };
 		477145F321C99FE00016FFAB /* NotesTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotesTVCell.swift; path = Triggers/ViewControllers/NotesTVCell.swift; sourceTree = SOURCE_ROOT; };
@@ -131,7 +130,6 @@
 		47E29E2121C80B0400FA44EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		47E29E2421C80B0400FA44EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		47E29E2621C80B0400FA44EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		47E29E3721C82A1900FA44EE /* LocationOnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationOnboardingVC.swift; sourceTree = "<group>"; };
 		47E29E3C21C82AA000FA44EE /* Triggers.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Triggers.entitlements; sourceTree = "<group>"; };
 		47E29E4121C82DAA00FA44EE /* LocationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConstants.swift; sourceTree = "<group>"; };
 		47E29E4421C8522000FA44EE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -176,14 +174,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		470408EF21CD5A2300884CFA /* DeletTheseLater */ = {
-			isa = PBXGroup;
-			children = (
-				47E29E3721C82A1900FA44EE /* LocationOnboardingVC.swift */,
-			);
-			path = DeletTheseLater;
-			sourceTree = "<group>";
-		};
 		476A270421E5AE5F00CB864A /* Font */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,8 +189,9 @@
 		477145E821C9566E0016FFAB /* HelperFiles */ = {
 			isa = PBXGroup;
 			children = (
+				471665DF21D441E6000DC53B /* textFieldExtension.swift */,
 				477145E621C953960016FFAB /* ColorGradientExtension.swift */,
-				477145E921C956CB0016FFAB /* ColorCollection.swift */,
+				477145E921C956CB0016FFAB /* ColorPallet.swift */,
 				47C4935D21D55FF7002659EE /* AlertController.swift */,
 				477C945421DA76D6006F7E80 /* NotificationController.swift */,
 				475AD3F521E4398F00023B63 /* DateController.swift */,
@@ -215,7 +206,6 @@
 		477145EB21C960560016FFAB /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				470408EF21CD5A2300884CFA /* DeletTheseLater */,
 				4771460D21C9BB200016FFAB /* WalkThroughPVC.swift */,
 				4771461121C9CFB00016FFAB /* WalkThroughVC.swift */,
 				4771460F21C9C4210016FFAB /* WalkThroughContentVC.swift */,
@@ -284,7 +274,6 @@
 				47E29E3021C8295600FA44EE /* ViewControllers */,
 				47E29E2F21C8294C00FA44EE /* ModelControllers */,
 				47E29E2E21C8293B00FA44EE /* Models */,
-				47E29E3921C82A5600FA44EE /* StringFiles */,
 				47E29E2D21C8293200FA44EE /* Utilities */,
 				47E29E2C21C8292500FA44EE /* Resources */,
 			);
@@ -294,7 +283,7 @@
 		47E29E2C21C8292500FA44EE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8BFCFA4523FE10350000E860 /* Network */,
+				8BFCFA4523FE10350000E860 /* NetReachability */,
 				476A270421E5AE5F00CB864A /* Font */,
 				477145E821C9566E0016FFAB /* HelperFiles */,
 				47E29E1A21C80B0200FA44EE /* AppDelegate.swift */,
@@ -308,9 +297,9 @@
 		47E29E2D21C8293200FA44EE /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				47E29E3921C82A5600FA44EE /* StringFiles */,
 				47E29E5D21C8B1AA00FA44EE /* Networking */,
 				47E29E4021C82D9000FA44EE /* Constants  */,
-				471665DF21D441E6000DC53B /* textFieldExtension.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -421,13 +410,13 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
-		8BFCFA4523FE10350000E860 /* Network */ = {
+		8BFCFA4523FE10350000E860 /* NetReachability */ = {
 			isa = PBXGroup;
 			children = (
 				8BFCFA4623FE10460000E860 /* Reachability.swift */,
 				8BD40A0223FE3CA2002EF517 /* ReachabilityController.swift */,
 			);
-			path = Network;
+			path = NetReachability;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -591,8 +580,7 @@
 				47296FF521CB38D5007B9B1B /* Note.swift in Sources */,
 				47C4935E21D55FF7002659EE /* AlertController.swift in Sources */,
 				8BC67A182402471800622235 /* DateCell.swift in Sources */,
-				477145EA21C956CB0016FFAB /* ColorCollection.swift in Sources */,
-				47E29E3821C82A1900FA44EE /* LocationOnboardingVC.swift in Sources */,
+				477145EA21C956CB0016FFAB /* ColorPallet.swift in Sources */,
 				47A6030121D83A1900699EDF /* FolderController.swift in Sources */,
 				47E29E5C21C89C7400FA44EE /* UserController.swift in Sources */,
 				470408F121CD743E00884CFA /* LocationTVC.swift in Sources */,

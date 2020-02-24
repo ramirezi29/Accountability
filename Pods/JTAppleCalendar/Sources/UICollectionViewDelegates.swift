@@ -1,7 +1,7 @@
 //
-//  JTACCollectionViewDelegates.swift
+//  UICollectionViewDelegates.swift
 //
-//  Copyright (c) 2016-2020 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
+//  Copyright (c) 2016-2017 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,7 @@
 //  THE SOFTWARE.
 //
 
-import UIKit
-
-extension JTACMonthView: UICollectionViewDelegate, UICollectionViewDataSource {
+extension JTAppleCalendarView: UICollectionViewDelegate, UICollectionViewDataSource {
     /// Asks your data source object to provide a
     /// supplementary view to display in the collection view.
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -50,38 +48,14 @@ extension JTACMonthView: UICollectionViewDelegate, UICollectionViewDataSource {
         } else {
             cellState = cellStateFromIndexPath(indexPath)
         }
-        calendarDelegate!.calendar(self, willDisplay: cell as! JTACDayCell, forItemAt: cellState.date, cellState: cellState, indexPath: indexPath)
-    }
-    
-    /// Tells the delegate that the item at the specified index path was highlighted.
-    public func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        guard
-            let delegate = calendarDelegate,
-            let infoOfDate = dateOwnerInfoFromPath(indexPath) else {
-                return
-        }
-        let cell = collectionView.cellForItem(at: indexPath) as? JTACDayCell
-        let cellState = cellStateFromIndexPath(indexPath, withDateInfo: infoOfDate, selectionType: .userInitiated)
-        delegate.calendar(self, didHighlightDate: cellState.date, cell: cell, cellState: cellState, indexPath: indexPath)
-    }
-    
-    /// Tells the delegate that the item at the specified index path was unhighlighted.
-    public func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        guard
-            let delegate = calendarDelegate,
-            let infoOfDate = dateOwnerInfoFromPath(indexPath) else {
-                return
-        }
-        let cell = collectionView.cellForItem(at: indexPath) as? JTACDayCell
-        let cellState = cellStateFromIndexPath(indexPath, withDateInfo: infoOfDate, selectionType: .userInitiated)
-        delegate.calendar(self, didUnhighlightDate: cellState.date, cell: cell, cellState: cellState, indexPath: indexPath)
+        calendarDelegate!.calendar(self, willDisplay: cell as! JTAppleCell, forItemAt: cellState.date, cellState: cellState, indexPath: indexPath)
     }
     
     /// Asks your data source object for the cell that corresponds
     /// to the specified item in the collection view.
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let delegate = calendarDelegate else {
-            print("Your delegate does not conform to JTAppleCalendarMonthViewDelegate")
+            print("Your delegate does not conform to JTAppleCalendarViewDelegate")
             assert(false)
             return UICollectionViewCell()
         }
@@ -151,9 +125,9 @@ extension JTACMonthView: UICollectionViewDelegate, UICollectionViewDataSource {
                 return
         }
         // index paths to be reloaded should be index to the left and right of the selected index
-        var localPathsToReload: Set<IndexPath> = allowsRangedSelection ? validForwardAndBackwordSelectedIndexes(forIndexPath: indexPath, restrictToSection: false).set : []
+        var localPathsToReload: Set<IndexPath> = isRangeSelectionUsed ? validForwardAndBackwordSelectedIndexes(forIndexPath: indexPath, restrictToSection: false).set : []
         
-        let cell = collectionView.cellForItem(at: indexPath) as? JTACDayCell
+        let cell = collectionView.cellForItem(at: indexPath) as? JTAppleCell
         if !shouldTriggerSelectionDelegate || cell == nil {
             pathsToReload.insert(indexPath)
             localPathsToReload.insert(indexPath)
@@ -187,17 +161,15 @@ extension JTACMonthView: UICollectionViewDelegate, UICollectionViewDataSource {
         
         if let counterPartIndexPath = cleanupAction(indexPath, infoOfDate.date, cellState.dateBelongsTo) {
             localPathsToReload.insert(counterPartIndexPath)
-            let counterPathsToReload = allowsRangedSelection ? validForwardAndBackwordSelectedIndexes(forIndexPath: counterPartIndexPath, restrictToSection: false).set : []
+            let counterPathsToReload = isRangeSelectionUsed ? validForwardAndBackwordSelectedIndexes(forIndexPath: counterPartIndexPath, restrictToSection: false).set : []
             localPathsToReload.formUnion(counterPathsToReload)
         }
         
-        setMinMaxDate()
-        
         if shouldTriggerSelectionDelegate {
             if action == .didSelect {
-                delegate.calendar(self, didSelectDate: infoOfDate.date, cell: cell, cellState: cellState, indexPath: indexPath)
+                delegate.calendar(self, didSelectDate: infoOfDate.date, cell: cell, cellState: cellState)
             } else {
-                delegate.calendar(self, didDeselectDate: infoOfDate.date, cell: cell, cellState: cellState, indexPath: indexPath)
+                delegate.calendar(self, didDeselectDate: infoOfDate.date, cell: cell, cellState: cellState)
             }
         }
         
@@ -206,34 +178,19 @@ extension JTACMonthView: UICollectionViewDelegate, UICollectionViewDataSource {
         }
     }
     
-    func setMinMaxDate() {
-        let selectedCellData = self.selectedCellData
-        let sortedKeys = selectedCellData.keys.sorted()
-        guard
-            let firstIndex = sortedKeys.first,
-            let lastIndex = sortedKeys.last else {
-                selectedCells.first = nil
-                selectedCells.last = nil
-                return
-        }
-        let date = selectedCellData[firstIndex]!.date
-        selectedCells.first = (date, firstIndex)
-        selectedCells.last = (date, lastIndex)
-    }
-    
     func handleShouldSelectionValueChange(_ collectionView: UICollectionView, action: ShouldSelectionAction, indexPath: IndexPath, selectionType: SelectionType) -> Bool {
         if let
             delegate = calendarDelegate,
             let infoOfDate = dateOwnerInfoFromPath(indexPath) {
-            let cell = collectionView.cellForItem(at: indexPath) as? JTACDayCell
+            let cell = collectionView.cellForItem(at: indexPath) as? JTAppleCell
             let cellState = cellStateFromIndexPath(indexPath,
                                                    withDateInfo: infoOfDate,
                                                    selectionType: selectionType)
             switch action {
             case .shouldSelect:
-                return delegate.calendar(self, shouldSelectDate: infoOfDate.date, cell: cell, cellState: cellState, indexPath: indexPath)
+                return delegate.calendar(self, shouldSelectDate: infoOfDate.date, cell: cell, cellState: cellState)
             case .shouldDeselect:
-                return delegate.calendar(self, shouldDeselectDate: infoOfDate.date, cell: cell, cellState: cellState, indexPath: indexPath)
+                return delegate.calendar(self, shouldDeselectDate: infoOfDate.date, cell: cell, cellState: cellState)
             }
         }
         return false

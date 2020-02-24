@@ -27,7 +27,6 @@ class ReachabilityController {
                 self.setOfflineView(true)
             }
         }
-        
         do {
             try reachability?.startNotifier()
         } catch {
@@ -37,9 +36,9 @@ class ReachabilityController {
     
     func setOfflineView(_ offline: Bool) {
         if offline {
-            print("🚠🚠🚠 User is off line 🚠🚠🚠 🚠")
+            print("The user is off line")
         } else {
-            print("🥵The user is online 🥵")
+            print("The user is online")
         }
     }
 }

@@ -1,7 +1,7 @@
 //
-//  JTACInteractionMonthFunctions.swift
+//  UserInteractionFunctions.swift
 //
-//  Copyright (c) 2016-2020 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
+//  Copyright (c) 2016-2017 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,8 @@
 //  THE SOFTWARE.
 //
 
-import UIKit
 
-extension JTACMonthView {
+extension JTAppleCalendarView {
     
     /// Returns the cellStatus of a date that is visible on the screen.
     /// If the row and column for the date cannot be found,
@@ -57,7 +56,7 @@ extension JTACMonthView {
         // Jt101 change this function to also return
         // information like the dateInfoFromPath function
         if paths.isEmpty { return nil }
-        let cell = cellForItem(at: paths[0]) as? JTACDayCell
+        let cell = cellForItem(at: paths[0]) as? JTAppleCell
         let stateOfCell = cellStateFromIndexPath(paths[0], cell: cell)
         return stateOfCell
     }
@@ -105,7 +104,7 @@ extension JTACMonthView {
     ///     - CellState: The state of the found cell
     public func cellStatus(at point: CGPoint) -> CellState? {
         if let indexPath = indexPathForItem(at: point) {
-            let cell = cellForItem(at: indexPath) as? JTACDayCell
+            let cell = cellForItem(at: indexPath) as? JTAppleCell
             return cellStateFromIndexPath(indexPath, cell: cell)
         }
         return nil
@@ -113,9 +112,6 @@ extension JTACMonthView {
     
     /// Deselect all selected dates
     /// - Parameter: this funciton triggers a delegate call by default. Set this to false if you do not want this
-    /// - Parameter keepDeselectionIfMultiSelectionAllowed:
-    ///    if (in range selection) there are 4 dates. -> selected, unselected, selected, selected. (S | U | S | S)
-    ///    Deselecting those 4 dates again would give U | S | U | U. With KeepDeselection, this becomes U | U | U | U
     public func deselectAllDates(triggerSelectionDelegate: Bool = true) {
         deselect(dates: selectedDates, triggerSelectionDelegate: triggerSelectionDelegate)
     }
@@ -123,16 +119,9 @@ extension JTACMonthView {
     /// Deselect dates
     /// - Parameter: Dates - The dates to deselect
     /// - Parameter: triggerSelectionDelegate - this funciton triggers a delegate call by default. Set this to false if you do not want this
-    /// - Parameter keepDeselectionIfMultiSelectionAllowed:
-    ///    if (in range selection) there are 4 dates. -> selected, unselected, selected, selected. (S | U | S | S)
-    ///    Deselecting those 4 dates again would give U | S | U | U. With KeepDeselection, this becomes U | U | U | U
-    public func deselect(dates: [Date], triggerSelectionDelegate: Bool = true, keepDeselectionIfMultiSelectionAllowed: Bool = false) {
+    public func deselect(dates: [Date], triggerSelectionDelegate: Bool = true) {
         if allowsMultipleSelection {
-            var filteredDates: [Date] = dates
-            if keepDeselectionIfMultiSelectionAllowed {
-                filteredDates = dates.filter { self.selectedDatesSet.contains(calendar.startOfDay(for: $0)) }
-            }
-            selectDates(filteredDates, triggerSelectionDelegate: triggerSelectionDelegate, keepSelectionIfMultiSelectionAllowed: false)
+            selectDates(dates, triggerSelectionDelegate: triggerSelectionDelegate)
         } else {
             let paths = pathsFromDates(dates)
             guard !paths.isEmpty else { return }
@@ -145,7 +134,7 @@ extension JTACMonthView {
     public func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator, anchorDate: Date?) {
         DispatchQueue.main.async { [weak self] in
             guard let _self = self else { return }
-            _self.reloadData(withAnchor: anchorDate)
+            _self.reloadData(withanchor: anchorDate)
         }
     }
     
@@ -180,12 +169,12 @@ extension JTACMonthView {
     }
     
     /// Dequeues re-usable calendar cells
-    public func dequeueReusableJTAppleSupplementaryView(withReuseIdentifier identifier: String, for indexPath: IndexPath) -> JTACMonthReusableView {
+    public func dequeueReusableJTAppleSupplementaryView(withReuseIdentifier identifier: String, for indexPath: IndexPath) -> JTAppleCollectionReusableView {
         guard let headerView = dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                 withReuseIdentifier: identifier,
-                                                                for: indexPath) as? JTACMonthReusableView else {
+                                                                for: indexPath) as? JTAppleCollectionReusableView else {
                                                                     developerError(string: "Error initializing Header View with identifier: '\(identifier)'")
-                                                                    return JTACMonthReusableView()
+                                                                    return JTAppleCollectionReusableView()
         }
         return headerView
     }
@@ -199,10 +188,10 @@ extension JTACMonthView {
         calendarViewLayout.register(className, forDecorationViewOfKind: decorationViewID)
     }
     /// Dequeues a reuable calendar cell
-    public func dequeueReusableJTAppleCell(withReuseIdentifier identifier: String, for indexPath: IndexPath) -> JTACDayCell {
-        guard let cell = dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? JTACDayCell else {
+    public func dequeueReusableJTAppleCell(withReuseIdentifier identifier: String, for indexPath: IndexPath) -> JTAppleCell {
+        guard let cell = dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? JTAppleCell else {
             developerError(string: "Error initializing Cell View with identifier: '\(identifier)'")
-            return JTACDayCell()
+            return JTAppleCell()
         }
         return cell
     }
@@ -214,7 +203,7 @@ extension JTACMonthView {
     /// - Parameter animation: Scroll is animated if this is set to true
     /// - Parameter completionHandler: This closure will run after
     ///                                the reload is complete
-    public func reloadData(withAnchor date: Date? = nil, completionHandler: (() -> Void)? = nil) {
+    public func reloadData(withanchor date: Date? = nil, completionHandler: (() -> Void)? = nil) {
         if isReloadDataInProgress { return }
         if isScrollInProgress {
             scrollDelayedExecutionClosure.append {[unowned self] in
@@ -293,16 +282,11 @@ extension JTACMonthView {
     }
     
     /// Deselect all selected dates within a range
-    /// - Parameter: start - Start of date range to deselect
-    /// - Parameter: end of date range to deselect
-    /// - Parameter keepDeselectionIfMultiSelectionAllowed:
-    ///    if (in range selection) there are 4 dates. -> selected, unselected, selected, selected. (S | U | S | S)
-    ///    Deselecting those 4 dates again would give U | S | U | U. With KeepDeselection, this becomes U | U | U | U
-    public func deselectDates(from start: Date, to end: Date? = nil, triggerSelectionDelegate: Bool = true, keepDeselectionIfMultiSelectionAllowed: Bool = false) {
+    public func deselectDates(from start: Date, to end: Date? = nil, triggerSelectionDelegate: Bool = true) {
         if selectedDates.isEmpty { return }
         let end = end ?? selectedDates.last!
         let dates = selectedDates.filter { $0 >= start && $0 <= end }
-        deselect(dates: dates, triggerSelectionDelegate: triggerSelectionDelegate, keepDeselectionIfMultiSelectionAllowed: keepDeselectionIfMultiSelectionAllowed)
+        deselect(dates: dates, triggerSelectionDelegate: triggerSelectionDelegate)
         
     }
     

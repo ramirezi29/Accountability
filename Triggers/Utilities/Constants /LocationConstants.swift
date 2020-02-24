@@ -24,5 +24,6 @@ struct LocationConstants  {
     static let textSponsorActionKey = "textSponsor"
     static let notifLocationCatergoryKey = "locationCrossedCategory"
     static let resourceKey = "resourceKey"
-    
+    static let bannerResouceName = "myTriggersBannerFinalLogo"
+    static let pngKey = "png"
 }

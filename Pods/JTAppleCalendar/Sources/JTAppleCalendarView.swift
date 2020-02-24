@@ -1,7 +1,7 @@
 //
-//  JTACMonthView.swift
+//  JTAppleCalendarView.swift
 //
-//  Copyright (c) 2016-2020 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
+//  Copyright (c) 2016-2017 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,6 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
-import UIKit
-
 let maxNumberOfDaysInWeek = 7 // Should not be changed
 let maxNumberOfRowsPerMonth = 6 // Should not be changed
 let developerErrorMessage = "There was an error in this code section. Please contact the developer on GitHub"
@@ -32,11 +29,9 @@ let decorationViewID = "Are you ready for the life after this one?"
 let errorDelta: CGFloat = 0.0000001
 
 
-/// An instance of JTAppleCalendarMonthView (or simply, a calendar view) is a
+/// An instance of JTAppleCalendarView (or simply, a calendar view) is a
 /// means for displaying and interacting with a gridstyle layout of date-cells
-@available(*, unavailable, renamed: "JTACMonthView")
-open class JTAppleCalendarView: UICollectionView {}
-open class JTACMonthView: UICollectionView {
+open class JTAppleCalendarView: UICollectionView {
     
     /// Configures the size of your date cells
     @IBInspectable open var cellSize: CGFloat = 0 {
@@ -45,9 +40,6 @@ open class JTACMonthView: UICollectionView {
             calendarViewLayout.invalidateLayout()
         }
     }
-    
-    /// Stores the first and last selected date cel
-    open var selectedCells: (first: (date: Date, indexPath: IndexPath)?, last:  (date: Date, indexPath: IndexPath)?)
     
     /// The scroll direction of the sections in JTAppleCalendar.
     open var scrollDirection: UICollectionView.ScrollDirection = .horizontal
@@ -63,19 +55,15 @@ open class JTACMonthView: UICollectionView {
     /// then whenever you click on a datecell, you may notice a very fast
     /// refreshing of the date-cells both left and right of the cell you
     /// just selected.
-    @available(*, unavailable, renamed: "allowsRangedSelection")
     open var isRangeSelectionUsed: Bool = false
-    open var allowsRangedSelection: Bool = false
-  
-    open var rangeSelectionMode: RangeSelectionMode = .segmented
-  
+    
     /// The object that acts as the delegate of the calendar view.
-    weak open var calendarDelegate: JTACMonthViewDelegate? {
+    weak open var calendarDelegate: JTAppleCalendarViewDelegate? {
         didSet { lastMonthSize = sizesForMonthSection() }
     }
     
     /// The object that acts as the data source of the calendar view.
-    weak open var calendarDataSource: JTACMonthViewDataSource? {
+    weak open var calendarDataSource: JTAppleCalendarViewDataSource? {
         didSet { setupMonthInfoAndMap() } // Refetch the data source for a data source change
     }
     
@@ -90,25 +78,25 @@ open class JTACMonthView: UICollectionView {
     var generalDelayedExecutionClosure: [(() -> Void)] = []
     var scrollDelayedExecutionClosure: [(() -> Void)]  = []
     
-    let dateGenerator = JTAppleDateConfigGenerator.shared
+    let dateGenerator = JTAppleDateConfigGenerator()
     
     /// Implemented by subclasses to initialize a new object (the receiver) immediately after memory for it has been allocated.
     public init() {
         super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        setupNewLayout(from: collectionViewLayout as! JTACMonthLayoutProtocol)
+        setupNewLayout(from: collectionViewLayout as! JTAppleCalendarLayoutProtocol)
     }
     
     /// Initializes and returns a newly allocated collection view object with the specified frame and layout.
-    @available(*, unavailable, message: "Please use JTAppleCalendarMonthView() instead. It manages its own layout.")
+    @available(*, unavailable, message: "Please use JTAppleCalendarView() instead. It manages its own layout.")
     public override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: UICollectionViewFlowLayout())
-        setupNewLayout(from: collectionViewLayout as! JTACMonthLayoutProtocol)
+        setupNewLayout(from: collectionViewLayout as! JTAppleCalendarLayoutProtocol)
     }
     
     /// Initializes using decoder object
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setupNewLayout(from: collectionViewLayout as! JTACMonthLayoutProtocol)
+        setupNewLayout(from: collectionViewLayout as! JTAppleCalendarLayoutProtocol)
     }
     
     // Configuration parameters from the dataSource
@@ -161,28 +149,9 @@ open class JTACMonthView: UICollectionView {
         return retval
     }
     
-    var _sectionInset: UIEdgeInsets = .zero
-    open var sectionInset: UIEdgeInsets {
-        set {
-            _sectionInset.top =  newValue.top < 0 ? 0 : newValue.top
-            _sectionInset.bottom =  newValue.bottom < 0 ? 0 : newValue.bottom
-            _sectionInset.left =  newValue.left < 0 ? 0 : newValue.left
-            _sectionInset.right =  newValue.right < 0 ? 0 : newValue.right
-        }
-        get { return _sectionInset }
-    }
-    
-    var _minimumInteritemSpacing: CGFloat = 0
-    open var minimumInteritemSpacing: CGFloat {
-        set { _minimumInteritemSpacing = newValue < 0 ? 0 : newValue }
-        get { return _minimumInteritemSpacing }
-    }
-
-    var _minimumLineSpacing: CGFloat = 0
-    open var minimumLineSpacing: CGFloat {
-        set { _minimumLineSpacing = newValue < 0 ? 0 : newValue }
-        get { return _minimumLineSpacing }
-    }
+    open var sectionInset: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    open var minimumInteritemSpacing: CGFloat = 0
+    open var minimumLineSpacing: CGFloat = 0
     
     lazy var theData: CalendarData = {
         return self.setupMonthInfoDataForStartAndEndDate()
@@ -219,7 +188,8 @@ open class JTACMonthView: UICollectionView {
     }
 }
 
-extension JTACMonthView {
+@available(iOS 9.0, *)
+extension JTAppleCalendarView {
     /// A semantic description of the view’s contents, used to determine whether the view should be flipped when switching between left-to-right and right-to-left layouts.
     open override var semanticContentAttribute: UISemanticContentAttribute {
         didSet {

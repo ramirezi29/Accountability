@@ -64,7 +64,6 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the data source to itself
         dataSource = self
         delegate = self
         
@@ -121,7 +120,6 @@ extension WalkThroughPVC {
         if completed {
             if let contentViewController = pageViewController.viewControllers?.first as? WalkThroughContentVC {
                 currentIndex = contentViewController.index
-                
                 walkthroughDelegate?.didUpdatePageIndex(currentIndex: currentIndex)
             }
         }

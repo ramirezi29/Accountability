@@ -12,9 +12,7 @@ import MessageUI
 import JTAppleCalendar
 
 // NOTE: The Calendar in this app will soon be replaced by a cocoapod
-class CalendarVC: UIViewController, UINavigationBarDelegate, JTACMonthViewDataSource, JTACMonthViewDelegate {
-    
-    
+class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarViewDelegate, JTAppleCalendarViewDataSource {
     
     // MARK: - IBoutlets
     @IBOutlet weak var triggersLabel: UILabel!
@@ -34,22 +32,18 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTACMonthViewDataSo
     @IBOutlet weak var triggersLogoView: UIImageView!
     @IBOutlet weak var checkInBottomButton: UIButton!
     @IBOutlet weak var soberietyUserInfoLRStack: UIStackView!
-    
+
     @IBOutlet weak var firstDayLabel: UILabel!
-    
     @IBOutlet weak var secondDayLabel: UILabel!
     @IBOutlet weak var thirdDayLabel: UILabel!
     @IBOutlet weak var fourthDayLabel: UILabel!
     @IBOutlet weak var fifthDayLabel: UILabel!
     @IBOutlet weak var sixthDayLabel: UILabel!
-    
     @IBOutlet weak var seventhDayLabel: UILabel!
-    
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var rightArrow: UIButton!
     @IBOutlet weak var leftArrow: UIButton!
-    
-    @IBOutlet weak var calendarView: JTACMonthView!
+    @IBOutlet weak var calendarView: JTAppleCalendarView!
     
     
     private let localeUSA = "en_US"
@@ -85,7 +79,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTACMonthViewDataSo
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
         
-        triggersLabel.textColor = MyColor.offWhite.value
+        triggersLabel.textColor = ColorPallet.offWhite.value
         triggersLabel.text = "My Triggers"
         triggersLogoView.image = UIImage(named: "triggersLogoIcon")
         checkInBottomButton.isUserInteractionEnabled = true
@@ -201,19 +195,19 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTACMonthViewDataSo
         numberOfDaysSoberLabel.font = MyFont.SFDisMed.withSize(size: 17)
         numberOfDaysSoberValueLabel.font = MyFont.SFBold.withSize(size: 24)
         
-        soberSinceLabel.textColor = MyColor.offWhite.value
-        soberSinceYearValueLabel.textColor = MyColor.offWhite.value
-        soberSinceDateValueLabel.textColor = MyColor.offWhite.value
-        soberSinceWeekDayLabel.textColor = MyColor.offWhite.value
+        soberSinceLabel.textColor = ColorPallet.offWhite.value
+        soberSinceYearValueLabel.textColor = ColorPallet.offWhite.value
+        soberSinceDateValueLabel.textColor = ColorPallet.offWhite.value
+        soberSinceWeekDayLabel.textColor = ColorPallet.offWhite.value
         
         //Right side date related to Counter of days sober
-        numberOfDaysSoberLabel.textColor = MyColor.offWhite.value
-        numberOfDaysSoberValueLabel.textColor = MyColor.offWhite.value
+        numberOfDaysSoberLabel.textColor = ColorPallet.offWhite.value
+        numberOfDaysSoberValueLabel.textColor = ColorPallet.offWhite.value
     }
     
     // MARK: - Calendar
     
-    func configureCalendar(_ calendar: JTACMonthView) -> ConfigurationParameters {
+    func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
         
         let endDate = currentCalendar.date(byAdding: .year, value: 6, to: todaysDate) ?? todaysDate
         
@@ -222,9 +216,9 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTACMonthViewDataSo
         return calendarParameters
     }
     
-    func calendar(_ calendar: JTACMonthView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTACDayCell {
+    func calendar(_ calendar: JTAppleCalendarView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTAppleCell {
         guard let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: KeyConstants.calendarDateCell, for: indexPath) as? DateCell else {
-            return JTACDayCell()
+            return JTAppleCell()
         }
         
         let currentCalendar = Calendar.current
@@ -244,24 +238,24 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTACMonthViewDataSo
         calendarView.viewWillTransition(to: .zero, with: coordinator, anchorDate: visibleDates.monthDates.first?.date)
     }
     
-    func configureCell(view: JTACDayCell?, cellState: CellState, date: Date) {
+    func configureCell(view: JTAppleCell?, cellState: CellState, date: Date) {
         guard let cell = view as? DateCell  else { return }
         cell.cellDateLabel.text = cellState.text
-        cell.layer.borderColor = UIColor.white.cgColor
-        cell.layer.borderWidth = 0.5
-        
+        calendarView.backgroundColor = .clear
+        calendarView.backgroundView?.backgroundColor = .clear
         handleCellConfiguration(cell: cell, cellState: cellState, date: date)
     }
     
     // MARK: - Handle Cell Properties
     
-    func handleCellConfiguration(cell: JTACDayCell?, cellState: CellState, date: Date) {
+    func handleCellConfiguration(cell: JTAppleCell?, cellState: CellState, date: Date) {
         
         handleCellTextColor(view: cell, cellState: cellState, date: date)
         handleCellSelection(view: cell, cellState: cellState, date: date)
     }
     
-    func handleCellTextColor(view: JTACDayCell?, cellState: CellState, date: Date) {
+    //✅ Cell Color
+    func handleCellTextColor(view: JTAppleCell?, cellState: CellState, date: Date) {
         guard let cell = view as? DateCell else { return }
         
         // Text color of the date cell
@@ -279,54 +273,60 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTACMonthViewDataSo
         }
     }
     
-    func handleCellSelection(view: JTACDayCell?, cellState: CellState, date: Date) {
+    //✅ Cell Selection
+    func handleCellSelection(view: JTAppleCell?, cellState: CellState, date: Date) {
+        
         guard let cell = view as? DateCell else { return }
+        
+        
         dateFormatter.dateStyle = .short
         switch cellState.isSelected {
         case true:
-            cell.backgroundColor = MyColor.annotationOrange.value
-            preSelectedCell.backgroundColor = willTurnDarkGray ? .blue : .yellow
+            cell.backgroundColor = ColorPallet.annotationOrange.value
+            preSelectedCell.backgroundColor = willTurnDarkGray ? .clear : .clear
         case false:
             switch date.isSameDay(as: selectedDate) {
             case true:
-                cell.backgroundColor = MyColor.annotationOrange.value
+                cell.backgroundColor = ColorPallet.annotationOrange.value
                 preSelectedCell = cell
                 willTurnDarkGray = date.isSameDay(as: todaysDate) ? false : true
             case false:
-                cell.backgroundColor = .darkGray
+                cell.backgroundColor = .clear
             }
         }
     }
     
-    func calendar(_ calendar: JTACMonthView, willDisplay cell: JTACDayCell, forItemAt date: Date, cellState: CellState, indexPath: IndexPath) {
+    
+    func calendar(_ calendar: JTAppleCalendarView, willDisplay cell: JTAppleCell, forItemAt date: Date, cellState: CellState, indexPath: IndexPath) {
         
         configureCell(view: cell, cellState: cellState, date: date)
         if date.isSameDay(as: todaysDate) {
-            cell.backgroundColor = date.isSameDay(as: selectedDate) ? MyColor.annotationOrange.value : .gray
+            cell.backgroundColor = date.isSameDay(as: selectedDate) ? ColorPallet.annotationOrange.value : .clear
         }
     }
     
     // MARK: - Calendar Selection Properites
     
-    func calendar(_ calendar: JTACMonthView, shouldSelectDate date: Date, cell: JTACDayCell?, cellState: CellState) -> Bool {
+    func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) -> Bool {
         
         guard let yesterday = currentCalendar.date(byAdding: .day, value: -1, to: todaysDate) else { return false }
         if  date < yesterday || cellState.dateBelongsTo != .thisMonth { return false }
         return true
     }
     
-    func calendar(_ calendar: JTACMonthView, didSelectDate date: Date, cell: JTACDayCell?, cellState: CellState) {
+    func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
         handleCellConfiguration(cell: cell, cellState: cellState, date: date)
         selectedDate = date
+        
+        print(selectedDate.mmddyy)
     }
     
-    func calendar(_ calendar: JTACMonthView, didDeselectDate date: Date, cell: JTACDayCell?, cellState: CellState) {
+    func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
         handleCellConfiguration(cell: cell, cellState: cellState, date: date)
-        cell?.backgroundColor = .darkGray
     }
     
     // Month Label bit of code
-    func calendar(_ calendar: JTACMonthView, didScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
+    func calendar(_ calendar: JTAppleCalendarView, didScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
         DispatchQueue.main.async {
             self.setupViewsOfCalendar(from: visibleDates)
         }
@@ -344,7 +344,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTACMonthViewDataSo
         monthLabel.text = monthName + " " + String(year)
     }
     
-    func calendar(_ calendar: JTACMonthView, willScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
+    func calendar(_ calendar: JTAppleCalendarView, willScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
         DispatchQueue.main.async {
             self.animateArrows()
             self.setupViewsOfCalendar(from: visibleDates)
@@ -371,31 +371,6 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTACMonthViewDataSo
     }
     
     func setUPCalendar() {
-        dayLabels.append(firstDayLabel)
-        dayLabels.append(secondDayLabel)
-        dayLabels.append(thirdDayLabel)
-        dayLabels.append(fourthDayLabel)
-        dayLabels.append(fifthDayLabel)
-        dayLabels.append(sixthDayLabel)
-        dayLabels.append(seventhDayLabel)
-        
-        directionArrows.append(leftArrow)
-        directionArrows.append(rightArrow)
-        
-        for label in dayLabels {
-            label.layer.borderColor = UIColor.white.cgColor
-            label.layer.borderWidth = 0.5
-        }
-        
-        for arrow in directionArrows {
-            arrow.layer.borderColor = UIColor.white.cgColor
-            arrow.layer.borderWidth = 0.5
-        }
-        
-        monthLabel.layer.borderColor = UIColor.white.cgColor
-        monthLabel.layer.borderWidth = 0.5
-        //        monthLabel.backgroundColor = .darkGray
-        
         // Populates the month label with the current month, when the VC is first loaded
         self.calendarView.visibleDates {[unowned self] (visibleDates: DateSegmentInfo) in
             self.setupViewsOfCalendar(from: visibleDates)
@@ -406,7 +381,6 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTACMonthViewDataSo
         calendarView.allowsMultipleSelection = false
         calendarView.scrollingMode = .stopAtEachSection
         calendarView.showsVerticalScrollIndicator = false
-        
         // dayLabelArray contains the 7 values. The order of the string values can be re-arranged by changing the order in the dayLabelArray array syntax
         firstDayLabel.text = dayLabelArray[0]
         secondDayLabel.text = dayLabelArray[1]

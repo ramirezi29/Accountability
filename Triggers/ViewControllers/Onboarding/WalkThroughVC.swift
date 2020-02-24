@@ -24,8 +24,8 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         didSet {
             nextButton.layer.cornerRadius = 10.0
             nextButton.layer.masksToBounds = true
-            nextButton.backgroundColor = MyColor.annotationOrange.value
-            nextButton.setTitleColor(MyColor.offWhite.value, for: .normal)
+            nextButton.backgroundColor = ColorPallet.annotationOrange.value
+            nextButton.setTitleColor(ColorPallet.offWhite.value, for: .normal)
         }
     }
     
@@ -52,37 +52,27 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Background
-        tintedBackgroundView.backgroundColor = MyColor.powderBlue.value
-        
-        //Button
+        tintedBackgroundView.backgroundColor = ColorPallet.powderBlue.value
         nextButton.alpha = 0
         
         //Get the users info in order to check if an account already exists
-        //⛺️  //⛺️
         loadUserDefaults()
         
         //In order to not present the onboarding screen
-        //⛺️  //⛺️  //⛺️
         if disableOnBardingBool == true  {
             presentMainView()
-            
             return
         }
         
-        //View
-        buttomViewOutlet.backgroundColor = MyColor.offWhite.value
-        bossViewOutlet.backgroundColor = MyColor.powderBlue.value
+        buttomViewOutlet.backgroundColor = ColorPallet.offWhite.value
+        bossViewOutlet.backgroundColor = ColorPallet.powderBlue.value
         
-        // index
         let index = walkThroughPVC?.currentIndex
-        print("\nThe View just loaded and you are on index: \(String(describing: index))\n")
         
-        // Next button
         nextButton.isHidden = false
         
         // Page Control
-        pageControl.currentPageIndicatorTintColor = MyColor.hardBlue.value
+        pageControl.currentPageIndicatorTintColor = ColorPallet.hardBlue.value
         pageControl.pageIndicatorTintColor = UIColor.gray
         pageControl.backgroundColor = UIColor.clear
         pageControl.numberOfPages = 9
@@ -98,15 +88,12 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         return true
     }
     
-    //⛺️  //⛺️  //⛺️
     func loadUserDefaults(){
         disableOnBardingBool = UserDefaults.standard.bool(forKey: disableOnboardingKey)
     }
     
     func updateUI() {
         if let index = walkThroughPVC?.currentIndex {
-            print("\(String(describing: walkThroughPVC?.currentIndex))")
-            
             switch index {
             case 4:
                 print("case 4 was called")
@@ -121,28 +108,17 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                     
                     self.nextButton.alpha = 1.0
                 }, completion: nil)
-                
-                print("Case 5")
-                
             case 7:
                 self.nextButton.alpha = 0
-                print("case 7")
-                
             case 8:
                 nextButton.setTitle("GET STARTED", for: .normal)
-                
-                print("the Walk Through PVC hit the last case which is 6 and the index is \(index)")
                 nextButton.isEnabled = true
                 nextButton.isHidden = false
                 
                 UIView.animate(withDuration: 1.0, delay: 0.4, options: [.curveEaseOut], animations: {
-                    
                     self.nextButton.alpha = 1.0
                 }, completion: nil)
-                
-                
             default: break
-                
             }
             pageControl.currentPage = index
         }
@@ -150,17 +126,13 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     
     func presentMainView() {
         let calendarStoryboard = UIStoryboard(name: StoryboardConstants.mainStoryboard, bundle: nil).instantiateInitialViewController()!
-        
         UIApplication.shared.keyWindow?.rootViewController = calendarStoryboard
-        
         present(calendarStoryboard, animated: true, completion: nil)
-        
     }
     
     func didUpdatePageIndex(currentIndex: Int) {
         let contentVC = walkThroughPVC!.currentVC!
         contentVC.delegate = self
-        
         updateUI()
     }
     
@@ -173,9 +145,7 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     }
     
     @IBAction func nextButtonTapped(_ sender: Any) {
-        
         if let index = walkThroughPVC?.currentIndex {
-            
             switch index {
             case 0...5:
                 walkThroughPVC?.forwardPage()
@@ -199,24 +169,17 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
                         }
                     })
                 }
-                
                 UserDefaults.standard.set(true, forKey: UserDefaultConstants.isOnboardedKey)
-                
                 presentMainView()
-                
             default: break
-                
             }
-            print("\n♦️ you are on case number: \(String(describing: walkThroughPVC?.currentIndex))")
         }
         updateUI()
     }
 }
 
 extension WalkThroughVC : WalkThroughContentVCDelegate {
-    
     func validUserNameEntered(username: String, isHidden: Bool) {
-        
         switch isHidden {
         case true:
             nextButton.isEnabled = true
@@ -225,14 +188,11 @@ extension WalkThroughVC : WalkThroughContentVCDelegate {
             UIView.animate(withDuration: 0.8, delay: 0.1, options: [], animations: {
                 self.nextButton.alpha = 0.0
             }, completion: nil)
-            
         case false:
             nextButton.isHidden = isHidden
-            
             UIView.animate(withDuration: 0.8, delay: 0.1, options: [], animations: {
                 self.nextButton.alpha = 1.0
             }, completion: nil)
-            
             nextButton.setTitle("GET STARTED", for: .normal)
         }
     }

@@ -16,17 +16,14 @@ import MessageUI
 import ContactsUI
 
 
-class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, UISearchBarDelegate, MKLocalSearchCompleterDelegate {
+class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, MKLocalSearchCompleterDelegate {
     
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var saveButton: UIBarButtonItem!
-    @IBOutlet weak var enterTitleLabel: UILabel!
-    @IBOutlet weak var enterAddressLabel: UILabel!
     @IBOutlet weak var locationTitleTextField: UITextField!
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var mapViewOutlet: MKMapView!
-    
     @IBOutlet weak var actiivtyViewoutlet: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
@@ -37,13 +34,11 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
     @IBOutlet weak var mapTypeButton: UIButton!
     @IBOutlet weak var userLoactionButton: UIButton!
     
-    lazy var searchBar:UISearchBar = UISearchBar()
-    
     //Mark: - Landing Pad
     var location: Location? {
         didSet {
             loadViewIfNeeded()
-            addAnnotation()
+            retrieveAnnotations()
         }
     }
     
@@ -57,10 +52,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
     private var annotation: MKPointAnnotation?
     private var authorizationStatus = CLLocationManager.authorizationStatus()
     private let desiredRadius = 60.96
-    private let devMntLat = 40.761806
-    private let devMntLon = -111.890534
-    private let bannerResouceName = "myTriggersBannerFinalLogo"
-    private let resourceType = "png"
+    
     
     //NOTE: Trying out a different layout to put the alert constants
     let badAddressNotif = AlertController.presentAlertControllerWith(alertTitle: "Address Not Found", alertMessage: "Sorry, Couldnt not find the specified address", dismissActionTitle: "OK")
@@ -78,7 +70,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         
         UNUserNotificationCenter.current().delegate = self
         
-        toolView.backgroundColor = MyColor.offWhite.value
+        toolView.backgroundColor = ColorPallet.offWhite.value
         
         toolView.layer.cornerRadius = 10
         
@@ -110,12 +102,9 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         //Auto Complete
         let completer = MKLocalSearchCompleter()
         completer.delegate = self
-//            as! MKLocalSearchCompleterDelegate
+        //            as! MKLocalSearchCompleterDelegate
         completer.region = mapViewOutlet.region
-        
-        
-        //Test print
-        //print(mapViewOutlet.isUserLocationVisible)
+
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         //Activity Indicator
@@ -127,15 +116,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         
         //Background UI
         view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
-        
-        // Searchbar
-        searchBar.searchBarStyle = UISearchBar.Style.prominent
-        searchBar.placeholder = " Search..."
-        searchBar.sizeToFit()
-        searchBar.isTranslucent = false
-//        searchBar.backgroundImage =
-        searchBar.delegate = self
-        navigationItem.titleView = searchBar
         
         loadViewIfNeeded()
         updateViews()
@@ -149,7 +129,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         self.view.endEditing(true)
     }
     
-    func addAnnotation() {
+    func retrieveAnnotations() {
         guard let location = location,
             let latitude = CLLocationDegrees(exactly: location.latitude),
             let longitude = CLLocationDegrees(exactly: location.longitude)
@@ -160,7 +140,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         mapViewOutlet.addAnnotation(pointAnnotation)
         
         let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: self.metersPerHalfMile, longitudinalMeters: self.metersPerHalfMile)
-        print("Is user location visable \(mapViewOutlet.isUserLocationVisible). Clled in the add annotation func")
         self.mapViewOutlet.setRegion(viewRegion, animated: true)
     }
     
@@ -169,6 +148,20 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         guard let location = location else {return}
         locationTitleTextField.text = location.locationTitle
         addressTextField.text = location.geoCodeAddressString
+    }
+    
+    func searchButtonUI() {
+        searchButton.setTitle("Search", for: .normal)
+    }
+    
+    func startShowActivityIndicator() {
+        self.activityIndicator.startAnimating()
+        self.activityIndicator.isHidden = false
+    }
+    
+    func stopHideActivityIndicator() {
+        self.activityIndicator.stopAnimating()
+        self.activityIndicator.isHidden = true
     }
     
     private func showAddressOnMap(address: String) {
@@ -213,10 +206,30 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         }
     }
     
-    // Address TextField
-    
-    
-    
+    // MARK: - Map Type Display
+    func presentMapTypes() {
+           let mapTypesAlertController = AlertController.presentActionSheetAlertControllerWith(alertTitle: nil, alertMessage: nil, dismissActionTitle: "Cancel")
+           
+           let normalMapSelection = UIAlertAction(title: "Normal", style: .default) { (_) in
+               self.mapViewOutlet.mapType = MKMapType.standard
+           }
+           let satelliteMapSelection = UIAlertAction(title: "Satellite", style: .default) { (_) in
+               self.mapViewOutlet.mapType = MKMapType.satellite
+           }
+           let hybridMapSelection = UIAlertAction(title: "Hybrid", style: .default) { (_) in
+               self.mapViewOutlet.mapType = MKMapType.hybrid
+           }
+           
+           [normalMapSelection, satelliteMapSelection, hybridMapSelection].forEach { mapTypesAlertController.addAction($0)}
+           
+           DispatchQueue.main.async {
+               mapTypesAlertController.popoverPresentationController?.sourceView = self.view
+               mapTypesAlertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
+               mapTypesAlertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+               
+               self.present(mapTypesAlertController, animated: true, completion: nil)
+           }
+       }
     
     // MARK: - Actions
     @IBAction func mapTypeButtonTapped(_ sender: UIButton) {
@@ -246,8 +259,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
             self.startShowActivityIndicator()
         }
         
-        print("\n Save button Taped")
-        //Create a location based notification
         
         //Guard against either textfield being empty
         guard let locationTitle = locationTitleTextField.text, !locationTitle.isEmpty, let addressLocation = addressTextField.text, !addressLocation.isEmpty else {
@@ -291,47 +302,35 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
                     NotificationController.cancelLocalNotificationWith(identifier: location.locationTitle)
                     
                     //Create new notification with identifier as the new location title
-                    NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
-                    
-                    //Test Print
-                    print("🙏🏽 Success updating Location")
+                    NotificationController.createBasicSobrietyNotificationWithDismiss(contentTitle: "DO NOT ENTER \(locationTitle)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
                     
                     DispatchQueue.main.async {
                         self.stopHideActivityIndicator()
-                        
                         self.navigationController?.popViewController(animated: true)
                     }
                 } else {
-                    
-                    //Vibrate in order to alert the user something odd just happened
                     AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                     
                     DispatchQueue.main.async {
-                        
                         self.stopHideActivityIndicator()
                         self.present(self.networkErroNoif, animated: true, completion: nil)
-                        print("\n💀 error with the upating the data 💀")
                     }
+                    
                     self.navigationItem.rightBarButtonItem?.isEnabled = true
                     return
                 }
             }
         } else {
-            
             //Creating New Location
             LocationController.shared.createNewLocation(geoCodeAddressString: addressLocation, addressTitle: locationTitle, longitude: longitude, latitude: latitude) { (success) in
                 if success {
-                    
                     // Updated Location Notification with Dismiss Only
-                    NotificationController.createBasicSobrietyNotificationWithDismiss(resourceName: self.bannerResouceName, extenstionType: self.resourceType, contentTitle: "DO NOT ENTER \(locationTitle)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
+                    NotificationController.createBasicSobrietyNotificationWithDismiss(contentTitle: "DO NOT ENTER \(locationTitle)", contentBody: "Tap on the My Triggers logo to enter into the app and check-in with \(UserController.shared.loggedInUser?.sponsorName ?? "Your Support Person")", circularRegion: CLCircularRegion(center: self.coordinate!, radius: self.desiredRadius, identifier: "\(locationTitle)"), notifIdentifier: locationTitle)
                     
-                    print("\nSuccessfully created/saved location")
                     DispatchQueue.main.async {
-                        
                         self.navigationController?.popViewController(animated: true)
                     }
                 } else {
-                    print("\n💀 Error saving Location to Cloud Kit 💀")
                     DispatchQueue.main.async {
                         self.present(self.networkErroNoif, animated: true, completion: nil)
                     }
@@ -354,8 +353,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
                 self.stopHideActivityIndicator()
                 //present UI Alert Controller
                 self.present(self.badAddressNotif, animated: true, completion: nil)
-                
-                print("Invalid Address enetered")
             }
             return
         }
@@ -366,13 +363,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         DispatchQueue.main.async {
             self.stopHideActivityIndicator()
         }
-    }
-}
-
-extension LocationDetailVC {
-    
-    func searchButtonUI() {
-        searchButton.setTitle("Search", for: .normal)
     }
 }
 
@@ -396,7 +386,6 @@ extension LocationDetailVC: CLLocationManagerDelegate {
             let longPressedLatitude = annotation.coordinate.latitude
             let longPressedLongitude = annotation.coordinate.longitude
             
-            print("\(touchCoordinate)")
             mapViewOutlet.removeAnnotations(mapViewOutlet.annotations)
             //mapViewOutlet.addAnnotation(annotation)
             //drops the pin
@@ -406,11 +395,6 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                 guard let placemarks = placemarks, let placemark = placemarks.first else { return }
                 
                 guard let addressComponents = placemark.postalAddress  else {return}
-                
-                //Long and Lat of location
-                let longPressedLatAndLongString = "(\(longPressedLatitude)\(longPressedLongitude))"
-                
-                print("This is the Lat and Long that was long pressed \(longPressedLatAndLongString)")
                 
                 //Readable Components
                 let street = addressComponents.street
@@ -449,10 +433,8 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                         self.activityIndicator.stopAnimating()
                         self.activityIndicator.isHidden = true
                         
-                        //present UI Alert Controller
+                    
                         self.present(self.badAddressNotif, animated: true, completion: nil)
-                        
-                        print("Invalid Address enetered")
                     }
                     return
                 }
@@ -474,6 +456,9 @@ extension LocationDetailVC: MKMapViewDelegate {
     func centerMapOnUserLocation() {
         guard let coordinate = locationManager.location?.coordinate else {return}
         let coordinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: metersPerHalfMile, longitudinalMeters: metersPerHalfMile)
+        
+        print(coordinateRegion.center)
+        print(coordinateRegion)
         mapViewOutlet.setRegion(coordinateRegion, animated: true)
     }
     
@@ -487,48 +472,7 @@ extension LocationDetailVC: MKMapViewDelegate {
     
     //Users location for future use
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        //        centerMapOnUserLocation()
-    }
-}
-
-// MARK: - Map Action Sheet func
-extension LocationDetailVC {
-    
-    func presentMapTypes() {
-        let mapTypesAlertController = AlertController.presentActionSheetAlertControllerWith(alertTitle: nil, alertMessage: nil, dismissActionTitle: "Cancel")
-        
-        let normalMapSelection = UIAlertAction(title: "Normal", style: .default) { (_) in
-            self.mapViewOutlet.mapType = MKMapType.standard
-        }
-        let satelliteMapSelection = UIAlertAction(title: "Satellite", style: .default) { (_) in
-            self.mapViewOutlet.mapType = MKMapType.satellite
-        }
-        let hybridMapSelection = UIAlertAction(title: "Hybrid", style: .default) { (_) in
-            self.mapViewOutlet.mapType = MKMapType.hybrid
-        }
-        
-        [normalMapSelection, satelliteMapSelection, hybridMapSelection].forEach { mapTypesAlertController.addAction($0)}
-        
-        DispatchQueue.main.async {
-            mapTypesAlertController.popoverPresentationController?.sourceView = self.view
-            mapTypesAlertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
-            mapTypesAlertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
-            
-            self.present(mapTypesAlertController, animated: true, completion: nil)
-        }
-    }
-}
-
-extension LocationDetailVC {
-    
-    func startShowActivityIndicator() {
-        self.activityIndicator.startAnimating()
-        self.activityIndicator.isHidden = false
-    }
-    
-    func stopHideActivityIndicator() {
-        self.activityIndicator.stopAnimating()
-        self.activityIndicator.isHidden = true
+        //centerMapOnUserLocation()
     }
 }
 
@@ -536,9 +480,6 @@ extension LocationDetailVC {
 extension LocationDetailVC: UNUserNotificationCenterDelegate {
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
-        //Test print
-        print("Test: \(response.notification.request.identifier)")
         
         defer {
             completionHandler()
@@ -552,26 +493,8 @@ extension LocationDetailVC: UNUserNotificationCenterDelegate {
         //An action that indicates the user opened the app from the notification interface.
         case UNNotificationDefaultActionIdentifier:
             print("user was taken into the app")
-            
         default:
             break
-        }
-    }
-}
-
-extension LocationDetailVC {
-    
-    func fetchCurrentuser() {
-        UserController.shared.fetchCurrentUser { (success, _) in
-            if success {
-                guard let loggedInUser = UserController.shared.loggedInUser
-                    else { return }
-                print(loggedInUser.userName)
-                print("\(loggedInUser.aaStep)")
-                
-            } else {
-                print("\nUnable to fetch current user\n")
-            }
         }
     }
 }

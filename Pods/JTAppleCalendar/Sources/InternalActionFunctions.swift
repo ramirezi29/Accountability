@@ -1,7 +1,7 @@
 //
-//  JTACMonthActionFunctions.swift
+//  InternalActionFunctions.swift
 //
-//  Copyright (c) 2016-2020 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
+//  Copyright (c) 2016-2017 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,7 @@
 //  THE SOFTWARE.
 //
 
-import UIKit
-
-extension JTACMonthView {
+extension JTAppleCalendarView {
     /// Lays out subviews.
     override open func layoutSubviews() {
         super.layoutSubviews()
@@ -43,8 +41,8 @@ extension JTACMonthView {
         assert(false)
     }
     
-    func setupNewLayout(from oldLayout: JTACMonthLayoutProtocol) {
-        let newLayout = JTACMonthLayout(withDelegate: self)
+    func setupNewLayout(from oldLayout: JTAppleCalendarLayoutProtocol) {
+        let newLayout = JTAppleCalendarLayout(withDelegate: self)
         newLayout.scrollDirection = oldLayout.scrollDirection
         newLayout.sectionInset = oldLayout.sectionInset
         newLayout.minimumInteritemSpacing = oldLayout.minimumInteritemSpacing
@@ -57,7 +55,7 @@ extension JTACMonthView {
         sectionInset = newLayout.sectionInset
         minimumLineSpacing = newLayout.minimumLineSpacing
         minimumInteritemSpacing = newLayout.minimumInteritemSpacing
-
+        
         transform.a = semanticContentAttribute == .forceRightToLeft ? -1 : 1
         
         super.dataSource = self
@@ -167,13 +165,13 @@ extension JTACMonthView {
     
     func batchReloadIndexPaths(_ indexPaths: [IndexPath]) {
         let visiblePaths = indexPathsForVisibleItems
-        var visibleCellsToReload: [JTACDayCell: IndexPath] = [:]
+        var visibleCellsToReload: [JTAppleCell: IndexPath] = [:]
         
         for path in indexPaths {
             if calendarViewLayout.cachedValue(for: path.item, section: path.section) == nil { continue }
             pathsToReload.insert(path)
             if visiblePaths.contains(path) {
-                visibleCellsToReload[cellForItem(at: path) as! JTACDayCell] = path
+                visibleCellsToReload[cellForItem(at: path) as! JTAppleCell] = path
             }
         }
         

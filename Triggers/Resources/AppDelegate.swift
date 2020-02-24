@@ -23,7 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let current = UNUserNotificationCenter.current()
         current.delegate = self
         
-        
         //Onboarding screen check
         window = UIWindow()
         
@@ -36,9 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let storyboard = UIStoryboard(name: StoryboardConstants.onBoardingStoryBoard, bundle: nil)
             window?.rootViewController = storyboard.instantiateInitialViewController()
         }
-        
-        UserController.shared.fetchCurrentUser { (_, _) in
-            
+        UserController.shared.fetchCurrentUser { (_, _) in   
         }
         
         window?.makeKeyAndVisible()

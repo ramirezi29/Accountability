@@ -10,7 +10,6 @@ import UIKit
 
 class NotesTVC: UITableViewController {
     
-    //Landing Pad
     var folder: Folder?
     
     override func viewDidLoad() {
@@ -23,16 +22,8 @@ class NotesTVC: UITableViewController {
         tableView.dataSource = self
         
         // MARK: - Fetch
-        guard let folder = folder else  {
-            print("\n There is an issue with the folders perhaps it is nil")
-            
-            return
-        }
-        
+        guard let folder = folder else  { return }
         title = "\(folder.folderTitle)"
-        
-        //Test Pring
-        //print("The folder that was selected was 🐠\(folder.folderTitle) and it has \(folder.notes.count) note(s) inside of it, according to iCloud")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,9 +45,8 @@ class NotesTVC: UITableViewController {
         
         cell.textLabel?.text = songInFolder.title
         cell.detailTextLabel?.text = songInFolder.timeStampAsString
-        
-        cell.textLabel?.textColor = MyColor.offWhite.value
-        cell.detailTextLabel?.textColor = MyColor.offWhite.value
+        cell.textLabel?.textColor = ColorPallet.offWhite.value
+        cell.detailTextLabel?.textColor = ColorPallet.offWhite.value
         return cell
     }
     
@@ -64,6 +54,10 @@ class NotesTVC: UITableViewController {
     override  func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
+    
+    override  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+             cell.backgroundColor = .clear
+         }
     
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -76,11 +70,10 @@ class NotesTVC: UITableViewController {
                 if error != nil {
                     DispatchQueue.main.async {
                         //Future version will include a UI element
-                        //UI STUFF
                     }
                 } else {
                     self.folder?.notes.remove(at: indexPath.row)
-                    //                    NoteController.shared.notes.remove(at: indexPath.row)
+                    //NoteController.shared.notes.remove(at: indexPath.row)
                     DispatchQueue.main.async {
                         self.tableView.deleteRows(at: [indexPath], with: .fade)
                     }
@@ -96,13 +89,9 @@ class NotesTVC: UITableViewController {
         
         NoteController.shared.notes.remove(at: sourceIndexPath.row)
         NoteController.shared.notes.insert(note, at: destinationIndexPath.row)
-        
-        // NOTE: - Need to Save the Re-ordering done to CK some how
     }
-    
-    //canMoveRowAt
+
     override  func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        
         return true
     }
     
@@ -121,13 +110,5 @@ class NotesTVC: UITableViewController {
             let noteInFolder = folder?.notes[indexPath.row]
             destinationVC.note = noteInFolder
         }
-    }
-}
-
-extension NotesTVC {
-    
-    override  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
-        cell.backgroundColor = .clear
     }
 }

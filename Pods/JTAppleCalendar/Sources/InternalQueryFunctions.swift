@@ -1,7 +1,7 @@
 //
-//  JTACMonthQueryFunctions.swift
+//  InternalQueryFunctions.swift
 //
-//  Copyright (c) 2016-2020 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
+//  Copyright (c) 2016-2017 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,7 @@
 //  THE SOFTWARE.
 //
 
-import UIKit
-
-extension JTACMonthView {
+extension JTAppleCalendarView {
     func validForwardAndBackwordSelectedIndexes(forIndexPath indexPath: IndexPath, restrictToSection: Bool = true) -> (forwardIndex: IndexPath?, backIndex: IndexPath?, set: Set<IndexPath>) {
         var retval: (forwardIndex: IndexPath?, backIndex: IndexPath?, set: Set<IndexPath>) = (forwardIndex: nil, backIndex: nil, set: [])
         if let validForwardIndex = calendarViewLayout.indexPath(direction: .next, of: indexPath.section, item: indexPath.item),
@@ -279,7 +277,7 @@ extension JTACMonthView {
     
     func cellStateFromIndexPath(_ indexPath: IndexPath,
                                 withDateInfo info: (date: Date, owner: DateOwner)? = nil,
-                                cell: JTACDayCell? = nil,
+                                cell: JTAppleCell? = nil,
                                 isSelected: Bool? = nil,
                                 selectionType: SelectionType? = nil) -> CellState {
         let validDateInfo: (date: Date, owner: DateOwner)
@@ -313,9 +311,8 @@ extension JTACMonthView {
         let selectedPosition = { [unowned self] () -> SelectionRangePosition in
             let selectedDates = self.selectedDatesSet
             if !selectedDates.contains(date) || selectedDates.isEmpty  { return .none }
-          
-          let restrictToSection = self.rangeSelectionMode == .segmented
-          let validSelectedIndexes = self.validForwardAndBackwordSelectedIndexes(forIndexPath: indexPath, restrictToSection: restrictToSection)
+            
+            let validSelectedIndexes = self.validForwardAndBackwordSelectedIndexes(forIndexPath: indexPath)
             let dateBeforeIsSelected = validSelectedIndexes.backIndex != nil
             let dateAfterIsSelected = validSelectedIndexes.forwardIndex != nil
             
