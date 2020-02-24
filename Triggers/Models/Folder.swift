@@ -19,7 +19,6 @@ class Folder {
     var notes: [Note] = []
     
     init(folderTitle: String, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString)) {
-        
         self.folderTitle = folderTitle
         self.timeStamp = Date()
         self.ckRecordID = ckRecordID
@@ -33,20 +32,17 @@ class Folder {
         return DateFormatter.localizedString(from: timeStamp, dateStyle: .short, timeStyle: .none)
     }
     
-    // NOTE: - Fech ckRecord
+    // NOTE: - Fetch ckRecord
     convenience init?(ckRecord: CKRecord) {
+        
         guard let folderTitle = ckRecord[FolderConstants.folderTitleKey] as? String else { return nil }
-        
         let userFolderReference = ckRecord[FolderConstants.userFolderReferenceKey] as? CKRecord.Reference
-        
         self.init(folderTitle: folderTitle, ckRecordID: ckRecord.recordID)
-        
         self.userFolderReference = userFolderReference
     }
 }
 
 // NOTE: - Push
-
 extension CKRecord {
     convenience init(folder: Folder) {
         

@@ -64,11 +64,23 @@ class LocationTVC: UITableViewController {
         self.activityIndicator.stopAnimating()
     }
     
+    // MARK: - Acitivity Spinner
+    
+   func hideStopActivityIndicator() {
+       self.activityIndicator.isHidden =  true
+       self.activityIndicator.stopAnimating()
+   }
+   
+   func showStartActivityIndicator() {
+       self.activityIndicator.startAnimating()
+       self.activityIndicator.isHidden = false
+   }
+   
+    
     // MARK: - Table view data source
     override  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return LocationController.shared.locations.count
     }
-    
     
     override   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: LocationConstants.locationCellID, for: indexPath) as? LocationTVCell else {return UITableViewCell()}
@@ -82,9 +94,11 @@ class LocationTVC: UITableViewController {
         return true
     }
     
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+           tableView.tableFooterView = UIView()
+           cell.backgroundColor = .clear
+       }
     
-    //Future versions will include the ability to edit the TVC's row order
-    // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let locationRecord = LocationController.shared.locations[indexPath.row]
@@ -104,7 +118,6 @@ class LocationTVC: UITableViewController {
         }
     }
     
-    // MARK: - Rearrange Cells
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let location = LocationController.shared.locations[sourceIndexPath.row]
         LocationController.shared.locations.remove(at: sourceIndexPath.row)
@@ -113,16 +126,6 @@ class LocationTVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
-    }
-    
-    func hideStopActivityIndicator() {
-        self.activityIndicator.isHidden =  true
-        self.activityIndicator.stopAnimating()
-    }
-    
-    func showStartActivityIndicator() {
-        self.activityIndicator.startAnimating()
-        self.activityIndicator.isHidden = false
     }
     
     // MARK: - Navigation
@@ -136,9 +139,5 @@ class LocationTVC: UITableViewController {
             
             destinationVC.location = location
         }
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = .clear
     }
 }

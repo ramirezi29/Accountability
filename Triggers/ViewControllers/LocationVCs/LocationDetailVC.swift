@@ -63,15 +63,12 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Navigation bar
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
         
         UNUserNotificationCenter.current().delegate = self
-        
         toolView.backgroundColor = ColorPallet.offWhite.value
-        
         toolView.layer.cornerRadius = 10
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(LocationDetailVC.hideKeyboard))
@@ -82,10 +79,8 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         let longPressMapTap = UILongPressGestureRecognizer(target: self, action: #selector(LocationDetailVC.handleTap(_:)))
         
         longPressMapTap.delegate = self
-        
         longPressMapTap.minimumPressDuration = 0.5
         
-        //Location and Map Delegate
         locationManager.delegate = self
         mapViewOutlet.delegate = self
         
@@ -96,15 +91,13 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         locationManager.startUpdatingLocation()
         mapViewOutlet.addGestureRecognizer(longPressMapTap)
         
-        //TextFieldDelegate
         addressTextField.delegate = self
         
         //Auto Complete
         let completer = MKLocalSearchCompleter()
         completer.delegate = self
-        //            as! MKLocalSearchCompleterDelegate
         completer.region = mapViewOutlet.region
-
+        
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         //Activity Indicator
@@ -208,28 +201,28 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
     
     // MARK: - Map Type Display
     func presentMapTypes() {
-           let mapTypesAlertController = AlertController.presentActionSheetAlertControllerWith(alertTitle: nil, alertMessage: nil, dismissActionTitle: "Cancel")
-           
-           let normalMapSelection = UIAlertAction(title: "Normal", style: .default) { (_) in
-               self.mapViewOutlet.mapType = MKMapType.standard
-           }
-           let satelliteMapSelection = UIAlertAction(title: "Satellite", style: .default) { (_) in
-               self.mapViewOutlet.mapType = MKMapType.satellite
-           }
-           let hybridMapSelection = UIAlertAction(title: "Hybrid", style: .default) { (_) in
-               self.mapViewOutlet.mapType = MKMapType.hybrid
-           }
-           
-           [normalMapSelection, satelliteMapSelection, hybridMapSelection].forEach { mapTypesAlertController.addAction($0)}
-           
-           DispatchQueue.main.async {
-               mapTypesAlertController.popoverPresentationController?.sourceView = self.view
-               mapTypesAlertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
-               mapTypesAlertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
-               
-               self.present(mapTypesAlertController, animated: true, completion: nil)
-           }
-       }
+        let mapTypesAlertController = AlertController.presentActionSheetAlertControllerWith(alertTitle: nil, alertMessage: nil, dismissActionTitle: "Cancel")
+        
+        let normalMapSelection = UIAlertAction(title: "Normal", style: .default) { (_) in
+            self.mapViewOutlet.mapType = MKMapType.standard
+        }
+        let satelliteMapSelection = UIAlertAction(title: "Satellite", style: .default) { (_) in
+            self.mapViewOutlet.mapType = MKMapType.satellite
+        }
+        let hybridMapSelection = UIAlertAction(title: "Hybrid", style: .default) { (_) in
+            self.mapViewOutlet.mapType = MKMapType.hybrid
+        }
+        
+        [normalMapSelection, satelliteMapSelection, hybridMapSelection].forEach { mapTypesAlertController.addAction($0)}
+        
+        DispatchQueue.main.async {
+            mapTypesAlertController.popoverPresentationController?.sourceView = self.view
+            mapTypesAlertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection()
+            mapTypesAlertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            
+            self.present(mapTypesAlertController, animated: true, completion: nil)
+        }
+    }
     
     // MARK: - Actions
     @IBAction func mapTypeButtonTapped(_ sender: UIButton) {
@@ -251,14 +244,12 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
     }
     
     @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
-        
         // In order to prevent duplicate creations due to delay in pop over
         navigationItem.rightBarButtonItem?.isEnabled = false
         
         DispatchQueue.main.async {
             self.startShowActivityIndicator()
         }
-        
         
         //Guard against either textfield being empty
         guard let locationTitle = locationTitleTextField.text, !locationTitle.isEmpty, let addressLocation = addressTextField.text, !addressLocation.isEmpty else {
@@ -268,7 +259,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
             let textFieldError = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Location", alertMessage: "You must enter a location address and title before saving", dismissActionTitle: "OK")
             
             DispatchQueue.main.async {
-                
                 self.stopHideActivityIndicator()
                 self.present(textFieldError, animated: true, completion: nil)
             }
@@ -282,7 +272,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
                 let coordinateError = AlertController.presentAlertControllerWith(alertTitle: "Error Saving Location", alertMessage: "Ensure that the address is correctly entered", dismissActionTitle: "OK")
                 
                 DispatchQueue.main.async {
-                    
                     self.stopHideActivityIndicator()
                     self.present(coordinateError, animated: true, completion: nil)
                 }
@@ -296,8 +285,8 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         // MARK: - Update current location
         if let location = location {
             LocationController.shared.updateTargetLocation(location: location, geoCodeAddressString: addressLocation, addressTitle: locationTitle, latitude: latitude, longitude: longitude) { (success) in
+                
                 if success {
-                    
                     //Cancel notification based on the original location title
                     NotificationController.cancelLocalNotificationWith(identifier: location.locationTitle)
                     
@@ -315,13 +304,12 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
                         self.stopHideActivityIndicator()
                         self.present(self.networkErroNoif, animated: true, completion: nil)
                     }
-                    
                     self.navigationItem.rightBarButtonItem?.isEnabled = true
+                    
                     return
                 }
             }
         } else {
-            //Creating New Location
             LocationController.shared.createNewLocation(geoCodeAddressString: addressLocation, addressTitle: locationTitle, longitude: longitude, latitude: latitude) { (success) in
                 if success {
                     // Updated Location Notification with Dismiss Only
@@ -335,6 +323,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
                         self.present(self.networkErroNoif, animated: true, completion: nil)
                     }
                     self.navigationItem.rightBarButtonItem?.isEnabled = true
+                    
                     return
                 }
             }
@@ -342,7 +331,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
     }
     
     @IBAction func searchButtonTapped(_ sender: UIButton) {
-        print("Search Button Tapped")
         self.startShowActivityIndicator()
         self.activityIndicator.startAnimating()
         self.activityIndicator.isHidden = false
@@ -351,7 +339,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
             
             DispatchQueue.main.async {
                 self.stopHideActivityIndicator()
-                //present UI Alert Controller
                 self.present(self.badAddressNotif, animated: true, completion: nil)
             }
             return
@@ -379,37 +366,27 @@ extension LocationDetailVC: CLLocationManagerDelegate {
             let annotation = MKPointAnnotation()
             annotation.coordinate = touchCoordinate
             
-            //Future version customize the location pin
-            //annotation.title = "My Trigger"
-            
-            // what you annotatded Long and Lat
             let longPressedLatitude = annotation.coordinate.latitude
             let longPressedLongitude = annotation.coordinate.longitude
             
             mapViewOutlet.removeAnnotations(mapViewOutlet.annotations)
-            //mapViewOutlet.addAnnotation(annotation)
-            //drops the pin
             
             let geoCoder = CLGeocoder()
             geoCoder.reverseGeocodeLocation(CLLocation(latitude: longPressedLatitude, longitude: longPressedLongitude)) { (placemarks, error) in
-                guard let placemarks = placemarks, let placemark = placemarks.first else { return }
+                guard let placemarks = placemarks, let placemark = placemarks.first,
+                    
+                    let addressComponents = placemark.postalAddress  else {return}
                 
-                guard let addressComponents = placemark.postalAddress  else {return}
-                
-                //Readable Components
                 let street = addressComponents.street
                 let city = addressComponents.city
                 let state = addressComponents.state
                 let postalCode = addressComponents.postalCode
                 
-                let cnPostalAddressFormatter = CNPostalAddressFormatter()
-                
-                let cnPostalFormatString = cnPostalAddressFormatter.attributedString(from: addressComponents, withDefaultAttributes: [:])
+                //print("\(cnPostalFormatString)")
+                //let cnPostalAddressFormatter = CNPostalAddressFormatter()
+                //let cnPostalFormatString = cnPostalAddressFormatter.attributedString(from: addressComponents, withDefaultAttributes: [:])
                 
                 annotation.subtitle = "\(street) \(city), \(state) \(postalCode)"
-                
-                print("\(cnPostalFormatString)")
-                print("\(street) \(city), \(state) \(postalCode)")
                 
                 if !street.isEmpty {
                     
@@ -432,8 +409,6 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                     DispatchQueue.main.async {
                         self.activityIndicator.stopAnimating()
                         self.activityIndicator.isHidden = true
-                        
-                    
                         self.present(self.badAddressNotif, animated: true, completion: nil)
                     }
                     return
@@ -455,6 +430,7 @@ extension LocationDetailVC: MKMapViewDelegate {
     
     func centerMapOnUserLocation() {
         guard let coordinate = locationManager.location?.coordinate else {return}
+        
         let coordinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: metersPerHalfMile, longitudinalMeters: metersPerHalfMile)
         
         print(coordinateRegion.center)
@@ -485,7 +461,7 @@ extension LocationDetailVC: UNUserNotificationCenterDelegate {
             completionHandler()
         }
         switch response.actionIdentifier {
-            //The action that indicates the user explicitly dismissed the notification interface.
+            //The action that indicates the user explicitly dismissed the notification interface
         //This action is delivered only if the notification’s category object was configured with the customDismissAction option.
         case UNNotificationDismissActionIdentifier:
             print( "User tapped dismissed the notification")
