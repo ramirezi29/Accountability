@@ -1,7 +1,7 @@
 //
-//  JTACScrollViewDelegates.swift
+//  UIScrollViewDelegates.swift
 //
-//  Copyright (c) 2016-2020 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
+//  Copyright (c) 2016-2017 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,10 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
-
-import UIKit
-
-extension JTACMonthView: UIScrollViewDelegate {
+extension JTAppleCalendarView: UIScrollViewDelegate {
     /// Inform the scrollViewDidEndDecelerating
     /// function that scrolling just occurred
     public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
@@ -85,43 +82,20 @@ extension JTACMonthView: UIScrollViewDelegate {
         case let .stopAtEach(customInterval: interval): 
             let offset = scrollDecision(currentScrollDirectionValue: translation,
                                                     previousScrollDirectionValue: lastMovedScrollDirection,
-                                                    forward: { return ceil(theCurrentContentOffset / interval) * interval },
-                                                    backward: { return floor(theCurrentContentOffset / interval) * interval})
+                                                    forward: { () -> CGFloat in return ceil(theCurrentContentOffset / interval) * interval },
+                                                    backward: { () -> CGFloat in return floor(theCurrentContentOffset / interval) * interval})
             setTargetContentOffset(offset)
         case .stopAtEachSection:
             let section = scrollDecision(currentScrollDirectionValue: translation,
                                                      previousScrollDirectionValue: lastMovedScrollDirection,
-                                                     forward: { return theCurrentSection},
-                                                     backward: { return theCurrentSection - 1},
-                                                     fixed: { return theCurrentSection})
+                                                     forward: { () -> Int in return theCurrentSection },
+                                                     backward: { () -> Int in return theCurrentSection - 1 },
+                                                     fixed: { () -> Int in return theCurrentSection})
 
-            guard section >= 0, section < calendarLayout.endOfSectionOffsets.count else {setTargetContentOffset(0); return}
-            let endOfCurrentSectionOffset = calendarLayout.endOfSectionOffsets[theCurrentSection]
-            let endOfPreviousSectionOffset = calendarLayout.endOfSectionOffsets[theCurrentSection - 1 < 0 ? 0 : theCurrentSection - 1]
-            let midPoint = (endOfCurrentSectionOffset + endOfPreviousSectionOffset) / 2
-            let maxSnap = calendarLayout.endOfSectionOffsets[section]
-            
-            let userPercentage: CGFloat = 20
-            let modifiedPercentage = CGFloat((100 - userPercentage) / 100.0)
-            
-            let snapForward = midPoint - ((maxSnap - midPoint) * modifiedPercentage)
-            
-            scrollDecision(currentScrollDirectionValue: translation,
-                           previousScrollDirectionValue: lastMovedScrollDirection,
-                           forward: {
-                                if theCurrentContentOffset >= snapForward || directionVelocity > 0 {
-                                    setTargetContentOffset(endOfCurrentSectionOffset)
-                                } else {
-                                    setTargetContentOffset(endOfPreviousSectionOffset)
-                                }
-                           },
-                           backward: {
-                                if theCurrentContentOffset <= snapForward || directionVelocity < 0 {
-                                    setTargetContentOffset(endOfPreviousSectionOffset)
-                                } else {
-                                    setTargetContentOffset(endOfCurrentSectionOffset)
-                                }
-                           })
+            guard section >= 0, section < calendarLayout.sectionSize.count else {setTargetContentOffset(0); return}
+
+            let calculatedOffset = calendarLayout.sectionSize[section]
+            setTargetContentOffset(calculatedOffset)
         case let .nonStopToCell(withResistance: resistance), let .nonStopToSection(withResistance: resistance):
             
             let (recalculatedOffset, elementProperties) = rectAfterApplying(resistance: resistance,
@@ -145,10 +119,10 @@ extension JTACMonthView: UIScrollViewDelegate {
             case .nonStopToSection:
                 let stopSection = scrollDecision(currentScrollDirectionValue: translation,
                                                              previousScrollDirectionValue: lastMovedScrollDirection,
-                                                             forward: { validElementProperties.section },
-                                                             backward: {validElementProperties.section - 1})
+                                                             forward: { () -> Int in return validElementProperties.section },
+                                                             backward: {() -> Int in return validElementProperties.section - 1})
  
-                let calculatedOffSet = (stopSection < 0 || stopSection > calendarLayout.endOfSectionOffsets.count - 1) ? 0 : calendarLayout.endOfSectionOffsets[stopSection]
+                let calculatedOffSet = (stopSection < 0 || stopSection > calendarLayout.sectionSize.count - 1) ? 0 : calendarLayout.sectionSize[stopSection]
                 setTargetContentOffset(calculatedOffSet)
             default: return
             }
@@ -157,13 +131,13 @@ extension JTACMonthView: UIScrollViewDelegate {
             let diffResist = diffResistance(targetOffset: theTargetContentOffset, currentOffset: theCurrentContentOffset, resistance: resistance)
             let recalculatedOffsetAfterResistance = scrollDecision(currentScrollDirectionValue: translation,
                                                                    previousScrollDirectionValue: lastMovedScrollDirection,
-                                                                   forward: { theTargetContentOffset - diffResist },
-                                                                   backward: { theTargetContentOffset + diffResist })
+                                                                   forward: { () -> CGFloat in return theTargetContentOffset - diffResist },
+                                                                   backward: { () -> CGFloat in return theTargetContentOffset + diffResist })
 
             let offset = scrollDecision(currentScrollDirectionValue: translation,
                                         previousScrollDirectionValue: lastMovedScrollDirection,
-                                        forward: { ceil(recalculatedOffsetAfterResistance / interval) * interval },
-                                        backward: { floor(recalculatedOffsetAfterResistance / interval) * interval })
+                                        forward: { () -> CGFloat in return ceil(recalculatedOffsetAfterResistance / interval) * interval },
+                                        backward: { () -> CGFloat in floor(recalculatedOffsetAfterResistance / interval) * interval })
             
             setTargetContentOffset(offset)
         case .none: break
@@ -202,7 +176,7 @@ extension JTACMonthView: UIScrollViewDelegate {
     
     /// Tells the delegate that the scroll view has
     /// ended decelerating the scrolling movement.
-    open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         visibleDates {[unowned self] dates in
             self.calendarDelegate?.calendar(self, didScrollToDateSegmentWith: dates)
         }

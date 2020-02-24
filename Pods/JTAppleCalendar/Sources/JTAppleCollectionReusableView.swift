@@ -1,7 +1,7 @@
 //
-//  UserInteractionYearFunctions.swift
+//  JTAppleCollectionReusableView.swift
 //
-//  Copyright (c) 2016-2020 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
+//  Copyright (c) 2016-2017 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,16 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
-
-extension JTACYearView {
-   
-    /// Dequeues a reuable calendar cell
-    public func dequeueReusableJTAppleMonthCell(withReuseIdentifier identifier: String, for indexPath: IndexPath) -> JTACMonthCell {
-        guard let cell = dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? JTACMonthCell else {
-            assert(false, "Error initializing Cell View with identifier: '\(identifier)'")
-            return JTACMonthCell()
-        }
-        return cell
+/// The header view class of the calendar
+open class JTAppleCollectionReusableView: UICollectionReusableView {
+    /// Initializes and returns a newly allocated view object with the specified frame rectangle.
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
     }
-    
+
+    /// Returns an object initialized from data in a given unarchiver.
+    /// self, initialized using the data in decoder.
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
 }

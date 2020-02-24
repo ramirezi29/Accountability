@@ -2,6 +2,6 @@
 
 target 'Triggers' do
   use_frameworks!
-  pod 'JTAppleCalendar'
+  pod 'JTAppleCalendar', '7.1.8'
 
 end

@@ -1,7 +1,6 @@
 [![jtapplecalendarnewlogo](https://cloud.githubusercontent.com/assets/2439146/20656424/a1c98c8e-b4e1-11e6-9833-5fa6430f5a8c.png)](https://github.com/patchthecode/JTAppleCalendar)
 
-[![Tutorial](https://img.shields.io/badge/Tutorials-patchthecode.com-blue.svg)](https://patchthecode.com/) [![Version](https://img.shields.io/cocoapods/v/JTAppleCalendar.svg?style=flat)](http://cocoapods.org/pods/JTAppleCalendar) [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![Platform](https://img.shields.io/cocoapods/p/JTAppleCalendar.svg?style=flat)](http://cocoapods.org/pods/JTAppleCalendar) [![License](https://img.shields.io/cocoapods/l/JTAppleCalendar.svg?style=flat)](http://cocoapods.org/pods/JTAppleCalendar) [![](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_74x21.png)](https://github.com/patchthecode/JTAppleCalendar/wiki/Support) [![Backers on Open Collective](https://opencollective.com/JTAppleCalendar/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/JTAppleCalendar/sponsors/badge.svg)](#sponsors) [![Open Source Helpers](https://www.codetriage.com/patchthecode/jtapplecalendar/badges/users.svg)](https://www.codetriage.com/patchthecode/jtapplecalendar)
-
+[![Tutorial](https://img.shields.io/badge/Tutorials-patchthecode.com-blue.svg)](https://patchthecode.com/) [![Version](https://img.shields.io/cocoapods/v/JTAppleCalendar.svg?style=flat)](http://cocoapods.org/pods/JTAppleCalendar) [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![Platform](https://img.shields.io/cocoapods/p/JTAppleCalendar.svg?style=flat)](http://cocoapods.org/pods/JTAppleCalendar) [![License](https://img.shields.io/cocoapods/l/JTAppleCalendar.svg?style=flat)](http://cocoapods.org/pods/JTAppleCalendar) [![](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_74x21.png)](https://github.com/patchthecode/JTAppleCalendar/wiki/Support) [![Backers on Open Collective](https://opencollective.com/JTAppleCalendar/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/JTAppleCalendar/sponsors/badge.svg)](#sponsors) 
 
 #### Q: How will my calendar dateCells look with this library?
 **A**: However you want them to look.
@@ -32,7 +31,7 @@
 ___
 
 ## How do I use this library? 
-### >> [Read the wiki](https://github.com/patchthecode/JTAppleCalendar/wiki/Tutorials) for Tutorials and example code to download. Or visit [PatchTheCode.com](https://patchthecode.com).
+### >> Installation instructions + tutorials located @ [PatchTheCode.com](https://patchthecode.com/)
 ___
 
 ## Contributors

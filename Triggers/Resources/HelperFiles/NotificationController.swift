@@ -16,7 +16,7 @@ class NotificationController {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
     }
     
-    static func createBasicSobrietyNotificationWithDismiss(resourceName: String, extenstionType: String, contentTitle: String, contentBody: String, circularRegion: CLCircularRegion, notifIdentifier: String){
+    static func createBasicSobrietyNotificationWithDismiss(contentTitle: String, contentBody: String, circularRegion: CLCircularRegion, notifIdentifier: String) {
         
         // Action
         let dismissAction = UNNotificationAction(identifier: LocationConstants.dismissActionKey, title: "Dismiss", options: [])
@@ -34,13 +34,13 @@ class NotificationController {
         content.categoryIdentifier = LocationConstants.notifLocationCatergoryKey
         
         // Image
-        guard let url = Bundle.main.url(forResource: resourceName, withExtension: extenstionType) else {return}
+        guard let url = Bundle.main.url(forResource: LocationConstants.bannerResouceName, withExtension: LocationConstants.pngKey) else { return }
         do {
             let attachments =  try UNNotificationAttachment(identifier: LocationConstants.resourceKey, url: url, options: [:])
             
             content.attachments = [attachments]
         } catch {
-            print("\n\nThere was an error with the attachment in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription)\n\n")
+            print("\n\nThere was an error with the payload image url attachment in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription)\n\n")
         }
         
         let region = circularRegion
@@ -54,13 +54,11 @@ class NotificationController {
         UNUserNotificationCenter.current().add(request) { (error) in
             if let error = error {
                 print("There was an error in \(#function) ; (error) ; \(error.localizedDescription)")
-            } else {
-                print("\n Successfuly created location based notification")
-                
             }
         }
     }
     
+    //Testing
     static func createLocalNotifciationWith(telephoneActionTitle: String, textActionTitle: String, resourceName: String, extenstionType: String, contentTitle: String, contentBody: String, circularRegion: CLCircularRegion, notifIdentifier: String){
         
         // Action
@@ -96,15 +94,11 @@ class NotificationController {
         region.notifyOnEntry = true
         
         let trigger = UNLocationNotificationTrigger(region: region, repeats: true)
-        
         let request = UNNotificationRequest(identifier: notifIdentifier, content: content, trigger: trigger)
-        
         
         UNUserNotificationCenter.current().add(request) { (error) in
             if let error = error {
                 print("There was an error in \(#function) ; (error) ; \(error.localizedDescription)")
-            } else {
-                print("\n Successfuly created location based notification")
             }
         }
     }

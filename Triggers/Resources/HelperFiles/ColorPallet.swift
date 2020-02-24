@@ -11,7 +11,7 @@ import UIKit
 /**
  A collection of colors linked to a given value.
  */
-enum MyColor {
+enum ColorPallet {
     
     case powderBlue
     case buttonBlue
@@ -24,10 +24,9 @@ enum MyColor {
     case annotationOrange
 }
 
-extension MyColor {
-    
+extension ColorPallet {
     /**
-     An exention of MyColor which holds the color values.
+     An exention of ColorPallet which holds the color values.
      
      - Parameter value: Contains the red, green, blue and alpha values to create the particular color.
      */

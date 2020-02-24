@@ -1,7 +1,7 @@
 //
 //  CalendarStructs.swift
 //
-//  Copyright (c) 2016-2020 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
+//  Copyright (c) 2016-2017 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,6 @@
 //  THE SOFTWARE.
 //
 
-
-import UIKit
 
 /// Describes which month the cell belongs to
 /// - ThisMonth: Cell belongs to the current month
@@ -60,7 +58,7 @@ public struct CellState {
     public let selectedPosition: () -> SelectionRangePosition
     /// returns the cell.
     /// Useful if you wish to display something at the cell's frame/position
-    public var cell: () -> JTACDayCell?
+    public var cell: () -> JTAppleCell?
     /// Shows if a cell's selection/deselection was done either programatically or by the user
     /// This variable is guranteed to be non-nil inside of a didSelect/didDeselect function
     public var selectionType: SelectionType? = nil
@@ -143,9 +141,7 @@ struct CalendarData {
 
 /// Defines a month structure.
 public struct Month {
-    /// Index of the month
-    let index: Int
-    
+
     /// Start index day for the month.
     /// The start is total number of days of previous months
     let startDayIndex: Int
@@ -252,11 +248,7 @@ public struct Month {
     }
 }
 
-class JTAppleDateConfigGenerator {
-    
-    static let shared =  JTAppleDateConfigGenerator()
-    private init() {}
-    
+struct JTAppleDateConfigGenerator {
     func setupMonthInfoDataForStartAndEndDate(_ parameters: ConfigurationParameters)
         -> (months: [Month], monthMap: [Int: Int], totalSections: Int, totalDays: Int) {
             let differenceComponents = parameters.calendar.dateComponents([.month], from: parameters.startDate, to: parameters.endDate)
@@ -329,7 +321,6 @@ class JTAppleDateConfigGenerator {
                         section += 1
                     }
                     monthArray.append(Month(
-                        index: monthIndex,
                         startDayIndex: startIndexForMonth,
                         startCellIndex: startCellIndexForMonth,
                         sections: sectionsForTheMonth,

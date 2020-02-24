@@ -1,7 +1,7 @@
 //
-//  JTACVariables.swift
+//  JTAppleCalendarVariables.swift
 //
-//  Copyright (c) 2016-2020 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
+//  Copyright (c) 2016-2017 JTAppleCalendar (https://github.com/patchthecode/JTAppleCalendar)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,20 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
-import UIKit
-
 // Calculated Variables
-extension JTACMonthView {
+extension JTAppleCalendarView {
     /// Workaround for Xcode bug that prevents you from connecting the delegate in the storyboard.
     /// Remove this extra property once Xcode gets fixed.
     @IBOutlet public var ibCalendarDelegate: AnyObject? {
-        get { return calendarDelegate as AnyObject? }
-        set { calendarDelegate = newValue as? JTACMonthViewDelegate }
+        get { return calendarDelegate }
+        set { calendarDelegate = newValue as? JTAppleCalendarViewDelegate }
     }
     
     /// Workaround for Xcode bug that prevents you from connecting the delegate in the storyboard.
     /// Remove this extra property once Xcode gets fixed.
     @IBOutlet public var ibCalendarDataSource: AnyObject? {
-        get { return calendarDataSource as AnyObject? }
-        set { calendarDataSource = newValue as? JTACMonthViewDataSource }
+        get { return calendarDataSource }
+        set { calendarDataSource = newValue as? JTAppleCalendarViewDataSource }
     }
     
     @available(*, unavailable)
@@ -76,11 +73,11 @@ extension JTACMonthView {
     var totalDays: Int {
         return theData.totalDays
     }
-             
-    var calendarViewLayout: JTACMonthLayout {
-        guard let layout = collectionViewLayout as? JTACMonthLayout else {
-            developerError(string: "Calendar layout is not of type JTAppleCalendarMonthLayout.")
-            return JTACMonthLayout(withDelegate: self)
+    
+    var calendarViewLayout: JTAppleCalendarLayout {
+        guard let layout = collectionViewLayout as? JTAppleCalendarLayout else {
+            developerError(string: "Calendar layout is not of type JTAppleCalendarLayout.")
+            return JTAppleCalendarLayout(withDelegate: self)
         }
         return layout
     }
@@ -90,25 +87,10 @@ extension JTACMonthView {
     }
     
     var calendarLayoutIsLoaded: Bool { return calendarViewLayout.isCalendarLayoutLoaded }
-    var startDateCache: Date {
-        guard let date = _cachedConfiguration?.startDate else {
-            assert(false, "Attemped to access startDate when Datasource/delegate is not set yet. Returning todays's date")
-            return Date()
-        }
-        return date
-    }
-    var endDateCache: Date           {
-        guard let date = _cachedConfiguration?.endDate else {
-            assert(false, "Attemped to access endDate when Datasource/delegate is not set yet. Returning todays's date")
-            return Date()
-        }
-        return date
-    }
-    var calendar: Calendar {
-        guard let calendar = _cachedConfiguration?.calendar else {
-            assert(false, "Attemped to access calendar when Datasource/delegate is not set yet. Returning default value")
-            return Calendar.current
-        }
-        return calendar
-    }
+    var startDateCache: Date         { return _cachedConfiguration.startDate }
+    var endDateCache: Date           { return _cachedConfiguration.endDate }
+    var calendar: Calendar           { return _cachedConfiguration.calendar }
+
+    
+
 }

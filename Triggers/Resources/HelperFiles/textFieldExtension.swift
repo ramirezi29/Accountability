@@ -17,7 +17,6 @@ extension UITextField {
         guard let trimmed = text?.trimmingCharacters(in: ws), !trimmed.isEmpty else {
             return nil
         }
-        
         return trimmed
     }
 }
