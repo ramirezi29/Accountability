@@ -21,48 +21,12 @@ class FolderTVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Navigation bar
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
+        self.activityIndicator.startAnimating()
+        setUpNavUI()
+        fetchCKFolders()
         
         view.setGradientToTableView(tableView: tableView, UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
         activityView.backgroundColor = .clear
-        
-        self.activityIndicator.startAnimating()
-        
-        //Fetch Folders from CK
-        FolderController.shared.fetchItemsFor { (folder, error) in
-            if folder != nil {
-                folder?.forEach({ (folder) in
-                    NoteController.shared.fetchItems(folder: folder) { (note, _) in
-                        if note != nil {
-                            folder.notes = note!
-                            DispatchQueue.main.async {
-                                self.tableView.reloadData()
-                                self.hideStopActivityIndicator()
-                            }
-                        } else {
-                            let networkError = AlertController.presentAlertControllerWith(alertTitle: "Unable to load notes", alertMessage: "Check your internet connection and ensure that you are signed into iCloud", dismissActionTitle: "OK")
-                            DispatchQueue.main.async {
-                                self.present(networkError, animated: true, completion: nil)
-                            }
-                            return
-                        }
-                    }
-                })
-                
-                DispatchQueue.main.async {
-                    
-                    self.hideStopActivityIndicator()
-                }
-            } else {
-                DispatchQueue.main.async {
-                    //UI Element will go here in future versions
-                }
-                return
-            }
-        }
     }
     
     
@@ -82,10 +46,10 @@ class FolderTVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let folderCount = FolderController.shared.folders.count
+        
         return folderCount
     }
     
-    //Cell for row at
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.folderCellID, for: indexPath)
@@ -97,10 +61,8 @@ class FolderTVC: UITableViewController {
         cell.detailTextLabel?.textColor = ColorPallet.offWhite.value
         
         return cell
-        
     }
     
-    // Can Edit
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -146,7 +108,13 @@ class FolderTVC: UITableViewController {
         cell.backgroundColor = .clear
     }
     
-    //activity spinner funcs
+    func setUpNavUI() {
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+    }
+    
+    // MARK: - Activity Indicators
     func hideStopActivityIndicator() {
         self.activityIndicator.isHidden =  true
         self.activityIndicator.stopAnimating()
@@ -157,27 +125,7 @@ class FolderTVC: UITableViewController {
         self.activityIndicator.isHidden = false
     }
     
-    // MARK: - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == NoteConstants.folderSegueID {
-            
-            guard let destinationVC = segue.destination as? NotesTVC,
-                let indexPath = tableView.indexPathForSelectedRow else {return}
-            
-            let folder = FolderController.shared.folders[indexPath.row]
-            destinationVC.folder = folder
-        }
-    }
-    
-    @IBAction func newFolderButtonTapped(_ sender: Any) {
-        addFolderAlert()
-    }
-}
-
-extension FolderTVC {
-    
     func addFolderAlert() {
-        
         var folderNameTextField: UITextField?
         
         let myCustomerAlert = AlertController.presentAlertControllerWith(alertTitle: "New Folder", alertMessage: "Enter a name for this folder", dismissActionTitle: "Cancel")
@@ -207,5 +155,56 @@ extension FolderTVC {
         }
         myCustomerAlert.addAction(saveFolderName)
         self.present(myCustomerAlert, animated: true, completion: nil)
+    }
+    
+    // MARK: - Fetch Folders
+    func fetchCKFolders() {
+        //Fetch Folders from CK
+        FolderController.shared.fetchItemsFor { (folder, error) in
+            if folder != nil {
+                folder?.forEach({ (folder) in
+                    NoteController.shared.fetchItems(folder: folder) { (note, _) in
+                        if note != nil {
+                            folder.notes = note!
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
+                                self.hideStopActivityIndicator()
+                            }
+                        } else {
+                            let networkError = AlertController.presentAlertControllerWith(alertTitle: "Unable to load notes", alertMessage: "Check your internet connection and ensure that you are signed into iCloud", dismissActionTitle: "OK")
+                            DispatchQueue.main.async {
+                                self.present(networkError, animated: true, completion: nil)
+                            }
+                            return
+                        }
+                    }
+                })
+                
+                DispatchQueue.main.async {
+                    self.hideStopActivityIndicator()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    //UI Element will go here in future versions
+                }
+                return
+            }
+        }
+    }
+    
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == NoteConstants.folderSegueID {
+            
+            guard let destinationVC = segue.destination as? NotesTVC,
+                let indexPath = tableView.indexPathForSelectedRow else {return}
+            
+            let folder = FolderController.shared.folders[indexPath.row]
+            destinationVC.folder = folder
+        }
+    }
+    
+    @IBAction func newFolderButtonTapped(_ sender: Any) {
+        addFolderAlert()
     }
 }
