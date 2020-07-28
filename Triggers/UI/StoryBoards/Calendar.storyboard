@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yXW-Se-O5W">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yXW-Se-O5W">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -156,9 +156,6 @@
                                                         <state key="normal" title="&lt;">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
-                                                        <connections>
-                                                            <action selector="leftArowTapped:" destination="JYi-HP-gyc" eventType="touchUpInside" id="tmv-Ud-wsg"/>
-                                                        </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MonthLabel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E0R-y5-aZ5" customClass="HelveticaLabel" customModule="Triggers" customModuleProvider="target">
                                                         <rect key="frame" x="56" y="0.0" width="281" height="41"/>
@@ -173,9 +170,6 @@
                                                         <state key="normal" title="&gt;">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
-                                                        <connections>
-                                                            <action selector="rightArrowTapped:" destination="JYi-HP-gyc" eventType="touchUpInside" id="Mzg-Ix-US7"/>
-                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <constraints>
@@ -270,10 +264,6 @@
                                                             <constraint firstItem="vbU-jc-kG4" firstAttribute="height" secondItem="pOu-cO-PTp" secondAttribute="height" multiplier="0.706667" id="wfj-X1-ctT"/>
                                                         </constraints>
                                                         <size key="customSize" width="50" height="50"/>
-                                                        <connections>
-                                                            <outlet property="cellDateLabel" destination="XpK-9P-wH1" id="fBH-gP-Ob0"/>
-                                                            <outlet property="dateCellCircle" destination="vbU-jc-kG4" id="xnm-ZH-PQT"/>
-                                                        </connections>
                                                     </collectionViewCell>
                                                 </cells>
                                             </collectionView>
@@ -284,6 +274,7 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="37o-MY-JFG" firstAttribute="width" secondItem="btP-EN-eP7" secondAttribute="width" id="Wx8-rH-KnI"/>
                                     <constraint firstItem="37o-MY-JFG" firstAttribute="centerX" secondItem="btP-EN-eP7" secondAttribute="centerX" id="iwI-aS-MEG"/>
@@ -360,21 +351,11 @@
                     <connections>
                         <outlet property="activityIndicator" destination="VVv-47-W2Z" id="IDH-6I-tEc"/>
                         <outlet property="activityIndicatorView" destination="JiB-ZQ-U1l" id="831-yG-Vt0"/>
-                        <outlet property="calendarView" destination="ZZe-7e-nBw" id="IdL-XT-Aaz"/>
                         <outlet property="checkInBottomButton" destination="jmc-3V-WzP" id="vpO-Fu-9v0"/>
-                        <outlet property="fifthDayLabel" destination="Aa1-7Q-00L" id="ock-Md-0Uq"/>
-                        <outlet property="firstDayLabel" destination="lCn-ux-MLl" id="s0a-BW-wa0"/>
-                        <outlet property="fourthDayLabel" destination="aF8-BD-f8p" id="SVA-nw-R3m"/>
-                        <outlet property="leftArrow" destination="hQV-Zv-86V" id="RhM-PX-x1c"/>
                         <outlet property="leftView" destination="gNT-fm-2NB" id="Oun-kL-HJE"/>
-                        <outlet property="monthLabel" destination="E0R-y5-aZ5" id="b7l-DY-fTR"/>
                         <outlet property="numberOfDaysSoberLabel" destination="FXw-aA-33S" id="cos-Nu-MZe"/>
                         <outlet property="numberOfDaysSoberValueLabel" destination="7L6-2y-eVy" id="WKf-Xc-DIZ"/>
-                        <outlet property="rightArrow" destination="uVl-T0-4kd" id="dXZ-mY-KuG"/>
                         <outlet property="rightView" destination="GXl-8F-Baj" id="1YB-XC-ken"/>
-                        <outlet property="secondDayLabel" destination="mDF-Cj-TMD" id="4hh-ne-8X7"/>
-                        <outlet property="seventhDayLabel" destination="Azu-Ed-wLa" id="EeD-g1-Liw"/>
-                        <outlet property="sixthDayLabel" destination="WlH-Hc-wGj" id="B4b-5k-BJA"/>
                         <outlet property="soberSinceDateValueLabel" destination="pV3-b3-5Cu" id="9Ym-9B-MnW"/>
                         <outlet property="soberSinceLabel" destination="hVp-WB-Gai" id="59G-LZ-kcr"/>
                         <outlet property="soberSinceWeekDayLabel" destination="qMz-DO-Rn3" id="t4W-PS-05h"/>
@@ -383,7 +364,6 @@
                         <outlet property="sobrietyDatePicker" destination="5hP-To-UG2" id="NUL-bQ-CTZ"/>
                         <outlet property="sobrietyDateView" destination="9WM-kN-gr7" id="zqM-3o-10G"/>
                         <outlet property="sobrietySaveButton" destination="teH-2K-i9f" id="cvc-do-Rv4"/>
-                        <outlet property="thirdDayLabel" destination="0FW-pc-1TB" id="fMj-oJ-QN0"/>
                         <outlet property="triggersLabel" destination="oAg-TW-KcZ" id="4PC-Vg-Opi"/>
                         <outlet property="triggersLogoView" destination="mBk-PV-QPX" id="uGb-0O-nIh"/>
                     </connections>

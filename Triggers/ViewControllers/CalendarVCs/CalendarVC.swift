@@ -9,10 +9,11 @@
 import UIKit
 import CloudKit
 import MessageUI
-import JTAppleCalendar
+//import JTAppleCalendar
 
 // NOTE: The Calendar in this app will soon be replaced by a cocoapod
-class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarViewDelegate, JTAppleCalendarViewDataSource {
+class CalendarVC: UIViewController, UINavigationBarDelegate {
+//JTAppleCalendarViewDelegate, JTAppleCalendarViewDataSource {
     
     // MARK: - IBoutlets
     @IBOutlet weak var triggersLabel: UILabel!
@@ -43,7 +44,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarView
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var rightArrow: UIButton!
     @IBOutlet weak var leftArrow: UIButton!
-    @IBOutlet weak var calendarView: JTAppleCalendarView!
+//    @IBOutlet weak var calendarView: JTAppleCalendarView!
     
     private let localeUSA = "en_US"
     private let sobrietyUserDefaultKey = "sobrietyUserDefaultKey"
@@ -55,7 +56,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarView
     let todaysDate = Date()
     var dayLabelArray = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
     var selectedDate = Date()
-    var preSelectedCell = DateCell()
+//    var preSelectedCell = DateCell()
     var willTurnDarkGray = true
     
     var sobrietyDate: Date? {
@@ -67,8 +68,8 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarView
         super.viewDidLoad()
         
         //Calendar
-        self.calendarView.calendarDelegate = self
-        self.calendarView.calendarDataSource = self
+//        self.calendarView.calendarDelegate = self
+//        self.calendarView.calendarDataSource = self
         
         //Navigation Bar
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -94,7 +95,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarView
         updateDayofWeekLabel()
         sobrietyDateView.layer.cornerRadius = 15
         soberSinceDateValueLabel.numberOfLines = 0
-        modifiyDatePicker()
+//        modifiyDatePicker()
         
         self.activityIndicator.isHidden = true
         
@@ -104,9 +105,9 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarView
         //Check in button
         checkInBottomButton.setTitle("Check-In", for: .normal)
         
-        setUPCalendar()
+//        setUPCalendar()
         
-        calendarView.calendarDelegate = self
+//        calendarView.calendarDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -116,7 +117,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarView
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         checkInBottomButton.isEnabled = true
-        animateOutOfSobrietyView()
+//        animateOutOfSobrietyView()
     }
     
     override func viewWillLayoutSubviews() {
@@ -202,7 +203,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarView
     }
     
     // MARK: - Calendar
-    
+    /*
     func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
         
         let endDate = currentCalendar.date(byAdding: .year, value: 6, to: todaysDate) ?? todaysDate
@@ -386,6 +387,8 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarView
         sixthDayLabel.text = dayLabelArray[5]
         seventhDayLabel.text = dayLabelArray[6]
     }
+     
+     */
     
     func showStartActivityIndicator() {
         self.activityIndicator.startAnimating()
@@ -433,6 +436,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarView
     
     // MARK: - Actions
     
+    /*
     //Calendar
     @IBAction func leftArowTapped(_ sender: UIButton) {
         calendarView.scrollToSegment(.previous)
@@ -441,6 +445,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate, JTAppleCalendarView
     @IBAction func rightArrowTapped(_ sender: Any) {
         calendarView.scrollToSegment(.next)
     }
+ */
     
     //Sobriety
     @IBAction func sobrietySaveButtonTapped(_ sender: IRButton) {
@@ -593,7 +598,6 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
 extension CalendarVC: MFMessageComposeViewControllerDelegate {
     
     func composeTextMessage() {
-        
         guard MFMessageComposeViewController.canSendText() else {
             // DO some UI to show that an email cant be sent
             let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing Text Message", alertMessage: "At this time, your device does not support this feature", dismissActionTitle: "OK")
