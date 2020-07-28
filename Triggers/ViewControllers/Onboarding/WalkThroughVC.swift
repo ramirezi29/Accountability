@@ -19,6 +19,8 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     @IBOutlet var bossViewOutlet: UIView!
     @IBOutlet weak var buttomViewOutlet: UIView!
     @IBOutlet var pageControl: UIPageControl!
+    @IBOutlet var skipButton: UIButton!
+    @IBOutlet weak var tintedBackgroundView: UIView!
     
     @IBOutlet var nextButton: UIButton! {
         didSet {
@@ -29,9 +31,6 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         }
     }
     
-    @IBOutlet var skipButton: UIButton!
-    @IBOutlet weak var tintedBackgroundView: UIView!
-    
     weak var saveInfoDelegate: SaveUserInfoDelegate?
     var walkThroughPVC: WalkThroughPVC?
     var disableOnBardingBool = false
@@ -41,7 +40,6 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     var user: User?
     var walkThroughContentVC: WalkThroughContentVC?
     
-    //Landing Pad
     var userName: String?
     var sponsorName: String?
     var sponsorPhone: String?

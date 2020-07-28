@@ -17,7 +17,6 @@ protocol WalkthroughPageViewControllerDelegate: class {
 class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     weak var walkthroughDelegate: WalkthroughPageViewControllerDelegate?
-    
     var currentVC: WalkThroughContentVC?
     
     var pageHeadings = ["My Triggers",
@@ -55,7 +54,6 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
                            "Add another layer of accountability and support to your addiction recovery journey",
                            
                            ""]
-    
     
     var pageImages = ["LocationLogo", "icloud", "ambulance", "handshake", "friendship", "paperplane", "map", "gps", "landscape"]
     

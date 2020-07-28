@@ -30,7 +30,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     @IBOutlet weak var triggersLogoView: UIImageView!
     @IBOutlet weak var checkInBottomButton: UIButton!
     @IBOutlet weak var soberietyUserInfoLRStack: UIStackView!
-
+    
     private let localeUSA = "en_US"
     private let sobrietyUserDefaultKey = "sobrietyUserDefaultKey"
     var user: User?
@@ -401,7 +401,6 @@ extension CalendarVC: MFMessageComposeViewControllerDelegate {
     }
     
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-        
         switch result {
         case .cancelled:
             controller.dismiss(animated: true, completion: nil)

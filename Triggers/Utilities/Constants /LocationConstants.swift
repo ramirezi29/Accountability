@@ -9,6 +9,7 @@
 import Foundation
 
 struct LocationConstants  {
+    
     static let LocationTypeKey = "Location"
     static let geoCodeAddressStringKey = "geoCodeAddressString"
     static let locationTitleKey = "locationTitle"

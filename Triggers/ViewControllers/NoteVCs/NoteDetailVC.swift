@@ -12,18 +12,15 @@ import CloudKit
 
 class NoteDetailVC: UIViewController {
     
-    
     @IBOutlet weak var savebutton: UIBarButtonItem!
     @IBOutlet weak var textBodyView: UITextView!
     @IBOutlet weak var titelTextField: UITextField!
     
-    //Landing Pad
     var note: Note?
     var folder: Folder?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         textBodyView.delegate = self
         textBodyView.backgroundColor = ColorPallet.offWhite.value
         
@@ -42,9 +39,7 @@ class NoteDetailVC: UIViewController {
         }
         
         self.view.addVerticalGradientLayer()
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NoteDetailVC.hideKeyboard))
-        
         tapGesture.cancelsTouchesInView = true
         self.view.addGestureRecognizer(tapGesture)
     }

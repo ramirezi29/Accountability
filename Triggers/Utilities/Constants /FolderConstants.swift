@@ -9,6 +9,7 @@
 import Foundation
 
 struct FolderConstants {
+    
     static let FolderTypeKey = "Folder"
     static let folderTitleKey = "folderTitle"
     static let timeStampKey = "timeStamp"
