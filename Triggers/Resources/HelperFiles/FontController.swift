@@ -18,7 +18,6 @@ enum MyFont: String {
     case SFDisReg = "SFProDisplay-Regular"
     case SFDisMed = "SFProDisplay-Medium"
  
-    
     func withSize(size: CGFloat) -> UIFont {
         return UIFont(name: self.rawValue, size: size)!
     }

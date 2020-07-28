@@ -120,8 +120,6 @@ class UserController {
                 completion(true)
             } else {
                 completion(false)
-                //for test purposes fatal error
-                //fatalError("\nFatal Error , error creating record\n")
             }
         }
         

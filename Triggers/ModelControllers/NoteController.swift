@@ -86,9 +86,6 @@ class NoteController {
             }
             
             guard let record = record, let newNote = Note(ckRecord: record) else {
-                
-                print("\n💀 No Record came back from CloudKit\n")
-                
                 completion(false)
                 return
             }

@@ -44,7 +44,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     @IBOutlet weak var upperSaveButtonView: IRButton!
     
     weak var delegate: WalkThroughContentVCDelegate?
-    
     private let locationManger = CLLocationManager()
     private let center = UNUserNotificationCenter.current()
     private let londonLatitude = 51.50998
@@ -59,7 +58,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     var user: User?
     var location: Location?
     var loggedInUserExist: Bool? 
-    
     
     // Bools and Keys to for UIAlert
     var disableRestrictedAlertBool = false
@@ -738,7 +736,6 @@ extension WalkThroughContentVC {
                 DispatchQueue.main.async {
                     self.present(errorMessage, animated: true, completion: nil)
                 }
-                // prseent UI Alert expalining error
                 completion(false)
                 return
             }

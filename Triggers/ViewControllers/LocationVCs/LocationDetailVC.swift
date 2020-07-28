@@ -97,7 +97,6 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         let completer = MKLocalSearchCompleter()
         completer.delegate = self
         completer.region = mapViewOutlet.region
-        
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         //Activity Indicator
@@ -108,7 +107,7 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
         searchButtonUI()
         
         //Background UI
-        view.addVerticalGradientLayer(topColor: UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        view.addVerticalGradientLayer()
         
         loadViewIfNeeded()
         updateViews()
@@ -381,15 +380,10 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                 let city = addressComponents.city
                 let state = addressComponents.state
                 let postalCode = addressComponents.postalCode
-                
-                //print("\(cnPostalFormatString)")
-                //let cnPostalAddressFormatter = CNPostalAddressFormatter()
-                //let cnPostalFormatString = cnPostalAddressFormatter.attributedString(from: addressComponents, withDefaultAttributes: [:])
-                
+
                 annotation.subtitle = "\(street) \(city), \(state) \(postalCode)"
                 
                 if !street.isEmpty {
-                    
                     self.addressTextField.text = ("\(street) \(city), \(state) \(postalCode)")
                 } else {
                     let noStreetAddressFoundAlert = AlertController.presentAlertControllerWith(alertTitle: "No Street Address Found", alertMessage: "Latitude and Longitude were only obtained", dismissActionTitle: "OK")
@@ -400,12 +394,10 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                     }
                     self.addressTextField.text = ("\(longPressedLatitude), \(longPressedLongitude)")
                 }
-                
                 self.activityIndicator.startAnimating()
                 self.activityIndicator.isHidden = false
                 
                 guard let addressToSearchFor = self.addressTextField.toTrimmedString() else {
-                    
                     DispatchQueue.main.async {
                         self.activityIndicator.stopAnimating()
                         self.activityIndicator.isHidden = true
@@ -413,7 +405,6 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                     }
                     return
                 }
-                
                 self.showAddressOnMap(address: addressToSearchFor)
                 
                 DispatchQueue.main.async {

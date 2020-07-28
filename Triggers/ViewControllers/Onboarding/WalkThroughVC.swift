@@ -33,7 +33,6 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
     @IBOutlet weak var tintedBackgroundView: UIView!
     
     weak var saveInfoDelegate: SaveUserInfoDelegate?
-    
     var walkThroughPVC: WalkThroughPVC?
     var disableOnBardingBool = false
     var disableOnboardingKey = "disableOnboardingKey"
@@ -76,7 +75,6 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
         pageControl.pageIndicatorTintColor = UIColor.gray
         pageControl.backgroundColor = UIColor.clear
         pageControl.numberOfPages = 9
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -149,16 +147,12 @@ class WalkThroughVC: UIViewController, WalkthroughPageViewControllerDelegate {
             switch index {
             case 0...5:
                 walkThroughPVC?.forwardPage()
-                
             case 6:
                 walkThroughPVC?.currentVC?.inquirePermissions()
                 walkThroughPVC?.forwardPage()
                 walkThroughPVC?.currentVC?.inquirePermissions()
-                print("case 5")
-                
             case 7:
                 walkThroughPVC?.forwardPage()
-                
             case 8:
                 if UserController.shared.loggedInUser == nil {
                     walkThroughPVC?.currentVC?.saveInfoToCloudKit(completion: { (success) in

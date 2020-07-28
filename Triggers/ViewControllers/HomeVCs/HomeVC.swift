@@ -58,7 +58,6 @@ class HomeVC: UIViewController {
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Location Detail ViewDidLoad")
         
         //Navigation bar
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -146,7 +145,7 @@ class HomeVC: UIViewController {
         
         //Background UI
         //Top view
-        view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        view.addVerticalGradientLayer()
         
         //Textfields
         textFieldsInactive()
@@ -385,15 +384,9 @@ class HomeVC: UIViewController {
                 }
             }
             
-            // Text Fields
             textFieldsInactive()
-            
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped(_:)))
-            
-            // Picker View
             aaPickerDissaperAnimation()
-            print("\nEdit Button Tapped")
-            // Edit Button Bool
             editBool = false
         }
     }
@@ -446,11 +439,8 @@ extension HomeVC: UITextFieldDelegate {
         switch textField {
         case sponsorsPhoneNumberTextField:
             sponsorsPhoneNumberTextField.keyboardType = .namePhonePad
-            print("spnosrs phone number text field selected")
         case sponsorsEmailTextField:
             sponsorsEmailTextField.keyboardType = .emailAddress
-            print("sponsor email text field selected")
-            
         default: break
         }
         return true
@@ -460,13 +450,10 @@ extension HomeVC: UITextFieldDelegate {
         switch textField {
         case userNameTextField:
             sponsorsNameTextField.becomeFirstResponder()
-            
         case sponsorsNameTextField:
             sponsorsPhoneNumberTextField.becomeFirstResponder()
-            
         case sponsorsPhoneNumberTextField:
             sponsorsEmailTextField.becomeFirstResponder()
-            
         default:
             sponsorsEmailTextField.resignFirstResponder()
             break
@@ -484,8 +471,6 @@ extension HomeVC {
         }) { (succes) in
             if succes {
                 
-                //Test Print
-                print("\nCase False animation compeleted\n")
             }
         }
     }
@@ -496,7 +481,6 @@ extension HomeVC {
         }) { (succes) in
             if succes {
                 self.aaPickerView.isHidden = true
-                print("\nCase True animation compeleted\n")
                 DispatchQueue.main.async {
                     self.updateCurrentAAStep()
                 }
@@ -528,7 +512,6 @@ extension HomeVC: CNContactPickerDelegate {
         picker.delegate = self
         picker.predicateForEnablingContact = NSPredicate(format: "emailAddresses.@count > 0")
         picker.predicateForSelectionOfContact = NSPredicate(format: "emailAddresses.@count == 1")
-        
         present(picker, animated: true, completion: nil)
     }
     
@@ -537,7 +520,6 @@ extension HomeVC: CNContactPickerDelegate {
             let contactInfo = data.value
             sponsorsPhoneNumberTextField.text = contactInfo.stringValue
         }
-        
         let sponsorsName = contact.givenName
         let sponsorsFamilyName = contact.familyName
         let email = contact.emailAddresses.first

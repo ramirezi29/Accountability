@@ -20,7 +20,6 @@ class NotificationController {
         
         // Action
         let dismissAction = UNNotificationAction(identifier: LocationConstants.dismissActionKey, title: "Dismiss", options: [])
-        
         let locationCategory = UNNotificationCategory(identifier: LocationConstants.notifLocationCatergoryKey, actions: [dismissAction], intentIdentifiers: [], options: .customDismissAction)
         
         UNUserNotificationCenter.current().setNotificationCategories([locationCategory])
@@ -44,11 +43,8 @@ class NotificationController {
         }
         
         let region = circularRegion
-        
         region.notifyOnEntry = true
-        
         let trigger = UNLocationNotificationTrigger(region: region, repeats: true)
-        
         let request = UNNotificationRequest(identifier: notifIdentifier, content: content, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request) { (error) in
@@ -63,11 +59,8 @@ class NotificationController {
         
         // Action
         let dismissAction = UNNotificationAction(identifier: LocationConstants.dismissActionKey, title: "Dismiss", options: [])
-        
         let telephoneAction = UNNotificationAction(identifier: LocationConstants.telephoneSponsorActionKey, title: telephoneActionTitle, options: [.authenticationRequired])
-        
         let textMessageAction = UNNotificationAction(identifier: LocationConstants.textSponsorActionKey, title: textActionTitle, options: [.authenticationRequired])
-        
         let locationCategory = UNNotificationCategory(identifier: LocationConstants.notifLocationCatergoryKey, actions: [dismissAction, telephoneAction, textMessageAction], intentIdentifiers: [], options: .customDismissAction)
         UNUserNotificationCenter.current().setNotificationCategories([locationCategory])
         
@@ -88,11 +81,8 @@ class NotificationController {
         } catch {
             print("\n\nThere was an error with the attachment in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription)\n\n")
         }
-        
         let region = circularRegion
-        
         region.notifyOnEntry = true
-        
         let trigger = UNLocationNotificationTrigger(region: region, repeats: true)
         let request = UNNotificationRequest(identifier: notifIdentifier, content: content, trigger: trigger)
         
