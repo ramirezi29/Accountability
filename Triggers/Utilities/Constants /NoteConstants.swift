@@ -9,7 +9,6 @@
 import Foundation
 
 struct NoteConstants {
-    
     static let NoteTypeKey = "Note"
     static let titleKey = "title"
     static let textBodyKey = "textBody"

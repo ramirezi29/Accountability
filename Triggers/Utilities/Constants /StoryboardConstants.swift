@@ -9,7 +9,6 @@
 import Foundation
 
 struct StoryboardConstants {
-    
     static let calendarStoryboard = "Calendar"
     static let mainStoryboard = "Main"
     static let onBoardingStoryBoard = "WalkThroughOnBoarding"

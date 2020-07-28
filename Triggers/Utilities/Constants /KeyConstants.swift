@@ -11,5 +11,4 @@ import Foundation
 struct KeyConstants {
        static let calendarDateCell = "dateCell"
        static let calendarDateHeader = "DateHeader"
-    
 }

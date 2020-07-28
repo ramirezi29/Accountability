@@ -30,7 +30,6 @@ class LocationController {
      - The device must be signed into an iCloud account and be connected to the internet
      */
     func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping fetchCompletion) {
-        
         guard let user = user else {
             completion(nil, .invalidData("Invalid User"))
             return
@@ -76,9 +75,7 @@ class LocationController {
      - The device must be signed into an iCloud account and be connected to the internet
      */
     func saveToCloudKit(locations: Location, completion: @escaping boolVoidCompletion) {
-        
         let locationRecord = CKRecord(location: locations)
-        
         privateDB.save(locationRecord) { (record, error) in
             if let error = error {
                 print("\n\n🚀 There was an error with saving the record to CloudKit in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription) 🚀\n\n")

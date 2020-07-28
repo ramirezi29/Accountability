@@ -16,13 +16,13 @@ extension UIView {
      - Parameter topColor: Top color for gradiant
      - Parameter bottomColor: Bottom color for gradiant
      */
-    func addVerticalGradientLayer(topColor: UIColor, bottomColor: UIColor) {
+    func addVerticalGradientLayer() {
         
         let gradient = CAGradientLayer()
         gradient.frame = self.bounds
         gradient.colors = [
-            topColor.cgColor,
-            bottomColor.cgColor
+            UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0).cgColor,
+            UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0).cgColor
         ]
         gradient.locations = [0.0, 20.0]
         gradient.startPoint = CGPoint(x: 0, y: 0)
@@ -36,9 +36,9 @@ extension UIView {
      - Parameter topColor: Top color for gradiant
      - Parameter bottomColor: Bottom color for gradiant
      */
-    func setGradientToTableView(tableView: UITableView, _ topColor:UIColor, _ bottomColor:UIColor) {
+    func setGradientToTableView(tableView: UITableView) {
         
-        let gradientBackgroundColors = [topColor.cgColor, bottomColor.cgColor]
+        let gradientBackgroundColors = [UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0).cgColor,  UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0).cgColor]
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = gradientBackgroundColors
         gradientLayer.locations = [0.0,1.0]

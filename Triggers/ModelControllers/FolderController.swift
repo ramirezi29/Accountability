@@ -41,9 +41,6 @@ class FolderController {
             return
         }
         
-        //Test Print
-        print("Random info From folder fetch: user: \(user)")
-        
         guard let userParentID = user.ckRecordID else {
             completion(nil, .invalidData("Invalid User Parent ID"))
             return
@@ -67,9 +64,6 @@ class FolderController {
             }
             let fetchItems = records.compactMap{ Folder(ckRecord: $0) }
             self.folders = fetchItems
-            
-            //Test Print
-            //            print("\nNumber of folders fetched: \(self.folders.count)")
             completion(fetchItems, nil)
         }
     }
@@ -129,8 +123,6 @@ class FolderController {
                 //                print("\nSuccesfully created folder record\n")
                 completion(true)
             } else {
-                //Test Print
-                print("\n💀 Error Creating Folder Record\n")
                 completion(false)
             }
         }
@@ -159,7 +151,6 @@ class FolderController {
         operration.queuePriority = .high
         operration.qualityOfService = .userInteractive
         operration.completionBlock = {
-            
             completion(true)
         }
         privateDB.add(operration)
@@ -168,15 +159,15 @@ class FolderController {
     // MARK: - Add Note to the specific Folder
     
     /**
-      Add a Note object to an existing Folder.
-      
-      - Parameter note: Note object
-      - Parameter folder: Folder object
-      
-      ## Important Note ##
-      - A valid User object must already exist
-      - The device must be signed into an iCloud account and be connected to the internet
-      */
+     Add a Note object to an existing Folder.
+     
+     - Parameter note: Note object
+     - Parameter folder: Folder object
+     
+     ## Important Note ##
+     - A valid User object must already exist
+     - The device must be signed into an iCloud account and be connected to the internet
+     */
     func add(note: Note, to folder: Folder) {
         folder.notes.append(note)
     }

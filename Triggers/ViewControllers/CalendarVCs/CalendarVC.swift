@@ -9,11 +9,8 @@
 import UIKit
 import CloudKit
 import MessageUI
-//import JTAppleCalendar
 
-// NOTE: The Calendar in this app will soon be replaced by a cocoapod
 class CalendarVC: UIViewController, UINavigationBarDelegate {
-//JTAppleCalendarViewDelegate, JTAppleCalendarViewDataSource {
     
     // MARK: - IBoutlets
     @IBOutlet weak var triggersLabel: UILabel!
@@ -33,30 +30,14 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     @IBOutlet weak var triggersLogoView: UIImageView!
     @IBOutlet weak var checkInBottomButton: UIButton!
     @IBOutlet weak var soberietyUserInfoLRStack: UIStackView!
-    
-    @IBOutlet weak var firstDayLabel: UILabel!
-    @IBOutlet weak var secondDayLabel: UILabel!
-    @IBOutlet weak var thirdDayLabel: UILabel!
-    @IBOutlet weak var fourthDayLabel: UILabel!
-    @IBOutlet weak var fifthDayLabel: UILabel!
-    @IBOutlet weak var sixthDayLabel: UILabel!
-    @IBOutlet weak var seventhDayLabel: UILabel!
-    @IBOutlet weak var monthLabel: UILabel!
-    @IBOutlet weak var rightArrow: UIButton!
-    @IBOutlet weak var leftArrow: UIButton!
-//    @IBOutlet weak var calendarView: JTAppleCalendarView!
-    
+
     private let localeUSA = "en_US"
     private let sobrietyUserDefaultKey = "sobrietyUserDefaultKey"
     var user: User?
-    var dayLabels = [UILabel]()
-    var directionArrows = [UIButton]()
     let dateFormatter = DateFormatter()
     let currentCalendar = Calendar.current
     let todaysDate = Date()
-    var dayLabelArray = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
     var selectedDate = Date()
-//    var preSelectedCell = DateCell()
     var willTurnDarkGray = true
     
     var sobrietyDate: Date? {
@@ -66,10 +47,6 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //Calendar
-//        self.calendarView.calendarDelegate = self
-//        self.calendarView.calendarDataSource = self
         
         //Navigation Bar
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -95,19 +72,14 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         updateDayofWeekLabel()
         sobrietyDateView.layer.cornerRadius = 15
         soberSinceDateValueLabel.numberOfLines = 0
-//        modifiyDatePicker()
         
         self.activityIndicator.isHidden = true
         
-        //UI
-        self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        view.addVerticalGradientLayer()
         
-        //Check in button
         checkInBottomButton.setTitle("Check-In", for: .normal)
         
-//        setUPCalendar()
-        
-//        calendarView.calendarDelegate = self
+        sobrietyDatePicker.datePickerMode = .date
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -117,7 +89,6 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         checkInBottomButton.isEnabled = true
-//        animateOutOfSobrietyView()
     }
     
     override func viewWillLayoutSubviews() {
@@ -178,10 +149,6 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     }
     
     func updateViewsFonts() {
-        
-        //Future version include 'kern' to text style
-        //let kernAttribute = [NSAttributedString.Key.kern: 10]
-        
         //Left side date related to Sober Since
         soberSinceLabel.font = MyFont.SFDisMed.withSize(size: 17)
         soberSinceYearValueLabel.font = MyFont.SFBold.withSize(size: 24)
@@ -202,194 +169,6 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         numberOfDaysSoberValueLabel.textColor = ColorPallet.offWhite.value
     }
     
-    // MARK: - Calendar
-    /*
-    func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
-        
-        let endDate = currentCalendar.date(byAdding: .year, value: 6, to: todaysDate) ?? todaysDate
-        
-        let calendarParameters = ConfigurationParameters(startDate: todaysDate, endDate: endDate, numberOfRows: 6, calendar: currentCalendar, generateInDates: .forAllMonths, generateOutDates: .tillEndOfRow, firstDayOfWeek: .sunday, hasStrictBoundaries: true)
-        
-        return calendarParameters
-    }
-    
-    func calendar(_ calendar: JTAppleCalendarView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTAppleCell {
-        guard let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: KeyConstants.calendarDateCell, for: indexPath) as? DateCell else {
-            return JTAppleCell()
-        }
-        
-        let currentCalendar = Calendar.current
-        
-        self.calendar(calendar, willDisplay: cell, forItemAt: date, cellState: cellState, indexPath: indexPath)
-        
-        guard let yesterday = currentCalendar.date(byAdding: .day, value: -1, to: todaysDate) else { return cell }
-        if date < yesterday {
-            cell.cellDateLabel.textColor = UIColor.gray
-        }
-        
-        return cell
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        let visibleDates = calendarView.visibleDates()
-        calendarView.viewWillTransition(to: .zero, with: coordinator, anchorDate: visibleDates.monthDates.first?.date)
-    }
-    
-    func configureCell(view: JTAppleCell?, cellState: CellState, date: Date) {
-        guard let cell = view as? DateCell  else { return }
-        cell.cellDateLabel.text = cellState.text
-        calendarView.backgroundColor = .clear
-        calendarView.backgroundView?.backgroundColor = .clear
-        handleCellConfiguration(cell: cell, cellState: cellState, date: date)
-    }
-    
-    // MARK: - Handle Cell Properties
-    
-    func handleCellConfiguration(cell: JTAppleCell?, cellState: CellState, date: Date) {
-        
-        handleCellTextColor(view: cell, cellState: cellState, date: date)
-        handleCellSelection(view: cell, cellState: cellState, date: date)
-    }
-    
-    func handleCellTextColor(view: JTAppleCell?, cellState: CellState, date: Date) {
-        guard let cell = view as? DateCell else { return }
-        
-        // Text color of the date cell
-        if cellState.dateBelongsTo == .thisMonth {
-            cell.cellDateLabel.textColor = UIColor.white
-        } else {
-            cell.cellDateLabel.textColor = UIColor.gray
-        }
-        
-        // The cell that is today's actual date
-        cell.cellDateLabel.text = cellState.text
-        
-        if currentCalendar.isDateInToday(date) {
-            cell.cellDateLabel.textColor = UIColor.black
-        }
-    }
-    
-    func handleCellSelection(view: JTAppleCell?, cellState: CellState, date: Date) {
-        
-        guard let cell = view as? DateCell else { return }
-        
-        dateFormatter.dateStyle = .short
-        switch cellState.isSelected {
-        case true:
-            cell.backgroundColor = ColorPallet.annotationOrange.value
-            preSelectedCell.backgroundColor = willTurnDarkGray ? .clear : .clear
-        case false:
-            switch date.isSameDay(as: selectedDate) {
-            case true:
-                cell.backgroundColor = ColorPallet.annotationOrange.value
-                preSelectedCell = cell
-                willTurnDarkGray = date.isSameDay(as: todaysDate) ? false : true
-            case false:
-                cell.backgroundColor = .clear
-            }
-        }
-    }
-    
-    
-    func calendar(_ calendar: JTAppleCalendarView, willDisplay cell: JTAppleCell, forItemAt date: Date, cellState: CellState, indexPath: IndexPath) {
-        
-        configureCell(view: cell, cellState: cellState, date: date)
-        if date.isSameDay(as: todaysDate) {
-            cell.backgroundColor = date.isSameDay(as: selectedDate) ? ColorPallet.annotationOrange.value : .clear
-        }
-    }
-    
-    // MARK: - Calendar Selection Properites
-    
-    func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) -> Bool {
-        
-        guard let yesterday = currentCalendar.date(byAdding: .day, value: -1, to: todaysDate) else { return false }
-        
-        if  date < yesterday || cellState.dateBelongsTo != .thisMonth { return false }
-        
-        return true
-    }
-    
-    func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
-        handleCellConfiguration(cell: cell, cellState: cellState, date: date)
-        selectedDate = date
-        
-        print(selectedDate.mmddyy)
-    }
-    
-    func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
-        handleCellConfiguration(cell: cell, cellState: cellState, date: date)
-    }
-    
-    // Month Label bit of code
-    func calendar(_ calendar: JTAppleCalendarView, didScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
-        DispatchQueue.main.async {
-            self.setupViewsOfCalendar(from: visibleDates)
-        }
-    }
-    
-    func setupViewsOfCalendar(from visibleDates: DateSegmentInfo) {
-        guard let startDate = visibleDates.monthDates.first?.date,
-            
-            let month = currentCalendar.dateComponents([.month], from: startDate).month else {
-                
-                return
-        }
-        let monthName = dateFormatter.monthSymbols[(month-1) % 12]
-        // 0 indexed array
-        let year = currentCalendar.component(.year, from: startDate)
-        monthLabel.text = monthName + " " + String(year)
-    }
-    
-    func calendar(_ calendar: JTAppleCalendarView, willScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
-        DispatchQueue.main.async {
-            self.animateArrows()
-            self.setupViewsOfCalendar(from: visibleDates)
-        }
-    }
-    
-    func sizeOfDecorationView(indexPath: IndexPath) -> CGRect {
-        let stride = calendarView.frame.width * CGFloat(indexPath.section)
-        return CGRect(x: stride + 5, y: 5, width: calendarView.frame.width - 10, height: calendarView.frame.height - 10)
-    }
-    
-    func animateArrows() {
-        UIView.animateKeyframes(withDuration: 1.5, delay: 0.0, animations: {
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5, animations: {
-                self.rightArrow.titleLabel?.alpha = 0
-                self.leftArrow.titleLabel?.alpha = 0
-            })
-            
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5, animations: {
-                self.rightArrow.titleLabel?.alpha = 1
-                self.leftArrow.titleLabel?.alpha = 1
-            })
-        }, completion: nil)
-    }
-    
-    func setUPCalendar() {
-        // Populates the month label with the current month, when the VC is first loaded
-        self.calendarView.visibleDates {[unowned self] (visibleDates: DateSegmentInfo) in
-            self.setupViewsOfCalendar(from: visibleDates)
-        }
-        
-        calendarView.scrollDirection = .horizontal
-        calendarView.isScrollEnabled = true
-        calendarView.allowsMultipleSelection = false
-        calendarView.scrollingMode = .stopAtEachSection
-        calendarView.showsVerticalScrollIndicator = false
-        // dayLabelArray contains the 7 values. The order of the string values can be re-arranged by changing the order in the dayLabelArray array syntax
-        firstDayLabel.text = dayLabelArray[0]
-        secondDayLabel.text = dayLabelArray[1]
-        thirdDayLabel.text = dayLabelArray[2]
-        fourthDayLabel.text = dayLabelArray[3]
-        fifthDayLabel.text = dayLabelArray[4]
-        sixthDayLabel.text = dayLabelArray[5]
-        seventhDayLabel.text = dayLabelArray[6]
-    }
-     
-     */
-    
     func showStartActivityIndicator() {
         self.activityIndicator.startAnimating()
         self.activityIndicator.isHidden = false
@@ -404,14 +183,10 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         UIView.animate(withDuration: 0.3, animations: {
             self.sobrietyDateView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
             self.sobrietyDateView.alpha = 0
-            //            self.visualBlurrrView.effect = nil
         }) { (success: Bool) in
             self.sobrietyDateView.removeFromSuperview()
             DispatchQueue.main.async {
-                //                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editButtonTapped(_:)))
-                DispatchQueue.main.async {
-                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit Date", style: .plain, target: self, action: #selector(self.editButtonTapped(_:)))
-                }
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit Date", style: .plain, target: self, action: #selector(self.editButtonTapped(_:)))
             }
             self.checkInBottomButton.isEnabled = true
         }
@@ -430,22 +205,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         }
     }
     
-    func modifiyDatePicker() {
-        sobrietyDatePicker.datePickerMode = .date
-    }
-    
     // MARK: - Actions
-    
-    /*
-    //Calendar
-    @IBAction func leftArowTapped(_ sender: UIButton) {
-        calendarView.scrollToSegment(.previous)
-    }
-    
-    @IBAction func rightArrowTapped(_ sender: Any) {
-        calendarView.scrollToSegment(.next)
-    }
- */
     
     //Sobriety
     @IBAction func sobrietySaveButtonTapped(_ sender: IRButton) {
@@ -456,7 +216,6 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     }
     
     @IBAction func editButtonTapped(_ sender: Any) {
-        
         checkInBottomButton.isEnabled = false
         DispatchQueue.main.async {
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.animateOutOfSobrietyView))
@@ -465,11 +224,9 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     }
     
     @IBAction func checkInButtonTapped(_ sender: IRButton) {
-        //Initial check to verify that the user's accountability partners inforamtion is saved
         if UserController.shared.loggedInUser?.sponsorEmail == "" && UserController.shared.loggedInUser?.sponsorTelephoneNumber == "" ||   UserController.shared.loggedInUser?.sponsorEmail == nil && UserController.shared.loggedInUser?.sponsorTelephoneNumber == nil {
             let noSponsorInfoFoundALert = AlertController.presentAlertControllerWith(alertTitle: "Error Obtaining Information", alertMessage: "There seems to be an issue obtaining your support person's email and phone number. Click on the 'Information' tab and ensure that their information is correctly saved", dismissActionTitle: "Ok")
             DispatchQueue.main.async {
-                
                 self.present(noSponsorInfoFoundALert, animated: true, completion: nil)
             }
         } else {
@@ -531,6 +288,29 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
             }
         }
     }
+    
+    // MARK: - Telephone
+    
+    func telephoneSponsor() {
+        DispatchQueue.main.async {
+            self.showStartActivityIndicator()
+        }
+        
+        guard let phoneCallURL = URL(string: "telprompt://\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "")") else {
+            
+            let phoneCallError = AlertController.presentAlertControllerWith(alertTitle: "Error Making Phone Call", alertMessage: "Unexpected error please try again later", dismissActionTitle: "OK")
+            
+            DispatchQueue.main.async {
+                self.hideStopActivityIndictor()
+                self.present(phoneCallError, animated: true, completion: nil)
+            }
+            return
+        }
+        DispatchQueue.main.async {
+            self.hideStopActivityIndictor()
+            UIApplication.shared.open(phoneCallURL)
+        }
+    }
 }
 
 // MARK: - Email
@@ -538,10 +318,8 @@ extension CalendarVC: MFMailComposeViewControllerDelegate {
     
     func composeEmail() {
         
-        //check if device can send mail
         guard MFMailComposeViewController.canSendMail() else {
             
-            // DO some UI to show that an email cant be sent
             let notMailCompatable = AlertController.presentAlertControllerWith(alertTitle: "Error Composing E-Mail", alertMessage: "Your device does not support this feature", dismissActionTitle: "OK")
             
             DispatchQueue.main.async {
@@ -637,27 +415,5 @@ extension CalendarVC: MFMessageComposeViewControllerDelegate {
     }
 }
 
-// MARK: - Telephone
-extension CalendarVC {
-    
-    func telephoneSponsor() {
-        DispatchQueue.main.async {
-            self.showStartActivityIndicator()
-        }
-        
-        guard let phoneCallURL = URL(string: "telprompt://\(UserController.shared.loggedInUser?.sponsorTelephoneNumber ?? "")") else {
-            
-            let phoneCallError = AlertController.presentAlertControllerWith(alertTitle: "Error Making Phone Call", alertMessage: "Unexpected error please try again later", dismissActionTitle: "OK")
-            
-            DispatchQueue.main.async {
-                self.hideStopActivityIndictor()
-                self.present(phoneCallError, animated: true, completion: nil)
-            }
-            return
-        }
-        DispatchQueue.main.async {
-            self.hideStopActivityIndictor()
-            UIApplication.shared.open(phoneCallURL)
-        }
-    }
-}
+
+

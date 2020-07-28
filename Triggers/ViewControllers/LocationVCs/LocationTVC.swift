@@ -31,7 +31,7 @@ class LocationTVC: UITableViewController {
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
         
-        view.setGradientToTableView(tableView: tableView, UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        view.setGradientToTableView(tableView: tableView)
         
         activityIndicatorView.backgroundColor = .clear
         
@@ -134,9 +134,7 @@ class LocationTVC: UITableViewController {
             
             guard let destinationVC = segue.destination as? LocationDetailVC,
                 let idexPath = tableView.indexPathForSelectedRow else {return}
-            
             let location = LocationController.shared.locations[idexPath.row]
-            
             destinationVC.location = location
         }
     }

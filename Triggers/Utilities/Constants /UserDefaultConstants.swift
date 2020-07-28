@@ -9,7 +9,6 @@
 import Foundation
 
 struct UserDefaultConstants {
-    
     static let isOnboardedKey = "hasViewedWalkthrough"
 }
 

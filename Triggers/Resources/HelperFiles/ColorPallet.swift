@@ -12,7 +12,6 @@ import UIKit
  A collection of colors linked to a given value.
  */
 enum ColorPallet {
-    
     case powderBlue
     case buttonBlue
     case hardBlue

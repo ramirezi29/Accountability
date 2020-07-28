@@ -41,7 +41,7 @@ class NoteDetailVC: UIViewController {
             title = "Note"
         }
         
-        self.view.addVerticalGradientLayer(topColor: UIColor(red: 55/255, green: 179/255, blue: 198/255, alpha: 1.0), bottomColor: UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
+        self.view.addVerticalGradientLayer()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NoteDetailVC.hideKeyboard))
         
