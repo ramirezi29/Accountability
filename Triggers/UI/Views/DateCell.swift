@@ -7,10 +7,10 @@
 //
 
 import UIKit
-import JTAppleCalendar
+//import JTAppleCalendar
 
-class DateCell: JTAppleCell {
-    
-    @IBOutlet weak var dateCellCircle: UIView!
-    @IBOutlet weak var cellDateLabel: UILabel!
-}
+//class DateCell: JTAppleCell {
+//    
+//    @IBOutlet weak var dateCellCircle: UIView!
+//    @IBOutlet weak var cellDateLabel: UILabel!
+//}

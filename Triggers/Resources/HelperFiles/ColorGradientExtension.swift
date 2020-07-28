@@ -16,7 +16,7 @@ extension UIView {
      - Parameter topColor: Top color for gradiant
      - Parameter bottomColor: Bottom color for gradiant
      */
-    func addVerticalGradientLayer(topColor:UIColor, bottomColor:UIColor) {
+    func addVerticalGradientLayer(topColor: UIColor, bottomColor: UIColor) {
         
         let gradient = CAGradientLayer()
         gradient.frame = self.bounds

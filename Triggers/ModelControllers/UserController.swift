@@ -117,13 +117,11 @@ class UserController {
         
         saveToCloudKit(user: user) { (success) in
             if success {
-                print("\n🙏🏽Successfully created record\n")
                 completion(true)
             } else {
                 completion(false)
-                print("\n💀Error Creating Record💀\n")
-                //                for test purposes fatal error
-                //                                fatalError("\nFatal Error , error creating record\n")
+                //for test purposes fatal error
+                //fatalError("\nFatal Error , error creating record\n")
             }
         }
         
@@ -151,9 +149,10 @@ class UserController {
         user.sponsorTelephoneNumber = sponserTelephoneNumber
         user.sponsorEmail = sponsorEmail
         user.aaStep = aaStep
-        let record = CKRecord(user: user )
         
+        let record = CKRecord(user: user )
         let operration = CKModifyRecordsOperation(recordsToSave: [record], recordIDsToDelete: nil)
+        
         operration.savePolicy = .changedKeys
         operration.queuePriority = .high
         operration.qualityOfService = .userInteractive

@@ -61,7 +61,6 @@
 		47E29E5C21C89C7400FA44EE /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E5B21C89C7400FA44EE /* UserController.swift */; };
 		47E29E5F21C8B1E300FA44EE /* NetworkingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E29E5E21C8B1E300FA44EE /* NetworkingError.swift */; };
 		47FE313021DEB60F000A92FD /* UserDefaultConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FE312F21DEB60F000A92FD /* UserDefaultConstants.swift */; };
-		7D2E86D76C075BB5E8F3C50C /* Pods_Triggers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF5B4515297F0C57565B8EAB /* Pods_Triggers.framework */; };
 		8BAEACB92401DA140013DADE /* KeyConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAEACB82401DA140013DADE /* KeyConstants.swift */; };
 		8BC67A182402471800622235 /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC67A172402471800622235 /* DateCell.swift */; };
 		8BD40A0323FE3CA2002EF517 /* ReachabilityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD40A0223FE3CA2002EF517 /* ReachabilityController.swift */; };
@@ -143,13 +142,10 @@
 		47E29E5B21C89C7400FA44EE /* UserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
 		47E29E5E21C8B1E300FA44EE /* NetworkingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingError.swift; sourceTree = "<group>"; };
 		47FE312F21DEB60F000A92FD /* UserDefaultConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultConstants.swift; sourceTree = "<group>"; };
-		7FD768786C30D142813C493B /* Pods-Triggers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Triggers.release.xcconfig"; path = "Target Support Files/Pods-Triggers/Pods-Triggers.release.xcconfig"; sourceTree = "<group>"; };
 		8BAEACB82401DA140013DADE /* KeyConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyConstants.swift; sourceTree = "<group>"; };
 		8BC67A172402471800622235 /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
 		8BD40A0223FE3CA2002EF517 /* ReachabilityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityController.swift; sourceTree = "<group>"; };
 		8BFCFA4623FE10460000E860 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
-		A7277D18071EB72CE0DDF584 /* Pods-Triggers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Triggers.debug.xcconfig"; path = "Target Support Files/Pods-Triggers/Pods-Triggers.debug.xcconfig"; sourceTree = "<group>"; };
-		EF5B4515297F0C57565B8EAB /* Pods_Triggers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Triggers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,7 +154,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				477B494321E010BE00167A81 /* CloudKit.framework in Frameworks */,
-				7D2E86D76C075BB5E8F3C50C /* Pods_Triggers.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,8 +163,6 @@
 		132A197BC0C7B1E073DB9C42 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A7277D18071EB72CE0DDF584 /* Pods-Triggers.debug.xcconfig */,
-				7FD768786C30D142813C493B /* Pods-Triggers.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -383,7 +376,6 @@
 			isa = PBXGroup;
 			children = (
 				477B494221E010BE00167A81 /* CloudKit.framework */,
-				EF5B4515297F0C57565B8EAB /* Pods_Triggers.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -426,11 +418,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 47E29E2921C80B0400FA44EE /* Build configuration list for PBXNativeTarget "Triggers" */;
 			buildPhases = (
-				396CA8E662F4640183686990 /* [CP] Check Pods Manifest.lock */,
 				47E29E1321C80B0200FA44EE /* Sources */,
 				47E29E1421C80B0200FA44EE /* Frameworks */,
 				47E29E1521C80B0200FA44EE /* Resources */,
-				AAB90719CC2F832B8C435E49 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 				8BB2A2532400F34E00F6027B /* PBXBuildRule */,
@@ -509,48 +499,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		396CA8E662F4640183686990 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Triggers-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AAB90719CC2F832B8C435E49 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Triggers/Pods-Triggers-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Triggers/Pods-Triggers-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Triggers/Pods-Triggers-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		47E29E1321C80B0200FA44EE /* Sources */ = {
@@ -771,7 +719,6 @@
 		};
 		47E29E2A21C80B0400FA44EE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A7277D18071EB72CE0DDF584 /* Pods-Triggers.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Triggers/Triggers.entitlements;
@@ -791,7 +738,6 @@
 		};
 		47E29E2B21C80B0400FA44EE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7FD768786C30D142813C493B /* Pods-Triggers.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Triggers/Triggers.entitlements;
