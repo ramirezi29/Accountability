@@ -31,7 +31,6 @@ class HomeVC: UIViewController {
     @IBOutlet weak var aaIconButton: UIButton!
     @IBOutlet weak var aaDismissButton: IRButton!
     
-    
     //Navigation Bar BUttons
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
@@ -58,11 +57,9 @@ class HomeVC: UIViewController {
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.addVerticalGradientLayer()
         //Navigation bar
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
+        setUpNavBar()
         
         //textField
         userNameTextField.contentVerticalAlignment = .bottom
@@ -90,7 +87,6 @@ class HomeVC: UIViewController {
         //Update AA Labels
         updateCurrentAAStep()
         
-        //Images
         supportPersonImageView.image = UIImage(named: "friendshipMaleIcon")
         phoneImageView.image = UIImage(named: "smartphone")
         emailImageView.image = UIImage(named: "paperPlaneIcon")
@@ -101,6 +97,16 @@ class HomeVC: UIViewController {
         tapGesture.cancelsTouchesInView = true
         self.view.addGestureRecognizer(tapGesture)
         
+        setUpTextFields()
+        textFieldsTextOffWhiteColor()
+        setUpPicker()
+        textFieldsInactive()
+        textFieldsInvisable()
+        updateCurrentAAStep()
+        fetchCurrentUser()
+    }
+    
+    func setUpTextFields() {
         // Text Field
         self.userNameTextField.delegate = self
         self.sponsorsNameTextField.delegate = self
@@ -122,8 +128,6 @@ class HomeVC: UIViewController {
         self.sponsorsPhoneNumberTextField.layer.cornerRadius = 7
         self.sponsorsEmailTextField.layer.cornerRadius = 7
         
-        textFieldsTextOffWhiteColor()
-        
         //Place holder
         userNameTextField.attributedPlaceholder = NSAttributedString(string: "Your Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
         
@@ -137,21 +141,15 @@ class HomeVC: UIViewController {
         self.sponsorsNameTextField.autocorrectionType = .no
         self.sponsorsPhoneNumberTextField.autocorrectionType = .no
         self.sponsorsEmailTextField.autocorrectionType = .no
-        
-        // Picker View
+    }
+    
+    func setUpPicker() {
         self.aaPickerView.isHidden = true
         self.aaPickerView.dataSource = self
         self.aaPickerView.delegate = self
-        
-        //Background UI
-        //Top view
-        view.addVerticalGradientLayer()
-        
-        //Textfields
-        textFieldsInactive()
-        textFieldsInvisable()
-        updateCurrentAAStep()
-        
+    }
+    
+    func fetchCurrentUser() {
         UserController.shared.fetchCurrentUser { (success, error) in
             if success {
                 DispatchQueue.main.async {
@@ -165,23 +163,6 @@ class HomeVC: UIViewController {
             }
         }
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
     
     @objc func hideKeyboard() {
         self.view.endEditing(true)
@@ -254,6 +235,12 @@ class HomeVC: UIViewController {
         currentAAStepValueLabel.text = "\(loggedInUser.aaStep)"
     }
     
+    func setUpNavBar() {
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+    }
+    
     // MARK: - Actions
     @IBAction func dismissAAInfoButtonTapped(_ sender: IRButton) {
         //Dismiss view
@@ -265,7 +252,7 @@ class HomeVC: UIViewController {
         disableBarButtons()
         self.cancelButton.isEnabled = false
         self.aaDismissButton.setTitle("Dismiss", for: .normal)
-        self.aaExplinationLabel.text = "If you are currently in an Alcohol Anonymous or 12 Step type program you can track your progress by selcting your current step"
+        self.aaExplinationLabel.text = "If you are currently in an Alcohol Anonymous or 12 Step type program you can track your progress by selecting your current step"
         
         animateInAAInfoView()
     }

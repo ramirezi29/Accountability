@@ -25,6 +25,8 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
     @IBOutlet weak var backGroundView: UIView!
     @IBOutlet weak var imageViewWidthToSuperView: NSLayoutConstraint!
     @IBOutlet weak var imageViewHightToSuperView: NSLayoutConstraint!
+    @IBOutlet weak var contentImageView: UIImageView!
+    @IBOutlet weak var upperSaveButtonView: IRButton!
     
     @IBOutlet var headLineLabel: UILabel! {
         didSet {
@@ -40,8 +42,6 @@ class WalkThroughContentVC: UIViewController, CLLocationManagerDelegate, UNUserN
         }
     }
     
-    @IBOutlet weak var contentImageView: UIImageView!
-    @IBOutlet weak var upperSaveButtonView: IRButton!
     
     weak var delegate: WalkThroughContentVCDelegate?
     private let locationManger = CLLocationManager()

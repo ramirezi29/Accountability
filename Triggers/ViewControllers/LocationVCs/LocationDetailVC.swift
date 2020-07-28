@@ -380,7 +380,7 @@ extension LocationDetailVC: CLLocationManagerDelegate {
                 let city = addressComponents.city
                 let state = addressComponents.state
                 let postalCode = addressComponents.postalCode
-
+                
                 annotation.subtitle = "\(street) \(city), \(state) \(postalCode)"
                 
                 if !street.isEmpty {

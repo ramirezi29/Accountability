@@ -10,7 +10,6 @@ import UIKit
 
 class FolderTVC: UITableViewController {
     
-    
     @IBOutlet weak var newFolderButton: UIBarButtonItem!
     @IBOutlet weak var activityView: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -20,13 +19,11 @@ class FolderTVC: UITableViewController {
     // MARK: - Life Cyles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.activityIndicator.startAnimating()
-        setUpNavUI()
-        fetchCKFolders()
-        
         view.setGradientToTableView(tableView: tableView)
         activityView.backgroundColor = .clear
+        activityIndicator.startAnimating()
+        setUpNavUI()
+        fetchCKFolders()
     }
     
     
@@ -51,7 +48,6 @@ class FolderTVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.folderCellID, for: indexPath)
         let folder = FolderController.shared.folders[indexPath.row]
         

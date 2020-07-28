@@ -14,21 +14,19 @@ class NotesTVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.setGradientToTableView(tableView: tableView)
-        
-        //Delegates
         tableView.delegate = self
         tableView.dataSource = self
-        
-        // MARK: - Fetch
-        guard let folder = folder else  { return }
-        title = "\(folder.folderTitle)"
+        setUpFolder()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
-        
+    }
+    
+    func setUpFolder() {
+        guard let folder = folder else  { return }
+              title = "\(folder.folderTitle)"
     }
     
     // MARK: - Table view data source
@@ -38,11 +36,8 @@ class NotesTVC: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.noteCellID, for: indexPath)
-        
         guard let songInFolder = folder?.notes[indexPath.row] else {return UITableViewCell()}
-        
         cell.textLabel?.text = songInFolder.title
         cell.detailTextLabel?.text = songInFolder.timeStampAsString
         cell.textLabel?.textColor = ColorPallet.offWhite.value
@@ -56,8 +51,8 @@ class NotesTVC: UITableViewController {
     }
     
     override  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-             cell.backgroundColor = .clear
-         }
+        cell.backgroundColor = .clear
+    }
     
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -84,13 +79,11 @@ class NotesTVC: UITableViewController {
     
     //moveRowAt
     override  func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
         let note = NoteController.shared.notes[sourceIndexPath.row]
-        
         NoteController.shared.notes.remove(at: sourceIndexPath.row)
         NoteController.shared.notes.insert(note, at: destinationIndexPath.row)
     }
-
+    
     override  func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -100,13 +93,10 @@ class NotesTVC: UITableViewController {
         guard let destinationVC = segue.destination as? NoteDetailVC else {
             return
         }
-        
         destinationVC.folder = folder
         
         if segue.identifier == NoteConstants.noteSegueID {
-            
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
-            //            let note = NoteController.shared.notes[indexPath.row]
             let noteInFolder = folder?.notes[indexPath.row]
             destinationVC.note = noteInFolder
         }

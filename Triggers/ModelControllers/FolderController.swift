@@ -12,15 +12,10 @@ import CloudKit
 class FolderController {
     
     static let shared = FolderController()
-    
     private init() {}
-    
     var folders = [Folder]()
-    
     let privateDB = CKContainer.default().privateCloudDatabase
-    
     typealias fetchCompletion = ([Folder]?, NetworkingError?) -> Void
-    
     typealias boolVoidCompletion = (Bool) -> Void
     
     // MARK: - Fetch

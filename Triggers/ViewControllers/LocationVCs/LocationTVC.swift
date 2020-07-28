@@ -66,16 +66,16 @@ class LocationTVC: UITableViewController {
     
     // MARK: - Acitivity Spinner
     
-   func hideStopActivityIndicator() {
-       self.activityIndicator.isHidden =  true
-       self.activityIndicator.stopAnimating()
-   }
-   
-   func showStartActivityIndicator() {
-       self.activityIndicator.startAnimating()
-       self.activityIndicator.isHidden = false
-   }
-   
+    func hideStopActivityIndicator() {
+        self.activityIndicator.isHidden =  true
+        self.activityIndicator.stopAnimating()
+    }
+    
+    func showStartActivityIndicator() {
+        self.activityIndicator.startAnimating()
+        self.activityIndicator.isHidden = false
+    }
+    
     
     // MARK: - Table view data source
     override  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -95,9 +95,9 @@ class LocationTVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-           tableView.tableFooterView = UIView()
-           cell.backgroundColor = .clear
-       }
+        tableView.tableFooterView = UIView()
+        cell.backgroundColor = .clear
+    }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {

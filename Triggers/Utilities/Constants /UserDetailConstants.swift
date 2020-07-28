@@ -9,6 +9,7 @@
 import Foundation
 
 struct UserConstants {
+    
     static let userTypeKey = "User"
     static let sponseeNameKey = "sponseeName"
     static let sponsorNameKey = "sponsorName"
