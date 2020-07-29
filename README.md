@@ -1,10 +1,7 @@
 # MyTriggers
 > My Triggers: Accountability Assistant provides assistance to individuals over coming addiction by adding a layer of accountability.
 
-
 [![Swift Version][swift-image]][swift-url]
-
-[![Build Status][travis-image]][travis-url]
 
 My Triggers: Accountability Assistant provides assistance to individuals over coming addiction by adding a layer of accountability.
 
@@ -62,5 +59,5 @@ var notes: [Note] = []
 
 Ivan Ramirez – [@YourTwitter](https://twitter.com/iramirezdev) – iramirez22ios@gmail.com
 
-[swift-image]:https://img.shields.io/badge/swift-3.0-orange.svg
+[swift-image]:https://img.shields.io/badge/swift-5.0-orange.svg
 [swift-url]: https://swift.org/
