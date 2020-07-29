@@ -2,13 +2,8 @@
 > My Triggers: Accountability Assistant provides assistance to individuals over coming addiction by adding a layer of accountability.
 
 
-[![Swift Version][swift-image]][swift-url]
-[![Build Status][travis-image]][travis-url]
-[![License][license-image]][license-url]
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/EZSwiftExtensions.svg)](https://img.shields.io/cocoapods/v/LFAlertController.svg)  
-[![Platform](https://img.shields.io/cocoapods/p/LFAlertController.svg?style=flat)](http://cocoapods.org/pods/LFAlertController)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![Swift Version
+5]()](https://swift.org/)
 
 My Triggers: Accountability Assistant provides assistance to individuals over coming addiction by adding a layer of accountability.
 
@@ -32,11 +27,11 @@ Notes, contact information and trigger locations are saved to iCloud and synched
 
 ## Requirements
 
-- iOS 8.0+
-- Xcode 7.3
+- iOS 12.1+
+- Xcode 12
 
-## Installation
+## Installation 
 
 #### CloudKit
-Make sure you're signed into your [iCloud](https://support.apple.com/en-us/HT203512) when testing application.
+Make sure you're signed into your [iCloud](https://support.apple.com/en-us/HT203512) when testing application on your device or simulator.
 
