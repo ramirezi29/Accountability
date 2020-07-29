@@ -15,7 +15,7 @@ As you approach the identified location a notification appears prompting you to 
 
 Notes, contact information and trigger locations are saved to iCloud and synched with your other iCloud enabled devices.
 
-![](header.png)
+<img src ="images/myTriggerScreenShots.jpeg">
 
 ## Features
 
