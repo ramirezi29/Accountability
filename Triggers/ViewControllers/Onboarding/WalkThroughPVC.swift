@@ -17,7 +17,6 @@ protocol WalkthroughPageViewControllerDelegate: class {
 class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     weak var walkthroughDelegate: WalkthroughPageViewControllerDelegate?
-    
     var currentVC: WalkThroughContentVC?
     
     var pageHeadings = ["My Triggers",
@@ -56,7 +55,6 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
                            
                            ""]
     
-    
     var pageImages = ["LocationLogo", "icloud", "ambulance", "handshake", "friendship", "paperplane", "map", "gps", "landscape"]
     
     var currentIndex = 0
@@ -64,7 +62,6 @@ class WalkThroughPVC: UIPageViewController, UIPageViewControllerDataSource, UIPa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the data source to itself
         dataSource = self
         delegate = self
         
@@ -121,7 +118,6 @@ extension WalkThroughPVC {
         if completed {
             if let contentViewController = pageViewController.viewControllers?.first as? WalkThroughContentVC {
                 currentIndex = contentViewController.index
-                
                 walkthroughDelegate?.didUpdatePageIndex(currentIndex: currentIndex)
             }
         }

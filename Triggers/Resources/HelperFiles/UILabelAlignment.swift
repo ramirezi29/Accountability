@@ -32,5 +32,3 @@ import UIKit
     }
 }
 
-//For top alignment y should be 0.
-

@@ -10,34 +10,23 @@ import UIKit
 
 class NotesTVC: UITableViewController {
     
-    //Landing Pad
     var folder: Folder?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.setGradientToTableView(tableView: tableView, UIColor(red:55/255, green: 179/255, blue: 198/255, alpha: 1.0), UIColor(red: 154/255, green: 213/255, blue: 214/255, alpha: 1.0))
-        
-        //Delegates
+        view.setGradientToTableView(tableView: tableView)
         tableView.delegate = self
         tableView.dataSource = self
-        
-        // MARK: - Fetch
-        guard let folder = folder else  {
-            print("\n There is an issue with the folders perhaps it is nil")
-            
-            return
-        }
-        
-        title = "\(folder.folderTitle)"
-        
-        //Test Pring
-        //print("The folder that was selected was 🐠\(folder.folderTitle) and it has \(folder.notes.count) note(s) inside of it, according to iCloud")
+        setUpFolder()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
-        
+    }
+    
+    func setUpFolder() {
+        guard let folder = folder else  { return }
+              title = "\(folder.folderTitle)"
     }
     
     // MARK: - Table view data source
@@ -47,22 +36,22 @@ class NotesTVC: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteConstants.noteCellID, for: indexPath)
-        
         guard let songInFolder = folder?.notes[indexPath.row] else {return UITableViewCell()}
-        
         cell.textLabel?.text = songInFolder.title
         cell.detailTextLabel?.text = songInFolder.timeStampAsString
-        
-        cell.textLabel?.textColor = MyColor.offWhite.value
-        cell.detailTextLabel?.textColor = MyColor.offWhite.value
+        cell.textLabel?.textColor = ColorPallet.offWhite.value
+        cell.detailTextLabel?.textColor = ColorPallet.offWhite.value
         return cell
     }
     
     //canEditRowAt
     override  func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
+    }
+    
+    override  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = .clear
     }
     
     // Override to support editing the table view.
@@ -76,11 +65,10 @@ class NotesTVC: UITableViewController {
                 if error != nil {
                     DispatchQueue.main.async {
                         //Future version will include a UI element
-                        //UI STUFF
                     }
                 } else {
                     self.folder?.notes.remove(at: indexPath.row)
-                    //                    NoteController.shared.notes.remove(at: indexPath.row)
+                    //NoteController.shared.notes.remove(at: indexPath.row)
                     DispatchQueue.main.async {
                         self.tableView.deleteRows(at: [indexPath], with: .fade)
                     }
@@ -91,18 +79,12 @@ class NotesTVC: UITableViewController {
     
     //moveRowAt
     override  func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
         let note = NoteController.shared.notes[sourceIndexPath.row]
-        
         NoteController.shared.notes.remove(at: sourceIndexPath.row)
         NoteController.shared.notes.insert(note, at: destinationIndexPath.row)
-        
-        // NOTE: - Need to Save the Re-ordering done to CK some how
     }
     
-    //canMoveRowAt
     override  func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        
         return true
     }
     
@@ -111,23 +93,12 @@ class NotesTVC: UITableViewController {
         guard let destinationVC = segue.destination as? NoteDetailVC else {
             return
         }
-        
         destinationVC.folder = folder
         
         if segue.identifier == NoteConstants.noteSegueID {
-            
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
-            //            let note = NoteController.shared.notes[indexPath.row]
             let noteInFolder = folder?.notes[indexPath.row]
             destinationVC.note = noteInFolder
         }
-    }
-}
-
-extension NotesTVC {
-    
-    override  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
-        cell.backgroundColor = .clear
     }
 }

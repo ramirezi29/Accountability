@@ -8,14 +8,17 @@
 
 import UIKit
 
+/**
+San Francisco Pro Text styles
+*/
 enum MyFont: String {
+    
     case SFReg = "SFProText-Regular"
     case SFMed = "SFProText-Medium"
     case SFBold = "SFProText-Bold"
     case SFDisReg = "SFProDisplay-Regular"
     case SFDisMed = "SFProDisplay-Medium"
  
-    
     func withSize(size: CGFloat) -> UIFont {
         return UIFont(name: self.rawValue, size: size)!
     }

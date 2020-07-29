@@ -32,7 +32,6 @@ class Note {
     
     // NOTE: - Create a model object fromR a CKRecord - Fetch
     convenience init?(ckRecord: CKRecord) {
-        // Step 1. Unpack the values that i want from the CKREcord
         guard let title = ckRecord[NoteConstants.titleKey] as? String,
             
             let textBody = ckRecord[NoteConstants.textBodyKey] as? String,

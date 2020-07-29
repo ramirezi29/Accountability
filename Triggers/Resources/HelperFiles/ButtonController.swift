@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ A pre defined button with color and font type
+ */
 class IRButton: UIButton {
     
     override init(frame: CGRect) {
@@ -21,8 +24,8 @@ class IRButton: UIButton {
     }
     
     private func setupButton() {
-        setTitleColor(MyColor.offWhite.value, for: .normal)
-        backgroundColor = MyColor.annotationOrange.value
+        setTitleColor(ColorPallet.offWhite.value, for: .normal)
+        backgroundColor = ColorPallet.buttonBlue.value
         titleLabel?.font = .boldSystemFont(ofSize: 17)
         layer.cornerRadius = frame.size.height / 4
     }

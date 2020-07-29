@@ -10,16 +10,12 @@ import Foundation
 import CloudKit
 
 class NoteController {
+    
     static let shared = NoteController()
-    
     private init() {}
-    
     var notes =  [Note]()
-    
     var usersLocationRefrence: CKRecord.ID?
-    
     let privateDB = CKContainer.default().privateCloudDatabase
-    
     typealias fetchCompletion = ([Note]?, NetworkingError?) -> Void
     typealias boolVoidCompletion = (Bool) -> Void
     
@@ -86,9 +82,6 @@ class NoteController {
             }
             
             guard let record = record, let newNote = Note(ckRecord: record) else {
-                
-                print("\n💀 No Record came back from CloudKit\n")
-                
                 completion(false)
                 return
             }

@@ -10,6 +10,7 @@ import Foundation
 import CloudKit
 
 class User {
+    
     var userName: String
     var sponsorName: String?
     var sponsorTelephoneNumber: String?

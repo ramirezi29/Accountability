@@ -19,9 +19,7 @@ class LocationController {
     typealias fetchCompletion = ([Location]?, NetworkingError?) -> Void
     typealias boolVoidCompletion = (Bool) -> Void
     
-    
     // MARK: - Fetch
-    
     /**
      Fetch CloudKit location object. This is done by querying the User object's CKRecordID with the LocationConstants' usersLocationRefKey and LocationTypeKey.
      
@@ -32,12 +30,10 @@ class LocationController {
      - The device must be signed into an iCloud account and be connected to the internet
      */
     func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping fetchCompletion) {
-        
         guard let user = user else {
             completion(nil, .invalidData("Invalid User"))
             return
         }
-        print("\n🐇Location Controller has user's print out as: \(user)\n \(String(describing: user.sponsorName))\n userRef: \(user.appleUserRef)\n ckRed: \(String(describing: user.ckRecordID))")
         
         guard let userParentID = user.ckRecordID else {
             completion(nil, .invalidData("Invalid User Parent ID"))
@@ -45,7 +41,6 @@ class LocationController {
         }
         
         let predicate = NSPredicate(format: "\(LocationConstants.usersLocationRefKey) == %@", userParentID)
-        
         let query = CKQuery(recordType: LocationConstants.LocationTypeKey, predicate: predicate)
         
         query.sortDescriptors = [NSSortDescriptor(key: LocationConstants.timeStampKey, ascending: true)]
@@ -70,7 +65,6 @@ class LocationController {
     }
     
     // MARK: - Save
-    
     /**
      Save a Location object to CloudKit
      
@@ -81,9 +75,7 @@ class LocationController {
      - The device must be signed into an iCloud account and be connected to the internet
      */
     func saveToCloudKit(locations: Location, completion: @escaping boolVoidCompletion) {
-        
         let locationRecord = CKRecord(location: locations)
-        
         privateDB.save(locationRecord) { (record, error) in
             if let error = error {
                 print("\n\n🚀 There was an error with saving the record to CloudKit in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription) 🚀\n\n")
@@ -91,7 +83,6 @@ class LocationController {
                 return
             }
             guard let record = record, let newlocationRecord = Location(ckRecord: record) else {
-                print("\n💀 No Record was saved to CloudKit\n")
                 completion(false)
                 return
             }
@@ -101,7 +92,6 @@ class LocationController {
     }
     
     // MARK: - Create
-    
     /**
      Create a new Location object to CloudKit
      
@@ -121,15 +111,9 @@ class LocationController {
         
         saveToCloudKit(locations: newLocation) { (success) in
             if success {
-                print("\nSuccessfully created record\n")
                 completion(true)
             } else {
-                //Test Print
-                print("\n💀Error Creating LocationRecord\n")
-                
                 completion(false)
-                //for test purposes fatal error
-                //                fatalError("\n💀Fatal Error , error creating location record\n")
             }
         }
     }
