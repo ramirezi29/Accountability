@@ -21,7 +21,7 @@ Notes, contact information and trigger locations are saved to iCloud and synched
 - [x] CloudKit
 - [x] Geo Location Notifications
 - [x] Journal to track your sobriety mile stones
-- [x] Feature 5
+
 
 ## Requirements
 
@@ -36,7 +36,6 @@ Make sure you're signed into your [iCloud](https://support.apple.com/en-us/HT203
 ## CloudKit Code Snippet 
 Leveraging the power of CloudKit a User object has a link to all the elements down below
 ```swift
-// code away!
 
 class User {
 
