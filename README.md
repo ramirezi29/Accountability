@@ -1,5 +1,5 @@
 # MyTriggers
-> My Triggers: Accountability Assistant provides assistance to individuals over coming addiction by adding a layer of accountability.
+> Our mobile application is designed to assist you and facilitate your journey towards addiction recover
 
 [![Swift Version][swift-image]][swift-url]
 
