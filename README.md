@@ -2,8 +2,8 @@
 > My Triggers: Accountability Assistant provides assistance to individuals over coming addiction by adding a layer of accountability.
 
 
-[![Swift Version
-5]()](https://swift.org/)
+[![Swift Version][swift-image]][swift-url]
+[![Build Status][travis-image]][travis-url]
 
 My Triggers: Accountability Assistant provides assistance to individuals over coming addiction by adding a layer of accountability.
 
@@ -35,3 +35,30 @@ Notes, contact information and trigger locations are saved to iCloud and synched
 #### CloudKit
 Make sure you're signed into your [iCloud](https://support.apple.com/en-us/HT203512) when testing application on your device or simulator.
 
+## CloudKit Code Snippet 
+Leveraging the power of CloudKit a User object has a link to all the elements down below
+```swift
+// code away!
+
+class User {
+
+var userName: String
+var sponsorName: String?
+var sponsorTelephoneNumber: String?
+var sponsorEmail: String?
+var aaStep: Int
+var ckRecordID: CKRecord.ID?
+var date: Date?
+var appleUserRef: CKRecord.Reference
+var targetLocations: [Location] = []
+var folders: [Folder] = []
+var notes: [Note] = []
+...
+}
+```
+
+## Let me know what you think
+
+Ivan Ramirez – [@YourTwitter](https://twitter.com/iramirezdev) – iramirez22ios@gmail.com
+[swift-image]:https://img.shields.io/badge/swift-3.0-orange.svg
+[swift-url]: https://swift.org/
