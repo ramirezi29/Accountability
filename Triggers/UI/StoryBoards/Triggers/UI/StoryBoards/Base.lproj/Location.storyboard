@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ALf-K7-xiu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ALf-K7-xiu">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -119,8 +119,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="44K-Xf-6fO">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="44K-Xf-6fO">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="0AJ-Zj-kPM">
                                 <rect key="frame" x="20" y="103" width="374" height="80"/>
@@ -191,19 +192,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="44K-Xf-6fO" firstAttribute="leading" secondItem="GKQ-hS-3nh" secondAttribute="leading" id="0Bb-fq-Tt9"/>
                             <constraint firstItem="MOi-Uc-o3t" firstAttribute="top" secondItem="GKQ-hS-3nh" secondAttribute="top" constant="231" id="0Wd-nI-7pd"/>
                             <constraint firstItem="MOi-Uc-o3t" firstAttribute="leading" secondItem="EhH-35-12m" secondAttribute="leading" constant="4" id="982-V6-QR8"/>
-                            <constraint firstItem="44K-Xf-6fO" firstAttribute="trailing" secondItem="GKQ-hS-3nh" secondAttribute="trailing" id="D3W-U0-ZeT"/>
                             <constraint firstItem="GKQ-hS-3nh" firstAttribute="trailing" secondItem="0AJ-Zj-kPM" secondAttribute="trailing" constant="20" id="GsT-Nr-BDn"/>
-                            <constraint firstItem="44K-Xf-6fO" firstAttribute="firstBaseline" secondItem="EhH-35-12m" secondAttribute="baseline" constant="-124" id="LDl-g6-M0k"/>
                             <constraint firstItem="0AJ-Zj-kPM" firstAttribute="centerX" secondItem="VRv-qa-JBv" secondAttribute="centerX" id="LqT-IT-dYn"/>
-                            <constraint firstItem="44K-Xf-6fO" firstAttribute="top" secondItem="GKQ-hS-3nh" secondAttribute="top" id="OJd-lt-1wn"/>
                             <constraint firstItem="GKQ-hS-3nh" firstAttribute="trailing" secondItem="EhH-35-12m" secondAttribute="trailing" constant="16" id="OiU-42-QO6"/>
                             <constraint firstItem="0AJ-Zj-kPM" firstAttribute="leading" secondItem="GKQ-hS-3nh" secondAttribute="leading" constant="20" id="QS1-B9-sZc"/>
+                            <constraint firstItem="EhH-35-12m" firstAttribute="top" secondItem="0AJ-Zj-kPM" secondAttribute="bottom" constant="3.5" id="ThY-VM-uwf"/>
                             <constraint firstItem="MOi-Uc-o3t" firstAttribute="trailing" secondItem="EhH-35-12m" secondAttribute="trailing" id="djQ-qi-Pn5"/>
                             <constraint firstItem="0AJ-Zj-kPM" firstAttribute="top" secondItem="GKQ-hS-3nh" secondAttribute="top" constant="15" id="ggl-hN-FWa"/>
-                            <constraint firstItem="44K-Xf-6fO" firstAttribute="bottom" secondItem="GKQ-hS-3nh" secondAttribute="bottom" id="ooB-0S-as4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="GKQ-hS-3nh"/>
                     </view>
@@ -220,12 +217,17 @@
                                     <rect key="frame" x="84" y="5.5" width="83" height="33"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="dpX-wP-vpc">
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="dpX-wP-vpc">
                                             <rect key="frame" x="31" y="7" width="20" height="20"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </activityIndicatorView>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="dpX-wP-vpc" firstAttribute="leading" secondItem="5MV-AJ-6X4" secondAttribute="leading" constant="31" id="Gmq-qy-FqV"/>
+                                        <constraint firstItem="dpX-wP-vpc" firstAttribute="centerX" secondItem="5MV-AJ-6X4" secondAttribute="centerX" id="NOx-sb-40C"/>
+                                        <constraint firstItem="dpX-wP-vpc" firstAttribute="top" secondItem="5MV-AJ-6X4" secondAttribute="top" constant="7" id="Q31-kI-Fg9"/>
+                                        <constraint firstItem="dpX-wP-vpc" firstAttribute="centerY" secondItem="5MV-AJ-6X4" secondAttribute="centerY" id="eBp-hc-ruQ"/>
+                                    </constraints>
                                 </view>
                             </barButtonItem>
                         </leftBarButtonItems>
@@ -252,16 +254,16 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Imx-Ku-HAu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2135.1999999999998" y="-869.41529235382313"/>
+            <point key="canvasLocation" x="-2136.231884057971" y="-869.86607142857144"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="Uv7-Yh-Pfb"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="cloud" width="432" height="272"/>
         <image name="cursor" width="60" height="60"/>
         <image name="info" width="60" height="60"/>
         <image name="locationIcon" width="23" height="23"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="Uv7-Yh-Pfb"/>
-    </inferredMetricsTieBreakers>
 </document>
