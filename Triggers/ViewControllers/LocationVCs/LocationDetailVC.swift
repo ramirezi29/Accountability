@@ -63,9 +63,11 @@ class LocationDetailVC: UIViewController, UIGestureRecognizerDelegate, UITextFie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
+       navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+       navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+           navigationController?.navigationItem.largeTitleDisplayMode = .always
+        
         
         UNUserNotificationCenter.current().delegate = self
         toolView.backgroundColor = ColorPallet.offWhite.value

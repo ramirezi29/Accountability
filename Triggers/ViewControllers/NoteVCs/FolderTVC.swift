@@ -24,6 +24,8 @@ class FolderTVC: UITableViewController {
         activityIndicator.startAnimating()
         setUpNavUI()
         fetchCKFolders()
+        
+        
     }
     
     
@@ -105,9 +107,11 @@ class FolderTVC: UITableViewController {
     }
     
     func setUpNavUI() {
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     // MARK: - Activity Indicators
