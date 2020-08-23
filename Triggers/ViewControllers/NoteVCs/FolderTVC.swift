@@ -146,7 +146,7 @@ class FolderTVC: UITableViewController {
                     }
                 } else {
                     DispatchQueue.main.async {
-                        let folderSaveErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error Creating Folder", alertMessage: "Check your internet connection and ensure that you are signed into your iCloud account", dismissActionTitle: "OK")
+                        let folderSaveErrorNotif = AlertController.presentAlertControllerWith(alertTitle: "Error creating folder", alertMessage: "Check your internet connection and ensure that you are signed into your iCloud account", dismissActionTitle: "OK")
                         self.present(folderSaveErrorNotif, animated: true, completion: nil)
                     }
                     return

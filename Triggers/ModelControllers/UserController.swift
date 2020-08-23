@@ -113,7 +113,8 @@ class UserController {
         
         let appleUserRef = CKRecord.Reference(recordID: appleUserRecordID, action: .deleteSelf)
         
-        let user = User(userName: userName, sponsorName: sponsorName, sponsorTelephoneNumber: sponserTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep, appleUserRef: appleUserRef)
+        //TODO: - need to put a sobrietyDate tha the user enters
+        let user = User(userName: userName, sponsorName: sponsorName, sponsorTelephoneNumber: sponserTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep, sobrietyDate: Date(), appleUserRef: appleUserRef)
         
         saveToCloudKit(user: user) { (success) in
             if success {
