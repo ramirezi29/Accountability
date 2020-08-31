@@ -22,9 +22,9 @@ class User {
     var targetLocations: [Location] = []
     var folders: [Folder] = []
     var notes: [Note] = []
-    var sobrietyDate: Date?
+//    var sobrietyDate: Date?
     
-    init(userName: String = "Your Name", sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, sobrietyDate: Date, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), appleUserRef: CKRecord.Reference) {
+    init(userName: String = "Your Name", sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), appleUserRef: CKRecord.Reference) {
         
         self.userName = userName
         self.sponsorName = sponsorName
@@ -33,7 +33,7 @@ class User {
         self.ckRecordID = ckRecordID
         self.sponsorEmail = sponsorEmail
         self.appleUserRef = appleUserRef
-        self.sobrietyDate = sobrietyDate
+//        self.sobrietyDate = sobrietyDate
     }
     
     // NOTE: - Create a model object fromR a CKRecord - Fetch
@@ -43,13 +43,13 @@ class User {
             let sponsorTelephoneNumber = ckRecord[UserConstants.sponsorTelephoneNumberKey] as? String,
             let sponsorEmail = ckRecord[UserConstants.sponsorEmailKey] as? String,
             let aaStep = ckRecord[UserConstants.aaStepKey] as? Int,
-            let sobrietyDate = ckRecord[UserConstants.sobreityDateyKey] as? Date,
+//            let sobrietyDate = ckRecord[UserConstants.sobreityDateyKey] as? Date,
             let appleUserRef = ckRecord[UserConstants.appleUserRefKey] as? CKRecord.Reference
             
             else {return nil}
         
         
-        self.init(userName: userName, sponsorName: sponsorName, sponsorTelephoneNumber: sponsorTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep, sobrietyDate: sobrietyDate, ckRecordID: ckRecord.recordID, appleUserRef: appleUserRef)
+        self.init(userName: userName, sponsorName: sponsorName, sponsorTelephoneNumber: sponsorTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep, ckRecordID: ckRecord.recordID, appleUserRef: appleUserRef)
     }
 }
 
@@ -65,7 +65,7 @@ extension CKRecord {
         self.setValue(user.sponsorTelephoneNumber, forKey: UserConstants.sponsorTelephoneNumberKey)
         self.setValue(user.sponsorEmail, forKey: UserConstants.sponsorEmailKey)
         self.setValue(user.aaStep, forKey: UserConstants.aaStepKey)
-        self.setValue(user.sobrietyDate, forKey: UserConstants.sobreityDateyKey)
+//        self.setValue(user.sobrietyDate, forKey: UserConstants.sobreityDateyKey)
         self.setValue(user.appleUserRef, forKey: UserConstants.appleUserRefKey)
         
         // NOTE: - In order to not save a brand new record

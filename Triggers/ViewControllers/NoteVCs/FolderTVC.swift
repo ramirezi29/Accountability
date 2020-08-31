@@ -25,7 +25,7 @@ class FolderTVC: UITableViewController {
         setUpNavUI()
         fetchCKFolders()
         
-        
+        print(folder.count)
     }
     
     
