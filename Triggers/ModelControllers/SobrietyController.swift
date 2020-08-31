@@ -1,27 +1,27 @@
 //
-//  TargetLocationController.swift
+//  SobrietyController.swift
 //  Triggers
 //
-//  Created by Ivan Ramirez on 12/20/18.
-//  Copyright © 2018 ramcomw. All rights reserved.
+//  Created by Ivan Ramirez on 8/30/20.
+//  Copyright © 2020 ramcomw. All rights reserved.
 //
 
 import Foundation
 import CloudKit
 
-class LocationController {
+class SobrietyController {
     
-    static let shared = LocationController()
+    static let shared = SobrietyController()
     private init() {}
-    var locations = [Location]()
+    var sobriety = [Sobriety]()
     let privateDB = CKContainer.default().privateCloudDatabase
-//    var locationUserRecordID: CKRecord.ID?
-    typealias fetchCompletion = ([Location]?, NetworkingError?) -> Void
+    var sobrietyRecordID: CKRecord.ID?
+    
     typealias boolVoidCompletion = (Bool) -> Void
     
     // MARK: - Fetch
     /**
-     Fetch CloudKit location object. This is done by querying the User object's CKRecordID with the LocationConstants' usersLocationRefKey and LocationTypeKey.
+     Fetch CloudKit sobriety object. This is done by querying the User object's CKRecordID with the SobrietyConstants' ref key and Sobriety typ ekey.
      
      - Parameter user: The User object which the location records will be fetched from.
      
@@ -29,38 +29,39 @@ class LocationController {
      - A valid User object must already exist
      - The device must be signed into an iCloud account and be connected to the internet
      */
-    func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping fetchCompletion) {
+    func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping (Result<Sobriety, Error>) -> Void) {
         guard let user = user else {
-            completion(nil, .invalidData("Invalid User"))
+            completion(.failure(NetworkingError.invalidData("User is nil")))
             return
         }
         
         guard let userParentID = user.ckRecordID else {
-            completion(nil, .invalidData("Invalid User Parent ID"))
+            completion(.failure(NetworkingError.invalidData("user parent id nil")))
             return
         }
         
-        let predicate = NSPredicate(format: "\(LocationConstants.usersLocationRefKey) == %@", userParentID)
-        let query = CKQuery(recordType: LocationConstants.LocationTypeKey, predicate: predicate)
+        let predicate = NSPredicate(format: "\(SobrietyConstants.sobreityRefKey) == %@", userParentID)
+        let query = CKQuery(recordType: SobrietyConstants.sobrietyTypeKey, predicate: predicate)
         
-        query.sortDescriptors = [NSSortDescriptor(key: LocationConstants.timeStampKey, ascending: true)]
+        //🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+        query.sortDescriptors = [NSSortDescriptor(key: "modificationDatey", ascending: true)]
         
-        privateDB.perform(query, inZoneWith: nil) { (records, error) in
+        privateDB.perform(query, inZoneWith: nil) { (record, error) in
             
             if let error = error {
                 print("\n\n🚀 There was an error with fetching the records in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription) 🚀\n\n")
-                completion(nil, .forwardedError(error))
+                completion(.failure(NetworkingError.forwardedError(error)))
                 return
             }
             // NOTE: - Make sure there are records
-            guard let records = records else {
-                completion(nil, .invalidData("\nINvalid Data\n"))
+            guard let record = record else {
+                completion(.failure(NetworkingError.invalidData("invalid record")))
                 return
             }
-            let fetchItems = records.compactMap { Location(ckRecord: $0) }
-            self.locations = fetchItems
+            let fetchSobrietyDate = record.compactMap {Sobriety(ckRecord: $0)}
+            self.sobriety = fetchSobrietyDate
             
-            completion(fetchItems, nil)
+            completion(.success(fetchSobrietyDate[0]))
         }
     }
     
@@ -74,19 +75,19 @@ class LocationController {
      - A valid User object must already exist
      - The device must be signed into an iCloud account and be connected to the internet
      */
-    func saveToCloudKit(locations: Location, completion: @escaping boolVoidCompletion) {
-        let locationRecord = CKRecord(location: locations)
-        privateDB.save(locationRecord) { (record, error) in
+    func saveToCloudKit(sobriety: Sobriety, completion: @escaping (Bool) -> Void) {
+        let sobrietyRecord = CKRecord(sobriety: sobriety)
+        privateDB.save(sobrietyRecord) { (record, error) in
             if let error = error {
                 print("\n\n🚀 There was an error with saving the record to CloudKit in: \(#file) \n\n \(#function); \n\n\(error); \n\n\(error.localizedDescription) 🚀\n\n")
                 completion(false)
                 return
             }
-            guard let record = record, let newlocationRecord = Location(ckRecord: record) else {
+            guard let record = record, let newSobrietyDate = Sobriety(ckRecord: record) else {
                 completion(false)
                 return
             }
-            self.locations.append(newlocationRecord)
+            self.sobriety.append(newSobrietyDate)
             completion(true)
         }
     }
@@ -105,11 +106,11 @@ class LocationController {
      - A valid User object must already exist
      - The device must be signed into an iCloud account and be connected to the internet
      */
-    func createNewLocation(geoCodeAddressString: String, addressTitle: String, longitude: Double, latitude: Double, completion: @escaping boolVoidCompletion) {
+    func createSobrietyDate(sobrietyDate: Date, completion: @escaping boolVoidCompletion) {
         
-        let newLocation = Location(geoCodeAddressString: geoCodeAddressString, addressTitle: addressTitle, longitude: longitude, latitude: latitude)
+        let newSobrietyDate = Sobriety(sobrietyDate: sobrietyDate)
         
-        saveToCloudKit(locations: newLocation) { (success) in
+        saveToCloudKit(sobriety: newSobrietyDate) { (success) in
             if success {
                 completion(true)
             } else {
@@ -132,24 +133,17 @@ class LocationController {
      - A valid User object must already exist
      - The device must be signed into an iCloud account and be connected to the internet
      */
-    func updateTargetLocation(location: Location, geoCodeAddressString: String, addressTitle: String, latitude: Double, longitude: Double, completion: @escaping boolVoidCompletion) {
+    func updatedSobreityDate(sobriety: Sobriety, sobrietyDate: Date) {
         
-        location.geoCodeAddressString = geoCodeAddressString
-        location.locationTitle = addressTitle
-        location.latitude = latitude
-        location.longitude = longitude
+        sobriety.sobrietyDate = sobrietyDate
         
-        let record = CKRecord(location: location)
+        let record = CKRecord(sobriety: sobriety)
         
         let operration = CKModifyRecordsOperation(recordsToSave: [record], recordIDsToDelete: nil)
         operration.savePolicy = .changedKeys
         operration.queuePriority = .high
         operration.qualityOfService = .userInteractive
         operration.completionBlock = {
-            
-            NotificationController.cancelLocalNotificationWith(identifier: location.locationTitle)
-            
-            completion(true)
         }
         privateDB.add(operration)
     }

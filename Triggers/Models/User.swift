@@ -22,7 +22,7 @@ class User {
     var targetLocations: [Location] = []
     var folders: [Folder] = []
     var notes: [Note] = []
-//    var sobrietyDate: Date?
+    var sobrietyDate: [Sobriety] = []
     
     init(userName: String = "Your Name", sponsorName: String, sponsorTelephoneNumber: String, sponsorEmail: String, aaStep: Int, ckRecordID: CKRecord.ID = CKRecord.ID(recordName: UUID().uuidString), appleUserRef: CKRecord.Reference) {
         
