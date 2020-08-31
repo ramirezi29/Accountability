@@ -32,7 +32,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     @IBOutlet weak var soberietyUserInfoLRStack: UIStackView!
     
     private let localeUSA = "en_US"
-    private let sobrietyUserDefaultKey = "sobrietyUserDefaultKey"
+//    private let sobrietyUserDefaultKey = "sobrietyUserDefaultKey"
     var user: User?
     let dateFormatter = DateFormatter()
     let currentCalendar = Calendar.current
@@ -40,9 +40,14 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     var selectedDate = Date()
     var willTurnDarkGray = true
     
-    var sobrietyDate: Date? {
-        return UserDefaults.standard.value(forKey: sobrietyUserDefaultKey) as? Date
-    }
+    
+    
+    //
+    var sobrietyDate: Date?
+    //
+//    var sobrietyDate: Date? {
+//        return UserDefaults.standard.value(forKey: sobrietyUserDefaultKey) as? Date
+//    }
     
     // MARK: - Life Cyles
     override func viewDidLoad() {
@@ -80,6 +85,20 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
         checkInBottomButton.setTitle("Check-In", for: .normal)
         
         sobrietyDatePicker.datePickerMode = .date
+        
+        
+        //
+        SobrietyController.shared.fetchItemsFor { (result) in
+            switch result {
+            case .success(let ckSobriety):
+              
+                self.sobrietyDate = ckSobriety.sobrietyDate
+              print(ckSobriety.sobrietyDate)
+            case .failure(_):
+                break
+            }
+        }
+        //
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,6 +116,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     }
     
     func updateViewsRelatedToSobrietyItems() {
+        
         
         guard let usersSobrietyDate = sobrietyDate else { return }
         
@@ -209,7 +229,14 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     
     //Sobriety
     @IBAction func sobrietySaveButtonTapped(_ sender: IRButton) {
-        UserDefaults.standard.setValue(sobrietyDatePicker.date, forKey: sobrietyUserDefaultKey)
+//        UserDefaults.standard.setValue(sobrietyDatePicker.date, forKey: sobrietyUserDefaultKey)
+        
+        SobrietyController.shared.createSobrietyDate(sobrietyDate: sobrietyDatePicker.date) { (success) in
+            if success {
+                print("Sobriety Date Saved")
+            }
+        }
+        
         updateViewsRelatedToSobrietyItems()
         updateDayofWeekLabel()
         animateOutOfSobrietyView()

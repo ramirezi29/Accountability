@@ -55,7 +55,6 @@ class Location {
         self.init(geoCodeAddressString: geoCodeAddressString, addressTitle: addressTitle, ckRecordID: ckRecord.recordID, longitude: longitude, latitude: latitude)
         
         self.userLocationReference = userLocationReference
-        
     }
 }
 

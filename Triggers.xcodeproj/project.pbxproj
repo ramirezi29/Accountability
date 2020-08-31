@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B5175BD24FC9B8400855A7E /* Sobriety.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5175BC24FC9B8400855A7E /* Sobriety.swift */; };
+		1B5175BF24FC9D9000855A7E /* SobrietyConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5175BE24FC9D9000855A7E /* SobrietyConstants.swift */; };
+		1BDE6C7A24FCA672000E6A7D /* SobrietyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDE6C7924FCA672000E6A7D /* SobrietyController.swift */; };
 		470408F121CD743E00884CFA /* LocationTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470408F021CD743E00884CFA /* LocationTVC.swift */; };
 		470408F321CD7A8E00884CFA /* LocationTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470408F221CD7A8E00884CFA /* LocationTVCell.swift */; };
 		471665E021D441E6000DC53B /* textFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471665DF21D441E6000DC53B /* textFieldExtension.swift */; };
@@ -81,6 +84,9 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
+		1B5175BC24FC9B8400855A7E /* Sobriety.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sobriety.swift; sourceTree = "<group>"; };
+		1B5175BE24FC9D9000855A7E /* SobrietyConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SobrietyConstants.swift; sourceTree = "<group>"; };
+		1BDE6C7924FCA672000E6A7D /* SobrietyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SobrietyController.swift; sourceTree = "<group>"; };
 		470408F021CD743E00884CFA /* LocationTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTVC.swift; sourceTree = "<group>"; };
 		470408F221CD7A8E00884CFA /* LocationTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTVCell.swift; sourceTree = "<group>"; };
 		471665DF21D441E6000DC53B /* textFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = textFieldExtension.swift; sourceTree = "<group>"; };
@@ -302,6 +308,7 @@
 				472EA53321CC05740022EE0A /* Location.swift */,
 				47296FF421CB38D5007B9B1B /* Note.swift */,
 				47A602FC21D82C2700699EDF /* Folder.swift */,
+				1B5175BC24FC9B8400855A7E /* Sobriety.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -313,6 +320,7 @@
 				472EA53521CC05CB0022EE0A /* LocationController.swift */,
 				47A6030021D83A1900699EDF /* FolderController.swift */,
 				47296FF821CB3C56007B9B1B /* NoteController.swift */,
+				1BDE6C7924FCA672000E6A7D /* SobrietyController.swift */,
 			);
 			path = ModelControllers;
 			sourceTree = "<group>";
@@ -387,6 +395,7 @@
 				47C3099421DEA16900F578A1 /* StoryboardConstants.swift */,
 				47FE312F21DEB60F000A92FD /* UserDefaultConstants.swift */,
 				8BAEACB82401DA140013DADE /* KeyConstants.swift */,
+				1B5175BE24FC9D9000855A7E /* SobrietyConstants.swift */,
 			);
 			path = "Constants ";
 			sourceTree = "<group>";
@@ -502,6 +511,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B5175BD24FC9B8400855A7E /* Sobriety.swift in Sources */,
 				47E29E1B21C80B0200FA44EE /* AppDelegate.swift in Sources */,
 				471A76F321DAAE1D002FB8CE /* FolderTVC.swift in Sources */,
 				47296FF921CB3C56007B9B1B /* NoteController.swift in Sources */,
@@ -509,6 +519,7 @@
 				470408F321CD7A8E00884CFA /* LocationTVCell.swift in Sources */,
 				477C945521DA76D6006F7E80 /* NotificationController.swift in Sources */,
 				47A602FF21D82C7A00699EDF /* FolderConstants.swift in Sources */,
+				1BDE6C7A24FCA672000E6A7D /* SobrietyController.swift in Sources */,
 				4771460E21C9BB200016FFAB /* WalkThroughPVC.swift in Sources */,
 				47E29E5F21C8B1E300FA44EE /* NetworkingError.swift in Sources */,
 				471665E021D441E6000DC53B /* textFieldExtension.swift in Sources */,
@@ -518,6 +529,7 @@
 				4771460021C9A8DC0016FFAB /* CalendarVC.swift in Sources */,
 				476A270821E5BDE100CB864A /* FontController.swift in Sources */,
 				475B9A302202223300060D0D /* CGRECTExtension.swift in Sources */,
+				1B5175BF24FC9D9000855A7E /* SobrietyConstants.swift in Sources */,
 				47E29E4F21C852DC00FA44EE /* LocationDetailVC.swift in Sources */,
 				472EA53421CC05740022EE0A /* Location.swift in Sources */,
 				47A602FD21D82C2700699EDF /* Folder.swift in Sources */,
