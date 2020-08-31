@@ -36,7 +36,8 @@ class UserController {
                 return
             }
             
-            guard let recordID = recordID else { completion(false, .invalidData("Record ID is invalid"))
+            guard let recordID = recordID else {
+                completion(false, .invalidData("Record ID is invalid"))
                 return
             }
             
@@ -114,7 +115,7 @@ class UserController {
         let appleUserRef = CKRecord.Reference(recordID: appleUserRecordID, action: .deleteSelf)
         
         //TODO: - need to put a sobrietyDate tha the user enters
-        let user = User(userName: userName, sponsorName: sponsorName, sponsorTelephoneNumber: sponserTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep, sobrietyDate: Date(), appleUserRef: appleUserRef)
+        let user = User(userName: userName, sponsorName: sponsorName, sponsorTelephoneNumber: sponserTelephoneNumber, sponsorEmail: sponsorEmail, aaStep: aaStep, appleUserRef: appleUserRef)
         
         saveToCloudKit(user: user) { (success) in
             if success {
