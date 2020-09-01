@@ -15,7 +15,7 @@ class SobrietyController {
     private init() {}
     var sobriety = [Sobriety]()
     let privateDB = CKContainer.default().privateCloudDatabase
-    var sobrietyRecordID: CKRecord.ID?
+//    var sobrietyRecordID: CKRecord.ID?
     
     typealias boolVoidCompletion = (Bool) -> Void
     
@@ -26,11 +26,12 @@ class SobrietyController {
      - Parameter user: The User object which the location records will be fetched from.
      
      ## Important Note ##
-     - A valid User object must already exist
+     - A valid User object  must already exist
      - The device must be signed into an iCloud account and be connected to the internet
      */
     func fetchItemsFor(user: User? = UserController.shared.loggedInUser, completion: @escaping (Result<Sobriety, Error>) -> Void) {
         guard let user = user else {
+            print("User is nill in fetch sobriety")
             completion(.failure(NetworkingError.invalidData("User is nil")))
             return
         }
@@ -44,7 +45,7 @@ class SobrietyController {
         let query = CKQuery(recordType: SobrietyConstants.sobrietyTypeKey, predicate: predicate)
         
         //🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
-        query.sortDescriptors = [NSSortDescriptor(key: "modificationDatey", ascending: true)]
+        query.sortDescriptors = [NSSortDescriptor(key: "sobrietyDateKey", ascending: true)]
         
         privateDB.perform(query, inZoneWith: nil) { (record, error) in
             
@@ -61,7 +62,13 @@ class SobrietyController {
             let fetchSobrietyDate = record.compactMap {Sobriety(ckRecord: $0)}
             self.sobriety = fetchSobrietyDate
             
-            completion(.success(fetchSobrietyDate[0]))
+            print(fetchSobrietyDate.count)
+            
+            guard let soberDate = fetchSobrietyDate.first else {
+                return
+            }
+            //Need to unwrap !
+            completion(.success(soberDate))
         }
     }
     
@@ -84,10 +91,13 @@ class SobrietyController {
                 return
             }
             guard let record = record, let newSobrietyDate = Sobriety(ckRecord: record) else {
+              
                 completion(false)
                 return
             }
+              print("\nNew Sber Date: \(newSobrietyDate)")
             self.sobriety.append(newSobrietyDate)
+            print("\n\(self.sobriety.description)")
             completion(true)
         }
     }
