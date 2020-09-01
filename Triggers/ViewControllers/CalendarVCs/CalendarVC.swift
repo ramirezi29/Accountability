@@ -95,6 +95,7 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
                 self.sobrietyDate = ckSobriety.sobrietyDate
               print(ckSobriety.sobrietyDate)
             case .failure(_):
+                print("Failed to fetch sobriety Date")
                 break
             }
         }
@@ -103,6 +104,17 @@ class CalendarVC: UIViewController, UINavigationBarDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        SobrietyController.shared.fetchItemsFor { (result) in
+                 switch result {
+                 case .success(let ckSobriety):
+                   
+                     self.sobrietyDate = ckSobriety.sobrietyDate
+                   print(ckSobriety.sobrietyDate)
+                 case .failure(_):
+                     print("Failed to fetch sobriety Date")
+                     break
+                 }
+             }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
